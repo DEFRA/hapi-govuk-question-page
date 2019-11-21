@@ -1,5 +1,5 @@
 const joi = require('@hapi/joi')
-const boom = require('@hapi/boom')
+// const boom = require('@hapi/boom')
 const pkg = require('./package.json')
 
 const Page = require('./page')
@@ -55,7 +55,7 @@ module.exports = {
   once: true,
   register: (server, registrationOptions) => {
     // console.log(`Registration: Options: ${JSON.stringify(registrationOptions)}`)
-    const { ordnanceSurveyKey  } = registrationOptions
+    const { ordnanceSurveyKey } = registrationOptions
 
     server.decorate('handler', 'digital-form-page', handlerProvider)
 
@@ -76,7 +76,7 @@ module.exports = {
           return results
         } catch (err) {
           // return boom.badImplementation('Failed to find addresses', err)
-          return [{ uprn: 'x', address: 'address', item: { BUILDING_NUMBER: '1', POST_TOWN: 'The Town', POSTCODE: 'XX1 1XX'} }]
+          return [{ uprn: 'x', address: 'address', item: { BUILDING_NUMBER: '1', POST_TOWN: 'The Town', POSTCODE: 'XX1 1XX' } }]
         }
       },
       options: {
