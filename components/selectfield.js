@@ -6,26 +6,18 @@ class SelectField extends FormComponent {
     super(definition)
 
     const { options } = this
-    // const list = model.lists.find(list => list.name === options.list)
     const list = options.list
     const items = list.items
     const values = items.map(item => item.value)
-    const formSchema = helpers.buildFormSchema('string'/* list.type */, this) // .valid(values)
-    // const stateSchema = helpers.buildStateSchema(list.type, this).valid(values)
-    const stateSchema = helpers.buildStateSchema(list.type, this).valid(...values)
+    const formSchema = helpers.buildFormSchema('string', this).valid(...values)
 
     this.list = list
     this.items = items
     this.formSchema = formSchema
-    this.stateSchema = stateSchema
   }
 
   getFormSchemaKeys () {
     return { [this.name]: this.formSchema }
-  }
-
-  getStateSchemaKeys () {
-    return { [this.name]: this.stateSchema }
   }
 
   getDisplayStringFromState (state) {

@@ -93,7 +93,6 @@ class FormComponent extends Component {
   }
 
   getFormSchemaKeys () { return { [this.name]: joi.any() } }
-  getStateSchemaKeys () { return { [this.name]: joi.any() } }
   getDisplayStringFromState (state) { return state[this.name] }
 }
 
@@ -184,11 +183,7 @@ class ConditionalFormComponent extends FormComponent {
     return state
   }
 
-  getStateSchemaKeys () {
-    return this[getSchemaKeys]('state')
-  }
-
-  [createConditionalComponents] (def, model) {
+  createConditionalComponents (def, model) {
     const filteredItems = this.list.items.filter(item => item.conditional && item.conditional.components)
     // Create a collection of conditional components that can be converted to a view model and rendered by Nunjucks
     // before primary view model rendering takes place.
@@ -197,7 +192,7 @@ class ConditionalFormComponent extends FormComponent {
     })
   }
 
-  [getSchemaKeys] (schemaType) {
+  getSchemaKeys (schemaType) {
     const schemaName = `${schemaType}Schema`
     const schemaKeysFunctionName = `get${schemaType.substring(0, 1).toUpperCase()}${schemaType.substring(1)}SchemaKeys`
     const filteredItems = this.items.filter(item => item.conditional && item.conditional.componentCollection)
@@ -247,7 +242,6 @@ class ComponentCollection {
     this.items = itemTypes
     this.formItems = formItems
     this.formSchema = joi.object().keys(this.getFormSchemaKeys()).required()
-    this.stateSchema = joi.object().keys(this.getStateSchemaKeys()).required()
   }
 
   getFormSchemaKeys () {
@@ -255,16 +249,6 @@ class ComponentCollection {
 
     this.formItems.forEach(item => {
       Object.assign(keys, item.getFormSchemaKeys())
-    })
-
-    return keys
-  }
-
-  getStateSchemaKeys () {
-    const keys = {}
-
-    this.formItems.forEach(item => {
-      Object.assign(keys, item.getStateSchemaKeys())
     })
 
     return keys

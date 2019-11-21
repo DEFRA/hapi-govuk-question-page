@@ -85,14 +85,6 @@ class Page {
     return this.validate(payload, this.formSchema)
   }
 
-  validateState (newState) {
-    return this.validate(newState, this.stateSchema)
-  }
-
-  getPartialMergeState (value) {
-    return value
-  }
-
   get viewName () { return 'index' }
   get validationOptions () { return { abortEarly: false } }
   get errorSummaryTitle () { return 'Fix the following errors' }

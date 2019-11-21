@@ -6,10 +6,6 @@ class MultilineTextField extends FormComponent {
     return helpers.getFormSchemaKeys(this.name, 'string', this)
   }
 
-  getStateSchemaKeys () {
-    return helpers.getStateSchemaKeys(this.name, 'string', this)
-  }
-
   getViewModel (formData, errors) {
     const { schema, options } = this
     const viewModel = super.getViewModel(formData, errors)

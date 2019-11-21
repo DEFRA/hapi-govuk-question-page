@@ -7,9 +7,6 @@ class YesNoField extends FormComponent {
 
     const { options } = this
 
-    // Defaults
-    // options.list = '__yesNo'
-
     if (!options.classes) {
       options.classes = 'govuk-radios--inline'
     }
@@ -18,20 +15,14 @@ class YesNoField extends FormComponent {
     const list = { type: 'boolean', items }
     const values = items.map(item => item.value)
     const formSchema = helpers.buildFormSchema(list.type, this, options.required !== false).valid(...values)
-    const stateSchema = helpers.buildStateSchema(list.type, this).valid(...values)
 
     this.list = list
     this.items = items
     this.formSchema = formSchema
-    this.stateSchema = stateSchema
   }
 
   getFormSchemaKeys () {
     return { [this.name]: this.formSchema }
-  }
-
-  getStateSchemaKeys () {
-    return { [this.name]: this.stateSchema }
   }
 
   getDisplayStringFromState (state) {

@@ -1,12 +1,10 @@
 const moment = require('moment')
 const { FormComponent, ComponentCollection } = require('.')
-const helpers = require('./helpers')
 
 class DatePartsField extends FormComponent {
   constructor (definition) {
     super(definition)
     const { name, options } = this
-    const stateSchema = helpers.buildStateSchema('date', this)
 
     const children = new ComponentCollection([
       { type: 'NumberField', name: `${name}__day`, title: 'Day', schema: { min: 1, max: 31 }, options: { required: options.required, classes: 'govuk-input--width-2' } },
@@ -15,15 +13,10 @@ class DatePartsField extends FormComponent {
     ])
 
     this.children = children
-    this.stateSchema = stateSchema
   }
 
   getFormSchemaKeys () {
     return this.children.getFormSchemaKeys()
-  }
-
-  getStateSchemaKeys () {
-    return { [this.name]: this.stateSchema }
   }
 
   getFormDataFromState (state) {

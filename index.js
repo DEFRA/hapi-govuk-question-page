@@ -28,22 +28,15 @@ const handlerProvider = (route, handlerOptions) => {
       if (formResult.errors) {
         return h.view(page.viewName, page.getViewModel(payload, formResult.errors))
       } else {
-        const newState = page.getStateFromValidForm(formResult.value)
-        const stateResult = page.validateState(newState)
+        const update = page.getStateFromValidForm(formResult.value)
+        const setDataResult = await setData(request, update)
 
-        if (stateResult.errors) {
-          return h.view(page.viewName, page.getViewModel(payload, stateResult.errors))
+        if (setDataResult && setDataResult.errors) {
+          return h.view(page.viewName, page.getViewModel(payload, setDataResult.errors))
         } else {
-          const update = page.getPartialMergeState(stateResult.value)
-          const setDataResult = await setData(request, update)
+          const nextPagePath = await getNextPagePath(request)
 
-          if (setDataResult && setDataResult.errors) {
-            return h.view(page.viewName, page.getViewModel(payload, setDataResult.errors))
-          } else {
-            const nextPagePath = await getNextPagePath(request)
-
-            return h.redirect(nextPagePath)
-          }
+          return h.redirect(nextPagePath)
         }
       }
     }

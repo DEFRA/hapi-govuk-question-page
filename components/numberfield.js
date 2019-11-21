@@ -6,10 +6,6 @@ class NumberField extends FormComponent {
     return helpers.getFormSchemaKeys(this.name, 'number', this)
   }
 
-  getStateSchemaKeys () {
-    return helpers.getStateSchemaKeys(this.name, 'number', this)
-  }
-
   getViewModel (formData, errors) {
     const viewModel = super.getViewModel(formData, errors)
     viewModel.type = 'number'

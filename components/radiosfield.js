@@ -7,10 +7,8 @@ class RadiosField extends ConditionalFormComponent {
 
     const { list, options, values } = this
     const formSchema = helpers.buildFormSchema(list.type, this, options.required !== false).valid(...values)
-    const stateSchema = helpers.buildStateSchema(list.type, this).valid(...values)
 
     this.formSchema = formSchema
-    this.stateSchema = stateSchema
   }
 
   getDisplayStringFromState (state) {

@@ -12,7 +12,6 @@ class CheckboxesField extends ConditionalFormComponent {
 
     this.list = list
     this.formSchema = helpers.buildFormSchema(alternatives, this, options.required !== false)
-    this.stateSchema = helpers.buildStateSchema(alternatives, this)
   }
 
   getDisplayStringFromState (state) {

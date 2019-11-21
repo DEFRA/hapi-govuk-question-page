@@ -12,7 +12,13 @@ function buildSchema (type, keys) {
 }
 
 function buildFormSchema (schemaType, component, isRequired = true) {
-  let schema = buildSchema(schemaType, component.schema)
+  const definedSchema = component.schema || {}
+
+  let schema = schemaType.isJoi ? schemaType : joi[schemaType]()
+  Object.keys(definedSchema).forEach(key => {
+    const val = definedSchema[key]
+    schema = schema[key](typeof val === 'boolean' ? undefined : val)
+  })
 
   if (isRequired) {
     schema = schema.required()
@@ -33,44 +39,14 @@ function buildFormSchema (schemaType, component, isRequired = true) {
   return schema
 }
 
-function buildStateSchema (schemaType, component) {
-  let schema = buildSchema(schemaType, component.schema)
-
-  if (component.title) {
-    schema = schema.label(component.title)
-  }
-
-  if (component.options.required !== false) {
-    schema = schema.required()
-  }
-
-  if (component.options.required === false) {
-    schema = schema.allow(null)
-  }
-
-  if (schema.trim && component.schema.trim !== false) {
-    schema = schema.trim()
-  }
-
-  return schema
-}
-
 function getFormSchemaKeys (name, schemaType, component) {
   const schema = buildFormSchema(schemaType, component)
 
   return { [component.name]: schema }
 }
 
-function getStateSchemaKeys (name, schemaType, component) {
-  const schema = buildStateSchema(schemaType, component)
-
-  return { [name]: schema }
-}
-
 module.exports = {
   buildSchema,
   buildFormSchema,
-  buildStateSchema,
-  getFormSchemaKeys,
-  getStateSchemaKeys
+  getFormSchemaKeys
 }

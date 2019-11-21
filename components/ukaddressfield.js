@@ -1,12 +1,9 @@
-const joi = require('@hapi/joi')
 const { FormComponent, ComponentCollection } = require('.')
-const helpers = require('./helpers')
 
 class UkAddressField extends FormComponent {
   constructor (definition) {
     super(definition)
     const { name, options } = this
-    const stateSchema = helpers.buildStateSchema('date', this)
 
     const childrenList = [
       { type: 'TextField', name: 'premises', title: 'Premises', schema: { max: 100 }, options: { required: options.required } },
@@ -16,8 +13,6 @@ class UkAddressField extends FormComponent {
       { type: 'TextField', name: 'postcode', title: 'Postcode', schema: { max: 10 }, options: { required: options.required } }
     ]
 
-    const stateChildren = new ComponentCollection(childrenList)
-
     // Modify the name to add a prefix and reuse
     // the children to create the formComponents
     childrenList.forEach(child => (child.name = `${name}__${child.name}`))
@@ -25,21 +20,10 @@ class UkAddressField extends FormComponent {
     const formChildren = new ComponentCollection(childrenList)
 
     this.formChildren = formChildren
-    this.stateChildren = stateChildren
-    this.stateSchema = stateSchema
   }
 
   getFormSchemaKeys () {
     return this.formChildren.getFormSchemaKeys()
-  }
-
-  getStateSchemaKeys () {
-    const { name, options } = this
-    return {
-      [name]: options.required === false
-        ? joi.object().keys(this.stateChildren.getStateSchemaKeys()).allow(null)
-        : joi.object().keys(this.stateChildren.getStateSchemaKeys()).required()
-    }
   }
 
   getFormDataFromState (state) {

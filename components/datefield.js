@@ -16,10 +16,6 @@ class DateField extends FormComponent {
     return helpers.getFormSchemaKeys(this.name, 'date', this)
   }
 
-  getStateSchemaKeys () {
-    return helpers.getStateSchemaKeys(this.name, 'date', this)
-  }
-
   getFormValueFromState (state) {
     const name = this.name
     const value = state[name]
