@@ -1,0 +1,30 @@
+{
+  "name": "digital-form-page",
+  "version": "0.0.1",
+  "description": "A hapi plugin for simple digital form pages",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DEFRA/digital-form-page"
+  },
+  "author": "Department for Environment, Food and Rural Affairs <https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs>.",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "@hapi/boom": "7.4.7",
+    "@hapi/hoek": "^8.5.0",
+    "@hapi/joi": "16.1.2",
+    "@hapi/wreck": "16.0.1",
+    "expr-eval": "^2.0.2",
+    "moment": "2.22.2"
+  },
+  "devDependencies": {
+    "standard": "14.3.1"
+  },
+  "peerDependencies": {
+    "govuk-frontend": "3.x",
+    "nunjucks": "3.x"
+  }
+}

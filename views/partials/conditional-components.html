@@ -1,0 +1,6 @@
+{% from "./components.html" import componentList %}
+
+{% for component in components %}
+  {% import component.type.toLowerCase() + ".html" as view %}
+  {{ view[component.type](component) }}
+{% endfor %}

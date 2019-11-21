@@ -1,0 +1,6 @@
+{% from "button/macro.njk" import govukButton %}
+
+<form method="post" autocomplete="off" novalidate>
+  {{ componentList(components) }}
+  {{ govukButton({ attributes: { id: "submit" }, text: "Continue" }) }}
+</form>

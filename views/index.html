@@ -1,0 +1,24 @@
+{% from "error-summary/macro.njk" import govukErrorSummary %}
+{% from "partials/components.html" import componentList %}
+
+{% extends 'layout.html' %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if errors %}
+        {{ govukErrorSummary(errors) }}
+      {% endif %}
+
+      {% include "partials/heading.html" %}
+
+      {% if page.hasFormComponents or page.hasNext %}
+        {% include "partials/form.html" %}
+      {% else %}
+        {{ componentList(components) }}
+      {% endif %}
+
+      <pre>{{ value | dump(2) | safe }}</pre>
+    </div>
+  </div>
+{% endblock %}
