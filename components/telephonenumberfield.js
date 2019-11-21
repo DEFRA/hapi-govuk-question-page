@@ -2,8 +2,8 @@ const { FormComponent } = require('.')
 const helpers = require('./helpers')
 
 class TelephoneNumberField extends FormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
     const { options } = this
 
     if (!options.classes) {

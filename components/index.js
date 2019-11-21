@@ -6,17 +6,16 @@ const createConditionalComponents = Symbol('createConditionalComponents')
 const getSchemaKeys = Symbol('getSchemaKeys')
 
 class Component {
-  constructor (def, model) {
-    Object.assign(this, def)
-    this.model = model
+  constructor (definition) {
+    Object.assign(this, definition)
   }
 
   getViewModel () { return {} }
 }
 
 class FormComponent extends Component {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
     this.isFormComponent = true
   }
 
@@ -113,17 +112,16 @@ function getType (name) {
 // An ES 6 class providing conditional reveal support for radio buttons (https://design-system.service.gov.uk/components/radios/)
 // and checkboxes (https://design-system.service.gov.uk/components/checkboxes/)
 class ConditionalFormComponent extends FormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
     const { options } = this
-    // const list = model.lists.find(list => list.name === options.list)
     const list = options.list
     const items = list.items
     const values = items.map(item => item.value)
     this.list = list
     this.items = items
     this.values = values
-    this[createConditionalComponents](def, model)
+    this[createConditionalComponents](definition)
   }
 
   addConditionalComponents (item, itemModel, formData, errors) {
@@ -238,11 +236,9 @@ class ConditionalFormComponent extends FormComponent {
 }
 
 class ComponentCollection {
-  // constructor (items, model) {
   constructor (items) {
     const itemTypes = items.map(def => {
       const Type = getType(def.type)
-      // return new Type(def, model)
       return new Type(def)
     })
 

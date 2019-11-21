@@ -3,8 +3,8 @@ const { FormComponent, ComponentCollection } = require('.')
 const helpers = require('./helpers')
 
 class UkAddressField extends FormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
     const { name, options } = this
     const stateSchema = helpers.buildStateSchema('date', this)
 
@@ -16,13 +16,13 @@ class UkAddressField extends FormComponent {
       { type: 'TextField', name: 'postcode', title: 'Postcode', schema: { max: 10 }, options: { required: options.required } }
     ]
 
-    const stateChildren = new ComponentCollection(childrenList, model)
+    const stateChildren = new ComponentCollection(childrenList)
 
     // Modify the name to add a prefix and reuse
     // the children to create the formComponents
     childrenList.forEach(child => (child.name = `${name}__${child.name}`))
 
-    const formChildren = new ComponentCollection(childrenList, model)
+    const formChildren = new ComponentCollection(childrenList)
 
     this.formChildren = formChildren
     this.stateChildren = stateChildren

@@ -2,8 +2,8 @@ const { FormComponent } = require('.')
 const helpers = require('./helpers')
 
 class SelectField extends FormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
 
     const { options } = this
     // const list = model.lists.find(list => list.name === options.list)

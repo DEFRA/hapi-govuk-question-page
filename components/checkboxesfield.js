@@ -3,8 +3,8 @@ const { ConditionalFormComponent } = require('.')
 const helpers = require('./helpers')
 
 class CheckboxesField extends ConditionalFormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
     const { list, options, values } = this
     const itemSchema = joi[list.type]().valid(values)
     const itemsSchema = joi.array().items(itemSchema)

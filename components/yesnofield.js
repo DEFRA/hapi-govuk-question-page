@@ -2,8 +2,8 @@ const { FormComponent } = require('.')
 const helpers = require('./helpers')
 
 class YesNoField extends FormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
 
     const { options } = this
 

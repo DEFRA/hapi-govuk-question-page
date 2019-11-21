@@ -2,8 +2,8 @@ const { FormComponent } = require('.')
 const helpers = require('./helpers')
 
 class EmailAddressField extends FormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
     const { options, schema } = this
 
     schema.email = true

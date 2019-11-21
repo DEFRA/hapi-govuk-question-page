@@ -3,8 +3,8 @@ const { FormComponent, ComponentCollection } = require('.')
 const helpers = require('./helpers')
 
 class DateTimePartsField extends FormComponent {
-  constructor (def, model) {
-    super(def, model)
+  constructor (definition) {
+    super(definition)
     const { name, options } = this
     const stateSchema = helpers.buildStateSchema('date', this)
 
@@ -14,7 +14,7 @@ class DateTimePartsField extends FormComponent {
       { type: 'NumberField', name: `${name}__year`, title: 'Year', schema: { min: 1000, max: 3000 }, options: { required: options.required, classes: 'govuk-input--width-4' } },
       { type: 'NumberField', name: `${name}__hour`, title: 'Hour', schema: { min: 0, max: 23 }, options: { required: options.required, classes: 'govuk-input--width-2' } },
       { type: 'NumberField', name: `${name}__minute`, title: 'Minute', schema: { min: 0, max: 59 }, options: { required: options.required, classes: 'govuk-input--width-2' } }
-    ], def)
+    ])
 
     this.children = children
     this.stateSchema = stateSchema
