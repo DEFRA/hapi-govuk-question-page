@@ -5,17 +5,17 @@ const helpers = require('./helpers')
 class CheckboxesField extends ConditionalFormComponent {
   constructor (definition) {
     super(definition)
-    const { list, options, values } = this
-    const itemSchema = joi[list.type]().valid(values)
+    const { list, options: { required } = {}, values = [] } = this
+    const itemSchema = joi[list.type]().valid(...values)
     const itemsSchema = joi.array().items(itemSchema)
     const alternatives = joi.alternatives([itemSchema, itemsSchema])
 
     this.list = list
-    this.formSchema = helpers.buildFormSchema(alternatives, this, options.required !== false)
+    this.formSchema = helpers.buildFormSchema(alternatives, this, required !== false)
   }
 
   getDisplayStringFromState (state) {
-    const { name, items } = this
+    const { name, items = [] } = this
 
     if (name in state) {
       const value = state[name]
@@ -30,7 +30,7 @@ class CheckboxesField extends ConditionalFormComponent {
   }
 
   getViewModel (formData, errors) {
-    const { name, items } = this
+    const { name, options: { bold } = {}, items = [] } = this
     const viewModel = super.getViewModel(formData, errors)
     let formDataItems = []
 
@@ -53,7 +53,7 @@ class CheckboxesField extends ConditionalFormComponent {
           checked: !!formDataItems.find(i => '' + item.value === i)
         }
 
-        if (this.options.bold) {
+        if (bold) {
           itemModel.label = {
             classes: 'govuk-label--s'
           }

@@ -7,12 +7,12 @@ class TextField extends FormComponent {
   }
 
   getViewModel (formData, errors) {
-    const { schema } = this
+    const { schema: { max } = {} } = this
     const viewModel = super.getViewModel(formData, errors)
 
-    if (typeof schema.max === 'number') {
+    if (typeof max === 'number') {
       viewModel.attributes = {
-        maxlength: schema.max
+        maxlength: max
       }
     }
 

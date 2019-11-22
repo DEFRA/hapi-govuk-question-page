@@ -2,8 +2,6 @@ const joi = require('@hapi/joi')
 const componentTypes = require('../component-types')
 const nunjucks = require('nunjucks')
 const path = require('path')
-const createConditionalComponents = Symbol('createConditionalComponents')
-const getSchemaKeys = Symbol('getSchemaKeys')
 
 class Component {
   constructor (definition) {
@@ -54,24 +52,23 @@ class FormComponent extends Component {
   }
 
   getViewModel (formData, errors) {
-    const options = this.options
+    const { name, title, hint, options = {} } = this
     const isOptional = options.required === false
-    const label = this.title + (isOptional ? ' (optional)' : '')
+    const label = title + (isOptional ? ' (optional)' : '')
 
-    const name = this.name
     const model = {
       label: {
         text: label,
         classes: 'govuk-label--s'
       },
       id: name,
-      name: name,
+      name,
       value: formData[name]
     }
 
-    if (this.hint) {
+    if (hint) {
       model.hint = {
-        html: this.hint
+        html: hint
       }
     }
 
@@ -113,14 +110,12 @@ function getType (name) {
 class ConditionalFormComponent extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { options } = this
-    const list = options.list
-    const items = list.items
+    const { options = {} } = this
+    const { list = {} } = options
+    const { items = [] } = list
     const values = items.map(item => item.value)
-    this.list = list
-    this.items = items
-    this.values = values
-    this[createConditionalComponents](definition)
+    Object.assign(this, { list, items, values })
+    this.createConditionalComponents(definition)
   }
 
   addConditionalComponents (item, itemModel, formData, errors) {
@@ -151,7 +146,7 @@ class ConditionalFormComponent extends FormComponent {
   }
 
   getFormSchemaKeys () {
-    return this[getSchemaKeys]('form')
+    return this.getSchemaKeys('form')
   }
 
   getStateFromValidForm (payload) {
@@ -231,7 +226,7 @@ class ConditionalFormComponent extends FormComponent {
 }
 
 class ComponentCollection {
-  constructor (items) {
+  constructor (items = []) {
     const itemTypes = items.map(def => {
       const Type = getType(def.type)
       return new Type(def)

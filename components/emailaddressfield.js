@@ -4,9 +4,11 @@ const helpers = require('./helpers')
 class EmailAddressField extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { options, schema } = this
 
+    const schema = this.schema = this.schema || {}
     schema.email = true
+
+    const options = this.options = this.options || {}
     if (!options.classes) {
       options.classes = 'govuk-input--width-20'
     }

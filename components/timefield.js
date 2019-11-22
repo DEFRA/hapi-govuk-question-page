@@ -4,8 +4,8 @@ const helpers = require('./helpers')
 class TimeField extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { options } = this
 
+    const options = this.options = this.options || {}
     if (!options.classes) {
       options.classes = 'govuk-input--width-4'
     }

@@ -4,8 +4,8 @@ const helpers = require('./helpers')
 class TelephoneNumberField extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { options } = this
 
+    const options = this.options = this.options || {}
     if (!options.classes) {
       options.classes = 'govuk-input--width-10'
     }
@@ -16,12 +16,12 @@ class TelephoneNumberField extends FormComponent {
   }
 
   getViewModel (formData, errors) {
-    const schema = this.schema
+    const { schema: { max } = {} } = this
     const viewModel = super.getViewModel(formData, errors)
 
-    if (typeof schema.max === 'number') {
+    if (typeof max === 'number') {
       viewModel.attributes = {
-        maxlength: schema.max
+        maxlength: max
       }
     }
 

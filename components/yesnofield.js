@@ -5,8 +5,7 @@ class YesNoField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { options } = this
-
+    const options = this.options = this.options || {}
     if (!options.classes) {
       options.classes = 'govuk-radios--inline'
     }

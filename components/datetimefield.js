@@ -5,8 +5,8 @@ const helpers = require('./helpers')
 class DateTimeField extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { options } = this
 
+    const options = this.options = this.options || {}
     if (!options.classes) {
       options.classes = 'govuk-input--width-20'
     }

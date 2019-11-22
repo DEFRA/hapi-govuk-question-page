@@ -12,9 +12,9 @@ function buildSchema (type, keys) {
 }
 
 function buildFormSchema (schemaType, component, isRequired = true) {
-  const definedSchema = component.schema || {}
+  const { title, schema: definedSchema = {}, options: { required } = {} } = component
 
-  let schema = schemaType.isJoi ? schemaType : joi[schemaType]()
+  let schema = joi.isSchema(schemaType) ? schemaType : joi[schemaType]()
   Object.keys(definedSchema).forEach(key => {
     const val = definedSchema[key]
     schema = schema[key](typeof val === 'boolean' ? undefined : val)
@@ -24,15 +24,15 @@ function buildFormSchema (schemaType, component, isRequired = true) {
     schema = schema.required()
   }
 
-  if (component.title) {
-    schema = schema.label(component.title)
+  if (title) {
+    schema = schema.label(title)
   }
 
-  if (component.options.required === false) {
+  if (required === false) {
     schema = schema.allow('')
   }
 
-  if (schema.trim && component.schema.trim !== false) {
+  if (schema.trim && definedSchema.trim !== false) {
     schema = schema.trim()
   }
 

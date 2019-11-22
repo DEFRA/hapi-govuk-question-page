@@ -4,14 +4,14 @@ const { FormComponent, ComponentCollection } = require('.')
 class DateTimePartsField extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { name, options } = this
+    const { name, options: { required } = {} } = this
 
     const children = new ComponentCollection([
-      { type: 'NumberField', name: `${name}__day`, title: 'Day', schema: { min: 1, max: 31 }, options: { required: options.required, classes: 'govuk-input--width-2' } },
-      { type: 'NumberField', name: `${name}__month`, title: 'Month', schema: { min: 1, max: 12 }, options: { required: options.required, classes: 'govuk-input--width-2' } },
-      { type: 'NumberField', name: `${name}__year`, title: 'Year', schema: { min: 1000, max: 3000 }, options: { required: options.required, classes: 'govuk-input--width-4' } },
-      { type: 'NumberField', name: `${name}__hour`, title: 'Hour', schema: { min: 0, max: 23 }, options: { required: options.required, classes: 'govuk-input--width-2' } },
-      { type: 'NumberField', name: `${name}__minute`, title: 'Minute', schema: { min: 0, max: 59 }, options: { required: options.required, classes: 'govuk-input--width-2' } }
+      { type: 'NumberField', name: `${name}__day`, title: 'Day', schema: { min: 1, max: 31 }, options: { required, classes: 'govuk-input--width-2' } },
+      { type: 'NumberField', name: `${name}__month`, title: 'Month', schema: { min: 1, max: 12 }, options: { required, classes: 'govuk-input--width-2' } },
+      { type: 'NumberField', name: `${name}__year`, title: 'Year', schema: { min: 1000, max: 3000 }, options: { required, classes: 'govuk-input--width-4' } },
+      { type: 'NumberField', name: `${name}__hour`, title: 'Hour', schema: { min: 0, max: 23 }, options: { required, classes: 'govuk-input--width-2' } },
+      { type: 'NumberField', name: `${name}__minute`, title: 'Minute', schema: { min: 0, max: 59 }, options: { required, classes: 'govuk-input--width-2' } }
     ])
 
     this.children = children
@@ -19,10 +19,6 @@ class DateTimePartsField extends FormComponent {
 
   getFormSchemaKeys () {
     return this.children.getFormSchemaKeys()
-  }
-
-  getStateSchemaKeys () {
-    return { [this.name]: this.stateSchema }
   }
 
   getFormDataFromState (state) {

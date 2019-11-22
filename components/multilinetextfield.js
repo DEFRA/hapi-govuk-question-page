@@ -7,17 +7,17 @@ class MultilineTextField extends FormComponent {
   }
 
   getViewModel (formData, errors) {
-    const { schema, options } = this
+    const { schema: { max } = {}, options: { rows } = {} } = this
     const viewModel = super.getViewModel(formData, errors)
 
-    if (typeof schema.max === 'number') {
+    if (typeof max === 'number') {
       viewModel.attributes = {
-        maxlength: schema.max
+        maxlength: max
       }
     }
 
-    if (options.rows) {
-      viewModel.rows = options.rows
+    if (rows) {
+      viewModel.rows = rows
     }
 
     return viewModel

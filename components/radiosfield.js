@@ -5,8 +5,8 @@ class RadiosField extends ConditionalFormComponent {
   constructor (definition) {
     super(definition)
 
-    const { list, options, values } = this
-    const formSchema = helpers.buildFormSchema(list.type, this, options.required !== false).valid(...values)
+    const { list, options: { required } = {}, values = [] } = this
+    const formSchema = helpers.buildFormSchema(list.type, this, required !== false).valid(...values)
 
     this.formSchema = formSchema
   }
