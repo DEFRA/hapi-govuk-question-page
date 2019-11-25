@@ -1,6 +1,7 @@
 .DS_Store
 .vscode
 .idea
+package-lock.json
 node_modules
 npm-debug.log
 server/public/build
