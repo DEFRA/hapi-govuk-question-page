@@ -1,14 +1,21 @@
-const { ConditionalFormComponent } = require('.')
+const { FormComponent } = require('.')
 const helpers = require('./helpers')
 
-class RadiosField extends ConditionalFormComponent {
+class RadiosField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { list, options: { required } = {}, values = [] } = this
-    const formSchema = helpers.buildFormSchema(list.type, this, required !== false).valid(...values)
+    const { options: { required, list: { type, items = [] } = {} } = {} } = this
+    this.items = items
+
+    const values = items.map(item => item.value)
+    const formSchema = helpers.buildFormSchema(type, this, required !== false).valid(...values)
 
     this.formSchema = formSchema
+  }
+
+  getFormSchemaKeys () {
+    return { [this.name]: this.formSchema }
   }
 
   getDisplayStringFromState (state) {
@@ -19,35 +26,41 @@ class RadiosField extends ConditionalFormComponent {
   }
 
   getViewModel (formData, errors) {
-    const { name, items, options } = this
+    const { name, options: { bold } = {}, items = [] } = this
     const viewModel = super.getViewModel(formData, errors)
 
     Object.assign(viewModel, {
       fieldset: {
         legend: viewModel.label
       },
-      items: items.map((item) => {
+      items: items.map(({ text, value, description, conditionalHtml }) => {
         const itemModel = {
-          html: item.text,
-          value: item.value,
+          text,
+          value,
           // Do a loose string based check as state may or
           // may not match the item value types.
-          checked: '' + item.value === '' + formData[name]
+          checked: '' + value === '' + formData[name]
         }
 
-        if (options.bold) {
+        if (bold) {
           itemModel.label = {
             classes: 'govuk-label--s'
           }
         }
 
-        if (item.description) {
+        if (description) {
           itemModel.hint = {
-            html: item.description
+            html: description
           }
         }
 
-        return super.addConditionalComponents(item, itemModel, formData, errors)
+        if (conditionalHtml) {
+          itemModel.conditional = {
+            html: conditionalHtml
+          }
+        }
+
+        return itemModel
       })
     })
 

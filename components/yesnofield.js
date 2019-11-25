@@ -9,13 +9,15 @@ class YesNoField extends FormComponent {
     if (!options.classes) {
       options.classes = 'govuk-radios--inline'
     }
+    const { yesFirst = true } = options
 
-    const items = [{ text: 'Yes', value: true }, { text: 'No', value: false }]
+    const [yes, no] = [{ text: 'Yes', value: true }, { text: 'No', value: false }]
+
+    const items = yesFirst ? [yes, no] : [no, yes]
     const list = { type: 'boolean', items }
     const values = items.map(item => item.value)
     const formSchema = helpers.buildFormSchema(list.type, this, options.required !== false).valid(...values)
 
-    this.list = list
     this.items = items
     this.formSchema = formSchema
   }
@@ -39,13 +41,13 @@ class YesNoField extends FormComponent {
       fieldset: {
         legend: viewModel.label
       },
-      items: items.map(item => {
+      items: items.map(({ text, value }) => {
         return {
-          text: item.text,
-          value: item.value,
+          text: text,
+          value: value,
           // Do a loose string based check as state may or
           // may not match the item value types.
-          checked: '' + item.value === '' + formData[name]
+          checked: '' + value === '' + formData[name]
         }
       })
     })

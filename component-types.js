@@ -93,5 +93,10 @@ module.exports = [
     name: 'Details',
     title: 'Details',
     subType: 'content'
+  },
+  {
+    name: 'CheckboxesWithTextField',
+    title: 'Checkboxes with text boxes field',
+    subType: 'field'
   }
 ]

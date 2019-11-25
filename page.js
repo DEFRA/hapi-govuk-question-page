@@ -12,9 +12,7 @@ class Page {
     // Components collection
     const components = new ComponentCollection(pageDef.components)
     this.components = components
-    const conditionalFormComponents = components.formItems.filter(c => c.conditionalComponents)
     this.hasFormComponents = !!components.formItems.length
-    this.hasConditionalFormComponents = !!conditionalFormComponents.length
 
     // Schema
     this[FORM_SCHEMA] = this.components.formSchema

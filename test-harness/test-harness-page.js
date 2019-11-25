@@ -1,6 +1,22 @@
 module.exports = {
   title: 'Test harness',
   components: [{
+    type: 'CheckboxesWithTextField',
+    name: 'checkboxesWithTextField',
+    title: 'Checkboxes with text field',
+    hint: 'Pick one',
+    options: {
+      required: false,
+      list: {
+        type: 'string',
+        items: [
+          { text: 'Email', value: 'email', conditionalTextField: { name: 'email', title: 'Email address', hint: 'This is your email', max: 2 } },
+          { text: 'Phone', value: 'phone', conditionalTextField: { name: 'phone', title: 'Phone number', hint: 'This is your phone number' } },
+          { text: 'Text', value: 'text', conditionalTextField: { name: 'text', title: 'Mobile number', hint: 'This is your mobile number' } }
+        ]
+      }
+    }
+  }, {
     type: 'TextField',
     name: 'textField',
     title: 'Text field',
@@ -37,7 +53,8 @@ module.exports = {
   }, {
     type: 'YesNoField',
     name: 'yesNoField',
-    title: 'Yes/No field'
+    title: 'Yes/No field',
+    options: { yesFirst: false }
   }, {
     type: 'EmailAddressField',
     name: 'emailAddressField',
@@ -58,7 +75,7 @@ module.exports = {
       list: {
         type: 'string',
         items: [
-          { text: 'Sole trader', value: 'soleTrader' },
+          { text: 'Sole trader', value: 'soleTrader', conditionalHtml: '<p class="govuk-body">Conditions apply...</p>' },
           { text: 'Private Limited Company', value: 'privateLimitedCompany' },
           { text: 'Public Limited Company', value: 'publicLimitedCompany' },
           { text: 'Limited Liability Partnership', value: 'limitedLiabilityPartnership' },
@@ -290,7 +307,7 @@ module.exports = {
         title: 'Horse breed',
         type: 'string',
         items: [
-          { text: 'Arabian', value: 'Arabian' },
+          { text: 'Arabian', value: 'Arabian', conditionalHtml: '<p class="govuk-body">Conditions apply...</p>' },
           { text: 'Patomine', value: 'Patomine' },
           { text: 'Shire', value: 'Shire' },
           { text: 'Shetland', value: 'Shetland' },

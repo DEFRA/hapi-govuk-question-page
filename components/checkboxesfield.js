@@ -1,17 +1,23 @@
 const joi = require('@hapi/joi')
-const { ConditionalFormComponent } = require('.')
+const { FormComponent } = require('.')
 const helpers = require('./helpers')
 
-class CheckboxesField extends ConditionalFormComponent {
+class CheckboxesField extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { list, options: { required } = {}, values = [] } = this
-    const itemSchema = joi[list.type]().valid(...values)
+
+    const { options: { required, list: { type, items = [] } = {} } = {} } = this
+    this.items = items
+
+    const values = items.map(item => item.value)
+    const itemSchema = joi[type]().valid(...values)
     const itemsSchema = joi.array().items(itemSchema)
     const alternatives = joi.alternatives([itemSchema, itemsSchema])
-
-    this.list = list
     this.formSchema = helpers.buildFormSchema(alternatives, this, required !== false)
+  }
+
+  getFormSchemaKeys () {
+    return { [this.name]: this.formSchema }
   }
 
   getDisplayStringFromState (state) {
@@ -30,7 +36,7 @@ class CheckboxesField extends ConditionalFormComponent {
   }
 
   getViewModel (formData, errors) {
-    const { name, options: { bold } = {}, items = [] } = this
+    const { name, items = [] } = this
     const viewModel = super.getViewModel(formData, errors)
     let formDataItems = []
 
@@ -45,31 +51,35 @@ class CheckboxesField extends ConditionalFormComponent {
         legend: viewModel.label
       },
       items: items.map(item => {
-        const itemModel = {
-          text: item.text,
-          value: item.value,
-          // Do a loose string based check as state may or
-          // may not match the item value types.
-          checked: !!formDataItems.find(i => '' + item.value === i)
-        }
-
-        if (bold) {
-          itemModel.label = {
-            classes: 'govuk-label--s'
-          }
-        }
-
-        if (item.description) {
-          itemModel.hint = {
-            html: item.description
-          }
-        }
-
-        return super.addConditionalComponents(item, itemModel, formData, errors)
+        // Do a loose string based check as state may or
+        // may not match the item value types.
+        const itemIsSelected = !!formDataItems.find(i => '' + item.value === i)
+        return this.mapItemForViewModel(formData, errors, item, itemIsSelected)
       })
     })
 
     return viewModel
+  }
+
+  mapItemForViewModel (formData, errors, item, checked = false) {
+    const { options: { bold } = {} } = this
+    const { text, value, description, conditionalHtml } = item
+
+    const itemModel = { text, value, checked }
+
+    if (bold) {
+      itemModel.label = { classes: 'govuk-label--s' }
+    }
+
+    if (description) {
+      itemModel.hint = { html: description }
+    }
+
+    if (conditionalHtml) {
+      itemModel.conditional = { html: conditionalHtml }
+    }
+
+    return itemModel
   }
 }
 
