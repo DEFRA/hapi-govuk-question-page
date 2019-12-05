@@ -5,13 +5,16 @@ class SelectField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { options } = this
-    const list = options.list
-    const items = list.items
+    const { titleForErrorText, nameForErrorText, options: { list: { items = [] } = {} } = {} } = this
     const values = items.map(item => item.value)
-    const formSchema = helpers.buildFormSchema('string', this).valid(...values)
 
-    this.list = list
+    let formSchema = helpers.buildFormSchema('string', this).valid(...values)
+    formSchema = formSchema.messages({
+      'any.required': `Select ${nameForErrorText}`,
+      'string.empty': `Select ${nameForErrorText}`,
+      'any.only': `${titleForErrorText} must be from the list`
+    })
+
     this.items = items
     this.formSchema = formSchema
   }

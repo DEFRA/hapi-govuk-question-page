@@ -1,20 +1,9 @@
-const { FormComponent } = require('.')
-const helpers = require('./helpers')
+const TextField = require('./textfield')
 
-class MultilineTextField extends FormComponent {
-  getFormSchemaKeys () {
-    return helpers.getFormSchemaKeys(this.name, 'string', this)
-  }
-
+class MultilineTextField extends TextField {
   getViewModel (formData, errors) {
-    const { schema: { max } = {}, options: { rows } = {} } = this
+    const { options: { rows } = {} } = this
     const viewModel = super.getViewModel(formData, errors)
-
-    if (typeof max === 'number') {
-      viewModel.attributes = {
-        maxlength: max
-      }
-    }
 
     if (rows) {
       viewModel.rows = rows

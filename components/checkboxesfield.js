@@ -6,14 +6,23 @@ class CheckboxesField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { options: { required, list: { type, items = [] } = {} } = {} } = this
+    const { titleForErrorText, nameForErrorText, options: { required, list: { type, items = [] } = {} } = {} } = this
     this.items = items
 
     const values = items.map(item => item.value)
     const itemSchema = joi[type]().valid(...values)
     const itemsSchema = joi.array().items(itemSchema)
     const alternatives = joi.alternatives([itemSchema, itemsSchema])
+
     this.formSchema = helpers.buildFormSchema(alternatives, this, required !== false)
+    this.formSchema = this.formSchema.messages({
+      'any.required': `Select ${nameForErrorText}`,
+      'string.empty': `Select ${nameForErrorText}`,
+      'any.only': `${titleForErrorText} must be from the list`,
+      'array.includes': `${titleForErrorText} must be from the list`,
+      'alternatives.types': `${titleForErrorText} must be from the list`,
+      'alternatives.match': `${titleForErrorText} must be from the list`
+    })
   }
 
   getFormSchemaKeys () {

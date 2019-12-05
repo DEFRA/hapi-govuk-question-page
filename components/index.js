@@ -13,6 +13,10 @@ class FormComponent extends Component {
   constructor (definition) {
     super(definition)
     this.isFormComponent = true
+
+    const { name, title, titleForError } = this
+    this.titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
+    this.nameForErrorText = this.titleForErrorText.charAt(0).toLowerCase() + this.titleForErrorText.slice(1)
   }
 
   getFormDataFromState (state) {
@@ -104,24 +108,24 @@ function getType (name) {
 }
 
 class ComponentCollection {
-  constructor (items = []) {
-    const itemTypes = items.map(def => {
+  constructor (componentDefinitions = []) {
+    const components = componentDefinitions.map(def => {
       const Type = getType(def.type)
       return new Type(def)
     })
 
-    const formItems = itemTypes.filter(component => component.isFormComponent)
+    const formComponents = components.filter(component => component.isFormComponent)
 
-    this.items = itemTypes
-    this.formItems = formItems
+    this.components = components
+    this.formComponents = formComponents
     this.formSchema = joi.object().keys(this.getFormSchemaKeys()).required()
   }
 
   getFormSchemaKeys () {
     const keys = {}
 
-    this.formItems.forEach(item => {
-      Object.assign(keys, item.getFormSchemaKeys())
+    this.formComponents.forEach(component => {
+      Object.assign(keys, component.getFormSchemaKeys())
     })
 
     return keys
@@ -130,8 +134,8 @@ class ComponentCollection {
   getFormDataFromState (state) {
     const formData = {}
 
-    this.formItems.forEach(item => {
-      Object.assign(formData, item.getFormDataFromState(state))
+    this.formComponents.forEach(component => {
+      Object.assign(formData, component.getFormDataFromState(state))
     })
 
     return formData
@@ -140,19 +144,19 @@ class ComponentCollection {
   getStateFromValidForm (payload) {
     const state = {}
 
-    this.formItems.forEach(item => {
-      Object.assign(state, item.getStateFromValidForm(payload))
+    this.formComponents.forEach(component => {
+      Object.assign(state, component.getStateFromValidForm(payload))
     })
 
     return state
   }
 
   getViewModel (formData, errors) {
-    return this.items.map(item => {
+    return this.components.map(component => {
       return {
-        type: item.type,
-        isFormComponent: item.isFormComponent,
-        model: item.getViewModel(formData, errors)
+        type: component.type,
+        isFormComponent: component.isFormComponent,
+        model: component.getViewModel(formData, errors)
       }
     })
   }

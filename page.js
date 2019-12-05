@@ -1,7 +1,8 @@
 const { ComponentCollection } = require('./components')
 
-const FORM_SCHEMA = Symbol('FORM_SCHEMA')
-const STATE_SCHEMA = Symbol('STATE_SCHEMA')
+const VIEW_NAME = 'index'
+const ERROR_SUMMARY_TITLE = 'Fix the following errors'
+const VALIDATION_OPTIONS = { abortEarly: false }
 
 class Page {
   constructor (pageDef) {
@@ -12,11 +13,10 @@ class Page {
     // Components collection
     const components = new ComponentCollection(pageDef.components)
     this.components = components
-    this.hasFormComponents = !!components.formItems.length
+    this.hasFormComponents = !!components.formComponents.length
 
     // Schema
-    this[FORM_SCHEMA] = this.components.formSchema
-    this[STATE_SCHEMA] = this.components.stateSchema
+    this.formSchema = this.components.formSchema
   }
 
   getViewModel (formData, errors) {
@@ -57,7 +57,7 @@ class Page {
   getErrors (validationResult) {
     if (validationResult && validationResult.error) {
       return {
-        titleText: this.errorSummaryTitle,
+        titleText: ERROR_SUMMARY_TITLE,
         errorList: validationResult.error.details.map(err => {
           const name = err.path.map((name, index) => index > 0 ? `__${name}` : name).join('')
 
@@ -72,24 +72,14 @@ class Page {
     }
   }
 
-  validate (value, schema) {
-    const result = schema.validate(value, this.validationOptions)
+  validateForm (payload) {
+    const result = this.formSchema.validate(payload, VALIDATION_OPTIONS)
     const errors = result.error ? this.getErrors(result) : null
 
     return { value: result.value, errors }
   }
 
-  validateForm (payload) {
-    return this.validate(payload, this.formSchema)
-  }
-
-  get viewName () { return 'index' }
-  get validationOptions () { return { abortEarly: false } }
-  get errorSummaryTitle () { return 'Fix the following errors' }
-  get formSchema () { return this[FORM_SCHEMA] }
-  set formSchema (value) { this[FORM_SCHEMA] = value }
-  get stateSchema () { return this[STATE_SCHEMA] }
-  set stateSchema (value) { this[STATE_SCHEMA] = value }
+  get viewName () { return VIEW_NAME }
 }
 
 module.exports = Page

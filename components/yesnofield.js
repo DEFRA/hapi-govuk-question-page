@@ -15,8 +15,16 @@ class YesNoField extends FormComponent {
 
     const items = yesFirst ? [yes, no] : [no, yes]
     const list = { type: 'boolean', items }
-    const values = items.map(item => item.value)
-    const formSchema = helpers.buildFormSchema(list.type, this, options.required !== false).valid(...values)
+
+    let formSchema = helpers.buildFormSchema(list.type, this, true)
+    const { name, title, titleForError } = this
+    const titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
+    const nameForErrorText = titleForErrorText.charAt(0).toLowerCase() + titleForErrorText.slice(1)
+    formSchema = formSchema.messages({
+      'any.required': `Select ${nameForErrorText}`,
+      'string.empty': `Select ${nameForErrorText}`,
+      'boolean.base': `${titleForErrorText} must be ${items[0].text} or ${items[1].text}`
+    })
 
     this.items = items
     this.formSchema = formSchema

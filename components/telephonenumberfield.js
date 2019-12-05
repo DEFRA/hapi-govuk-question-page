@@ -1,7 +1,6 @@
-const { FormComponent } = require('.')
-const helpers = require('./helpers')
+const TextField = require('./textfield')
 
-class TelephoneNumberField extends FormComponent {
+class TelephoneNumberField extends TextField {
   constructor (definition) {
     super(definition)
 
@@ -11,22 +10,9 @@ class TelephoneNumberField extends FormComponent {
     }
   }
 
-  getFormSchemaKeys () {
-    return helpers.getFormSchemaKeys(this.name, 'string', this)
-  }
-
   getViewModel (formData, errors) {
-    const { schema: { max } = {} } = this
     const viewModel = super.getViewModel(formData, errors)
-
-    if (typeof max === 'number') {
-      viewModel.attributes = {
-        maxlength: max
-      }
-    }
-
     viewModel.type = 'tel'
-
     return viewModel
   }
 }

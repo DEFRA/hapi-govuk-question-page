@@ -1,17 +1,24 @@
 const joi = require('@hapi/joi')
 const CheckboxesField = require('./checkboxesfield')
-// const helpers = require('./helpers')
 
 class CheckboxesWithTextField extends CheckboxesField {
   constructor (definition) {
     super(definition)
 
-    const schema = this.formSchema
-    console.log(schema)
+    this.textboxSchemas = this.items.filter(({ conditionalTextField }) => conditionalTextField)
+      .reduce((schemas, { value, conditionalTextField: { name, title, titleForError, schema: { max, trim } = {} } }) => {
+        const titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
+        const nameForErrorText = titleForErrorText.charAt(0).toLowerCase() + titleForErrorText.slice(1)
 
-    const textboxSchemas = this.items.filter(({ conditionalTextField }) => conditionalTextField).reduce((acc, { value, conditionalTextField: { name, title } }) => {
-      acc[name] = joi.string().label(title)
-        .when(this.name, {
+        let schema = joi.string().label(title)
+        if (max) {
+          schema = schema.max(max)
+        }
+        if (trim !== false) {
+          schema = schema.trim()
+        }
+
+        schema = schema.when(this.name, {
           is: joi.any().required(),
           then: joi.string().when(this.name, {
             switch: [{
@@ -25,10 +32,15 @@ class CheckboxesWithTextField extends CheckboxesField {
           }),
           otherwise: joi.string().optional().allow('', null)
         })
-      return acc
-    }, {})
 
-    this.textboxSchemas = textboxSchemas
+        schema = schema.messages({
+          'any.required': `Enter ${nameForErrorText}`,
+          'string.empty': `Enter ${nameForErrorText}`
+        })
+
+        schemas[name] = schema
+        return schemas
+      }, {})
   }
 
   getFormSchemaKeys () {

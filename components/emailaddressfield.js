@@ -1,35 +1,22 @@
-const { FormComponent } = require('.')
-const helpers = require('./helpers')
+const TextField = require('./textfield')
 
-class EmailAddressField extends FormComponent {
+class EmailAddressField extends TextField {
   constructor (definition) {
     super(definition)
-
-    const schema = this.schema = this.schema || {}
-    schema.email = true
 
     const options = this.options = this.options || {}
     if (!options.classes) {
       options.classes = 'govuk-input--width-20'
     }
-  }
 
-  getFormSchemaKeys () {
-    return helpers.getFormSchemaKeys(this.name, 'string', this)
+    this.formSchema = this.formSchema.email({ tlds: false }).messages({
+      'string.email': `Enter ${this.nameForErrorText} in the correct format`
+    })
   }
 
   getViewModel (formData, errors) {
-    const schema = this.schema
     const viewModel = super.getViewModel(formData, errors)
-
-    if (typeof schema.max === 'number') {
-      viewModel.attributes = {
-        maxlength: schema.max
-      }
-    }
-
     viewModel.type = 'email'
-
     return viewModel
   }
 }

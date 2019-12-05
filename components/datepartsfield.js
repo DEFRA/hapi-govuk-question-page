@@ -1,22 +1,74 @@
+const joi = require('@hapi/joi')
 const moment = require('moment')
-const { FormComponent, ComponentCollection } = require('.')
+const { FormComponent } = require('.')
+
+const PARTS = ['Day', 'Month', 'Year']
+const SUFFIXES = PARTS.map(part => `__${part.toLowerCase()}`)
+const SIZES = [2, 2, 4]
+
+const getPartsFromDate = (date) => {
+  return [date.getDate(), date.getMonth() + 1, date.getFullYear()]
+}
+
+const dateChecker = (required) => {
+  return (value, helpers) => {
+    const parent = helpers.state.ancestors[0]
+    const dateFieldName = helpers.state.path[helpers.state.path.length - 1]
+    const datePartsText = SUFFIXES.map(suffix => (parent[`${dateFieldName}${suffix}`] || '').trim())
+
+    const someEntered = datePartsText.some(datePartText => datePartText)
+    if (!someEntered) {
+      if (required === false) {
+        return value
+      } else {
+        return helpers.error('any.required')
+      }
+    }
+
+    const allEntered = datePartsText.every(datePartText => datePartText)
+    if (!allEntered) {
+      return helpers.error('date.format')
+    }
+
+    const dateParts = datePartsText.map(datePartText => Number.parseInt(datePartText))
+    const invalidEntry = dateParts.some(datePart => Number.isNaN(datePart))
+    if (invalidEntry) {
+      return helpers.error('date.base')
+    }
+    const parsedDateParts = getPartsFromDate(new Date(dateParts[0], dateParts[1] - 1, dateParts[2]))
+    const notMatched = dateParts.some((datePart, index) => datePart !== parsedDateParts[index])
+    if (notMatched) {
+      return helpers.error('date.base')
+    }
+
+    return value
+  }
+}
 
 class DatePartsField extends FormComponent {
   constructor (definition) {
     super(definition)
-    const { name, options: { required } = {} } = this
 
-    const children = new ComponentCollection([
-      { type: 'NumberField', name: `${name}__day`, title: 'Day', schema: { min: 1, max: 31 }, options: { required, classes: 'govuk-input--width-2' } },
-      { type: 'NumberField', name: `${name}__month`, title: 'Month', schema: { min: 1, max: 12 }, options: { required, classes: 'govuk-input--width-2' } },
-      { type: 'NumberField', name: `${name}__year`, title: 'Year', schema: { min: 1000, max: 3000 }, options: { required, classes: 'govuk-input--width-4' } }
-    ])
+    const { titleForErrorText, nameForErrorText, options: { required } = {} } = this
 
-    this.children = children
+    let schema = joi.object({ dummy: joi.any().default(1) }).default().custom(dateChecker(required))
+
+    schema = schema.messages({
+      'any.required': `Enter ${nameForErrorText}`,
+      'date.format': `${titleForErrorText} must include a day, month and year`,
+      'date.base': `Enter a real ${nameForErrorText}`
+    })
+
+    this.formSchema = schema
   }
 
   getFormSchemaKeys () {
-    return this.children.getFormSchemaKeys()
+    return {
+      [this.name]: this.formSchema,
+      [`${this.name}__day`]: joi.any(),
+      [`${this.name}__month`]: joi.any(),
+      [`${this.name}__year`]: joi.any()
+    }
   }
 
   getFormDataFromState (state) {
@@ -54,29 +106,18 @@ class DatePartsField extends FormComponent {
   }
 
   getViewModel (formData, errors) {
+    const { name: componentName } = this
     const viewModel = super.getViewModel(formData, errors)
 
-    // Todo: Remove after next
-    // release on govuk-frontend
-    viewModel.name = undefined
-
-    // Use the component collection to generate the subitems
-    const componentViewModels = this.children.getViewModel(formData, errors).map(vm => vm.model)
-
-    // Remove the labels and apply error classes to the items
-    componentViewModels.forEach(componentViewModel => {
-      componentViewModel.label = componentViewModel.label.text.replace(' (optional)', '')
-      if (componentViewModel.errorMessage) {
-        componentViewModel.classes += ' govuk-input--error'
-      }
+    viewModel.items = PARTS.map((label, index) => {
+      const name = `${componentName}${SUFFIXES[index]}`
+      const classes = `govuk-input--width-${SIZES[index]}${viewModel.errorMessage ? ' govuk-input--error' : ''}`
+      return { label, id: name, name, classes, value: formData[name] }
     })
 
-    Object.assign(viewModel, {
-      fieldset: {
-        legend: viewModel.label
-      },
-      items: componentViewModels
-    })
+    viewModel.fieldset = {
+      legend: viewModel.label
+    }
 
     return viewModel
   }

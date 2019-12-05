@@ -5,11 +5,17 @@ class RadiosField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { options: { required, list: { type, items = [] } = {} } = {} } = this
+    const { titleForErrorText, nameForErrorText, options: { list: { type, items = [] } = {} } = {} } = this
     this.items = items
 
     const values = items.map(item => item.value)
-    const formSchema = helpers.buildFormSchema(type, this, required !== false).valid(...values)
+
+    let formSchema = helpers.buildFormSchema(type, this, true).valid(...values)
+    formSchema = formSchema.messages({
+      'any.required': `Select ${nameForErrorText}`,
+      'string.empty': `Select ${nameForErrorText}`,
+      'any.only': `${titleForErrorText} must be from the list`
+    })
 
     this.formSchema = formSchema
   }

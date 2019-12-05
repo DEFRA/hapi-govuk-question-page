@@ -6,7 +6,7 @@ module.exports = {
     title: 'Checkboxes with text field',
     hint: 'Pick one',
     options: {
-      required: false,
+      // required: false,
       list: {
         type: 'string',
         items: [
@@ -20,6 +20,11 @@ module.exports = {
     type: 'TextField',
     name: 'textField',
     title: 'Text field',
+    titleForError: 'Your text field',
+    schema: {
+      trim: false,
+      max: 10
+    },
     hint: 'Help text'
   }, {
     type: 'MultilineTextField',
@@ -29,15 +34,20 @@ module.exports = {
   }, {
     type: 'NumberField',
     name: 'numberField',
-    title: 'Number field'
+    title: 'Number field',
+    options: { required: true }
+  /*
   }, {
     type: 'DateField',
     name: 'dateField',
     title: 'Date field'
+  */
   }, {
     type: 'DatePartsField',
     name: 'datePartsField',
-    title: 'Date parts field'
+    title: 'Date parts field',
+    options: { required: false }
+  /*
   }, {
     type: 'TimeField',
     name: 'timeField',
@@ -50,6 +60,7 @@ module.exports = {
     type: 'DateTimePartsField',
     name: 'dateTimePartsField',
     title: 'Date time parts field'
+  */
   }, {
     type: 'YesNoField',
     name: 'yesNoField',
@@ -63,10 +74,12 @@ module.exports = {
     type: 'TelephoneNumberField',
     name: 'telephoneNumberField',
     title: 'Telephone number field'
+  /*
   }, {
     type: 'UkAddressField',
     name: 'addressField',
     title: 'Telephone number field'
+  */
   }, {
     type: 'RadiosField',
     name: 'radiosField',
@@ -315,6 +328,7 @@ module.exports = {
         ]
       }
     }
+  /*
   }, {
     type: 'Para',
     content: 'Paragraph...'
@@ -325,5 +339,6 @@ module.exports = {
     type: 'Details',
     title: 'Title',
     content: 'Content'
+  */
   }]
 }
