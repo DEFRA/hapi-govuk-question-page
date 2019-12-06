@@ -1,5 +1,5 @@
+const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
-const helpers = require('./helpers')
 
 class YesNoField extends FormComponent {
   constructor (definition) {
@@ -14,12 +14,9 @@ class YesNoField extends FormComponent {
     const [yes, no] = [{ text: 'Yes', value: true }, { text: 'No', value: false }]
 
     const items = yesFirst ? [yes, no] : [no, yes]
-    const list = { type: 'boolean', items }
 
-    let formSchema = helpers.buildFormSchema(list.type, this, true)
-    const { name, title, titleForError } = this
-    const titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
-    const nameForErrorText = titleForErrorText.charAt(0).toLowerCase() + titleForErrorText.slice(1)
+    const { titleForErrorText, nameForErrorText } = this
+    let formSchema = joi.boolean().empty('').required().label(titleForErrorText)
     formSchema = formSchema.messages({
       'any.required': `Select ${nameForErrorText}`,
       'string.empty': `Select ${nameForErrorText}`,

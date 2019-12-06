@@ -15,28 +15,8 @@ module.exports = [
     subType: 'field'
   },
   {
-    name: 'DateField',
-    title: 'Date field',
-    subType: 'field'
-  },
-  {
-    name: 'TimeField',
-    title: 'Time field',
-    subType: 'field'
-  },
-  {
-    name: 'DateTimeField',
-    title: 'Date time field',
-    subType: 'field'
-  },
-  {
     name: 'DatePartsField',
     title: 'Date parts field',
-    subType: 'field'
-  },
-  {
-    name: 'DateTimePartsField',
-    title: 'Date time parts field',
     subType: 'field'
   },
   {
@@ -57,11 +37,6 @@ module.exports = [
   {
     name: 'NumberField',
     title: 'Number field',
-    subType: 'field'
-  },
-  {
-    name: 'UkAddressField',
-    title: 'Uk address field',
     subType: 'field'
   },
   {

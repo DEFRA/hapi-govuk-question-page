@@ -1,6 +1,5 @@
 const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
-const helpers = require('./helpers')
 
 class CheckboxesField extends FormComponent {
   constructor (definition) {
@@ -12,10 +11,15 @@ class CheckboxesField extends FormComponent {
     const values = items.map(item => item.value)
     const itemSchema = joi[type]().valid(...values)
     const itemsSchema = joi.array().items(itemSchema)
-    const alternatives = joi.alternatives([itemSchema, itemsSchema])
 
-    this.formSchema = helpers.buildFormSchema(alternatives, this, required !== false)
-    this.formSchema = this.formSchema.messages({
+    let formSchema = joi.alternatives([itemSchema, itemsSchema]).prefs({ abortEarly: true }).label(titleForErrorText)
+    if (required === false) {
+      formSchema = formSchema.allow('')
+    } else {
+      formSchema = formSchema.empty('').required()
+    }
+
+    formSchema = formSchema.messages({
       'any.required': `Select ${nameForErrorText}`,
       'string.empty': `Select ${nameForErrorText}`,
       'any.only': `${titleForErrorText} must be from the list`,
@@ -23,6 +27,7 @@ class CheckboxesField extends FormComponent {
       'alternatives.types': `${titleForErrorText} must be from the list`,
       'alternatives.match': `${titleForErrorText} must be from the list`
     })
+    this.formSchema = formSchema
   }
 
   getFormSchemaKeys () {

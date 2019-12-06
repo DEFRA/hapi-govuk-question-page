@@ -14,9 +14,7 @@
   "author": "Department for Environment, Food and Rural Affairs <https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs>.",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@hapi/boom": "7.4.7",
     "@hapi/joi": "16.1.2",
-    "@hapi/wreck": "16.0.1",
     "moment": "2.22.2"
   },
   "devDependencies": {

@@ -1,5 +1,4 @@
 const joi = require('@hapi/joi')
-const componentTypes = require('../component-types')
 
 class Component {
   constructor (definition) {
@@ -95,71 +94,4 @@ class FormComponent extends Component {
   getDisplayStringFromState (state) { return state[this.name] }
 }
 
-let Types = null
-function getType (name) {
-  if (Types === null) {
-    Types = {}
-    componentTypes.forEach(componentType => {
-      Types[componentType.name] = require(`./${componentType.name.toLowerCase()}`)
-    })
-  }
-
-  return Types[name]
-}
-
-class ComponentCollection {
-  constructor (componentDefinitions = []) {
-    const components = componentDefinitions.map(def => {
-      const Type = getType(def.type)
-      return new Type(def)
-    })
-
-    const formComponents = components.filter(component => component.isFormComponent)
-
-    this.components = components
-    this.formComponents = formComponents
-    this.formSchema = joi.object().keys(this.getFormSchemaKeys()).required()
-  }
-
-  getFormSchemaKeys () {
-    const keys = {}
-
-    this.formComponents.forEach(component => {
-      Object.assign(keys, component.getFormSchemaKeys())
-    })
-
-    return keys
-  }
-
-  getFormDataFromState (state) {
-    const formData = {}
-
-    this.formComponents.forEach(component => {
-      Object.assign(formData, component.getFormDataFromState(state))
-    })
-
-    return formData
-  }
-
-  getStateFromValidForm (payload) {
-    const state = {}
-
-    this.formComponents.forEach(component => {
-      Object.assign(state, component.getStateFromValidForm(payload))
-    })
-
-    return state
-  }
-
-  getViewModel (formData, errors) {
-    return this.components.map(component => {
-      return {
-        type: component.type,
-        isFormComponent: component.isFormComponent,
-        model: component.getViewModel(formData, errors)
-      }
-    })
-  }
-}
-
-module.exports = { Component, FormComponent, ComponentCollection }
+module.exports = { Component, FormComponent }

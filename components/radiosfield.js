@@ -1,5 +1,5 @@
+const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
-const helpers = require('./helpers')
 
 class RadiosField extends FormComponent {
   constructor (definition) {
@@ -10,7 +10,8 @@ class RadiosField extends FormComponent {
 
     const values = items.map(item => item.value)
 
-    let formSchema = helpers.buildFormSchema(type, this, true).valid(...values)
+    let formSchema = joi[type]().empty('').required().label(titleForErrorText)
+    formSchema = formSchema.valid(...values)
     formSchema = formSchema.messages({
       'any.required': `Select ${nameForErrorText}`,
       'string.empty': `Select ${nameForErrorText}`,

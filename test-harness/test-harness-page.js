@@ -36,31 +36,11 @@ module.exports = {
     name: 'numberField',
     title: 'Number field',
     options: { required: true }
-  /*
-  }, {
-    type: 'DateField',
-    name: 'dateField',
-    title: 'Date field'
-  */
   }, {
     type: 'DatePartsField',
     name: 'datePartsField',
     title: 'Date parts field',
     options: { required: false }
-  /*
-  }, {
-    type: 'TimeField',
-    name: 'timeField',
-    title: 'Time field'
-  }, {
-    type: 'DateTimeField',
-    name: 'dateTimeField',
-    title: 'Date time field'
-  }, {
-    type: 'DateTimePartsField',
-    name: 'dateTimePartsField',
-    title: 'Date time parts field'
-  */
   }, {
     type: 'YesNoField',
     name: 'yesNoField',
@@ -74,12 +54,6 @@ module.exports = {
     type: 'TelephoneNumberField',
     name: 'telephoneNumberField',
     title: 'Telephone number field'
-  /*
-  }, {
-    type: 'UkAddressField',
-    name: 'addressField',
-    title: 'Telephone number field'
-  */
   }, {
     type: 'RadiosField',
     name: 'radiosField',
@@ -94,6 +68,21 @@ module.exports = {
           { text: 'Limited Liability Partnership', value: 'limitedLiabilityPartnership' },
           { text: 'Charity', value: 'charity' },
           { text: 'Other', value: 'other' }
+        ]
+      }
+    }
+  }, {
+    type: 'RadiosField',
+    name: 'numericRadiosField',
+    title: 'Numeric radios field',
+    options: {
+      list: {
+        type: 'number',
+        items: [
+          { text: 'Parent', value: 1, conditionalHtml: '<p class="govuk-body">Conditions apply...</p>' },
+          { text: 'Sibling', value: 2 },
+          { text: 'Child', value: 3 },
+          { text: 'Other', value: 9 }
         ]
       }
     }
@@ -328,7 +317,6 @@ module.exports = {
         ]
       }
     }
-  /*
   }, {
     type: 'Para',
     content: 'Paragraph...'
@@ -339,6 +327,5 @@ module.exports = {
     type: 'Details',
     title: 'Title',
     content: 'Content'
-  */
   }]
 }

@@ -1,12 +1,8 @@
-const joi = require('@hapi/joi')
-// const boom = require('@hapi/boom')
 const pkg = require('./package.json')
 
 const Page = require('./page')
-const addressService = require('./address-service')
 
 const handlerProvider = (route, handlerOptions) => {
-  // console.log(`Route handler: Route method: ${route.method} Options: ${JSON.stringify(handlerOptions)}`)
   const getExistingData = handlerOptions.getExistingData
   const setData = handlerOptions.setData
   const getNextPagePath = handlerOptions.getNextPagePath
@@ -46,37 +42,7 @@ const handlerProvider = (route, handlerOptions) => {
 module.exports = {
   pkg,
   once: true,
-  register: (server, registrationOptions) => {
-    // console.log(`Registration: Options: ${JSON.stringify(registrationOptions)}`)
-    const { ordnanceSurveyKey } = registrationOptions
-
+  register: (server) => {
     server.decorate('handler', 'digital-form-page', handlerProvider)
-
-    // FIND ADDRESS
-    server.route([{
-      method: 'GET',
-      path: '/__/ukaddressfield.js',
-      options: {
-        handler: { file: 'client/ukaddressfield.js' },
-        files: { relativeTo: __dirname }
-      }
-    }, {
-      method: 'GET',
-      path: '/__/find-address',
-      handler: async (request, h) => {
-        try {
-          const results = await addressService(ordnanceSurveyKey, request.query.postcode)
-          return results
-        } catch (err) {
-          // return boom.badImplementation('Failed to find addresses', err)
-          return [{ uprn: 'x', address: 'address', item: { BUILDING_NUMBER: '1', POST_TOWN: 'The Town', POSTCODE: 'XX1 1XX' } }]
-        }
-      },
-      options: {
-        validate: {
-          query: joi.object({ postcode: joi.string().required() })
-        }
-      }
-    }])
   }
 }

@@ -1,5 +1,5 @@
+const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
-const helpers = require('./helpers')
 
 class SelectField extends FormComponent {
   constructor (definition) {
@@ -8,7 +8,8 @@ class SelectField extends FormComponent {
     const { titleForErrorText, nameForErrorText, options: { list: { items = [] } = {} } = {} } = this
     const values = items.map(item => item.value)
 
-    let formSchema = helpers.buildFormSchema('string', this).valid(...values)
+    let formSchema = joi.string().empty('').required().label(titleForErrorText)
+    formSchema = formSchema.valid(...values)
     formSchema = formSchema.messages({
       'any.required': `Select ${nameForErrorText}`,
       'string.empty': `Select ${nameForErrorText}`,

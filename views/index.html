@@ -1,5 +1,6 @@
 {% from "error-summary/macro.njk" import govukErrorSummary %}
-{% from "partials/components.html" import componentList %}
+{% from "button/macro.njk" import govukButton %}
+{% from "components.html" import componentList %}
 
 {% extends 'layout.html' %}
 
@@ -10,10 +11,20 @@
         {{ govukErrorSummary(errors) }}
       {% endif %}
 
-      {% include "partials/heading.html" %}
+      {% if showTitle %}
+        <h1 class="govuk-heading-xl">
+          {% if sectionTitle %}
+            <span class="govuk-caption-xl">{{sectionTitle}}</span>
+          {% endif %}
+          {{pageTitle}}
+        </h1>
+      {% endif %}
 
-      {% if page.hasFormComponents or page.hasNext %}
-        {% include "partials/form.html" %}
+      {% if useForm %}
+        <form method="post" autocomplete="off" novalidate>
+          {{ componentList(components) }}
+          {{ govukButton({ attributes: { id: "submit" }, text: "Continue" }) }}
+        </form>
       {% else %}
         {{ componentList(components) }}
       {% endif %}

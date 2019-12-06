@@ -37,6 +37,5 @@
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <script src="{{ assetPath }}/govuk-frontend.js"></script>
-  <script src="/__/ukaddressfield.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
 {% endblock %}
