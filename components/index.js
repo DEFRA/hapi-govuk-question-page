@@ -23,39 +23,25 @@ class FormComponent extends Component {
 
     if (name in state) {
       return {
-        [name]: this.getFormValueFromState(state)
+        [name]: state[name] === null ? '' : state[name].toString()
       }
     }
   }
 
-  getFormValueFromState (state) {
-    const name = this.name
-
-    if (name in state) {
-      return state[name] === null ? '' : state[name].toString()
-    }
-  }
-
-  getStateFromValidForm (payload) {
+  getStateFromValidForm (validatedFormData) {
     const name = this.name
 
     return {
-      [name]: this.getStateValueFromValidForm(payload)
+      [name]: (name in validatedFormData && validatedFormData[name] !== '')
+        ? validatedFormData[name]
+        : null
     }
   }
 
-  getStateValueFromValidForm (payload) {
-    const name = this.name
-
-    return (name in payload && payload[name] !== '')
-      ? payload[name]
-      : null
-  }
-
   getViewModel (formData, errors) {
-    const { name, title, hint, options = {} } = this
-    const isOptional = options.required === false
-    const label = title + (isOptional ? ' (optional)' : '')
+    const { name, title, hint, options: { classes, required = true } = {} } = this
+    const isOptional = required === false
+    const label = (title || name) + (isOptional ? ' (optional)' : '')
 
     const model = {
       label: {
@@ -64,6 +50,7 @@ class FormComponent extends Component {
       },
       id: name,
       name,
+      classes,
       value: formData[name]
     }
 
@@ -71,10 +58,6 @@ class FormComponent extends Component {
       model.hint = {
         html: hint
       }
-    }
-
-    if (options.classes) {
-      model.classes = options.classes
     }
 
     if (errors) {
@@ -90,8 +73,18 @@ class FormComponent extends Component {
     return model
   }
 
-  getFormSchemaKeys () { return { [this.name]: joi.any() } }
-  getDisplayStringFromState (state) { return state[this.name] }
+  getFormSchemaKeys () {
+    return { [this.name]: joi.any() }
+  }
+
+  getDisplayStringFromState (state) {
+    const name = this.name
+    if (name in state) {
+      return '' + state[this.name]
+    } else {
+      return ''
+    }
+  }
 }
 
 module.exports = { Component, FormComponent }

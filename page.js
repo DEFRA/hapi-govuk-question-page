@@ -9,6 +9,21 @@ const VIEW_NAME = 'index'
 const ERROR_SUMMARY_TITLE = 'Fix the following errors'
 const VALIDATION_OPTIONS = { abortEarly: false }
 
+const mapErrorsForDisplay = (joiError) => {
+  return {
+    titleText: ERROR_SUMMARY_TITLE,
+    errorList: joiError.details.map(err => {
+      const name = err.path[0]
+
+      return {
+        href: `#${name}`,
+        name: name,
+        text: err.message
+      }
+    })
+  }
+}
+
 class Page {
   constructor (pageDef) {
     const { title, sectionTitle, hasNext = true } = pageDef
@@ -37,7 +52,7 @@ class Page {
     let showTitle = true
     let pageTitle = this.title
     const sectionTitle = this.sectionTitle
-    const useForm = this.hasNext || this.hasFormComponents
+    const useForm = this.hasFormComponents || this.hasNext
     const components = this.components.map(component => ({ type: component.type, isFormComponent: component.isFormComponent, model: component.getViewModel(formData, errors) }))
 
     if (this.hasSingleFormComponentFirst) {
@@ -64,34 +79,16 @@ class Page {
     }, {})
   }
 
-  getStateFromValidForm (formData) {
+  getStateFromValidForm (validatedFormData) {
     return this.formComponents.reduce((acc, formComponent) => {
-      Object.assign(acc, formComponent.getStateFromValidForm(formData))
+      Object.assign(acc, formComponent.getStateFromValidForm(validatedFormData))
       return acc
     }, {})
   }
 
-  getErrors (validationResult) {
-    if (validationResult && validationResult.error) {
-      return {
-        titleText: ERROR_SUMMARY_TITLE,
-        errorList: validationResult.error.details.map(err => {
-          const name = err.path.map((name, index) => index > 0 ? `__${name}` : name).join('')
-
-          return {
-            path: err.path.join('.'),
-            href: `#${name}`,
-            name: name,
-            text: err.message
-          }
-        })
-      }
-    }
-  }
-
   validateForm (payload) {
     const result = this.formSchema.validate(payload, VALIDATION_OPTIONS)
-    const errors = result.error ? this.getErrors(result) : null
+    const errors = result.error ? mapErrorsForDisplay(result.error) : null
 
     return { value: result.value, errors }
   }

@@ -96,14 +96,14 @@ async function createServer () {
     path: '/',
     handler: {
       'digital-form-page': {
-        getExistingData: async (request) => {
+        getData: async (request) => {
           return data
         },
         setData: async (request, dataToSet) => {
           hoek.merge(data, dataToSet, { mergeArrays: false })
           console.log(data)
         },
-        getNextPagePath: async (request) => '/',
+        getNextPath: async (request) => '/',
         pageDefinition: require('./test-harness-page')
       }
     }

@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
+    "unit-test": "lab",
+    "test": "npm run unit-test",
     "test-harness": "node test-harness"
   },
   "repository": {
@@ -18,9 +20,11 @@
     "moment": "2.22.2"
   },
   "devDependencies": {
+    "@hapi/code": "^7.0.0",
     "@hapi/hapi": "18.4.0",
     "@hapi/hoek": "^8.5.0",
     "@hapi/inert": "5.2.2",
+    "@hapi/lab": "^21.0.0",
     "@hapi/vision": "5.5.4",
     "govuk-frontend": "3.4.0",
     "nunjucks": "3.2.0",
@@ -28,7 +32,6 @@
   },
   "peerDependencies": {
     "@hapi/hapi": "^18.4.0",
-    "@hapi/inert": "5.x",
     "@hapi/vision": "5.x",
     "govuk-frontend": "3.x",
     "nunjucks": "3.x"

@@ -30,12 +30,12 @@ const dateChecker = (required) => {
       return helpers.error('date.format')
     }
 
-    const dateParts = datePartsText.map(datePartText => Number.parseInt(datePartText))
-    const invalidEntry = dateParts.some(datePart => Number.isNaN(datePart))
+    const dateParts = datePartsText.map(datePartText => Number.parseFloat(datePartText))
+    const invalidEntry = dateParts.some(datePart => Number.isNaN(datePart) || !Number.isSafeInteger(datePart))
     if (invalidEntry) {
       return helpers.error('date.base')
     }
-    const parsedDateParts = getPartsFromDate(new Date(dateParts[0], dateParts[1] - 1, dateParts[2]))
+    const parsedDateParts = getPartsFromDate(new Date(dateParts[2], dateParts[1] - 1, dateParts[0]))
     const notMatched = dateParts.some((datePart, index) => datePart !== parsedDateParts[index])
     if (notMatched) {
       return helpers.error('date.base')
@@ -75,26 +75,29 @@ class DatePartsField extends FormComponent {
     const name = this.name
     const value = state[name]
     return {
-      [`${name}__day`]: value && value.getDate(),
-      [`${name}__month`]: value && value.getMonth() + 1,
-      [`${name}__year`]: value && value.getFullYear()
+      [`${name}__day`]: value ? '' + value.getDate() : '',
+      [`${name}__month`]: value ? '' + (value.getMonth() + 1) : '',
+      [`${name}__year`]: value ? '' + value.getFullYear() : ''
     }
   }
 
-  getStateValueFromValidForm (payload) {
+  getStateFromValidForm (validatedFormData) {
     // Use `moment` to parse the date as
     // opposed to the Date constructor.
     // `moment` will check that the individual date
     // parts together constitute a valid date.
     // E.g. 31 November is not a valid date
     const name = this.name
-    return payload[`${name}__year`]
+    const value = validatedFormData[`${name}__year`]
       ? moment([
-        payload[`${name}__year`],
-        payload[`${name}__month`] - 1,
-        payload[`${name}__day`]
+        validatedFormData[`${name}__year`],
+        validatedFormData[`${name}__month`] - 1,
+        validatedFormData[`${name}__day`]
       ]).toDate()
       : null
+    return {
+      [name]: value
+    }
   }
 
   getDisplayStringFromState (state) {

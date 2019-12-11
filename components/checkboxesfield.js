@@ -45,7 +45,9 @@ class CheckboxesField extends FormComponent {
       }
 
       const checked = Array.isArray(value) ? value : [value]
-      return checked.map(check => items.find(item => item.value === check).text).join(', ')
+      return items.filter(item => checked.find(check => check === item.value)).map(item => item.text).join(', ')
+    } else {
+      return ''
     }
   }
 

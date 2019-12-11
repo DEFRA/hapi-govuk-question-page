@@ -5,10 +5,15 @@ class SelectField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, options: { list: { items = [] } = {} } = {} } = this
-    const values = items.map(item => item.value)
+    const { titleForErrorText, nameForErrorText, options: { required, list: { items = [] } = {} } = {} } = this
+    const values = items.map(item => '' + item.value)
 
-    let formSchema = joi.string().empty('').required().label(titleForErrorText)
+    let formSchema = joi.string().label(titleForErrorText)
+    if (required === false) {
+      formSchema = formSchema.allow('')
+    } else {
+      formSchema = formSchema.empty('').required()
+    }
     formSchema = formSchema.valid(...values)
     formSchema = formSchema.messages({
       'any.required': `Select ${nameForErrorText}`,

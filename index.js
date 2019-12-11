@@ -3,16 +3,16 @@ const pkg = require('./package.json')
 const Page = require('./page')
 
 const handlerProvider = (route, handlerOptions) => {
-  const getExistingData = handlerOptions.getExistingData
-  const setData = handlerOptions.setData
-  const getNextPagePath = handlerOptions.getNextPagePath
+  const getData = handlerOptions.getData || (() => ({}))
+  const setData = handlerOptions.setData || (() => {})
+  const getNextPath = handlerOptions.getNextPath
   const pageDefinition = handlerOptions.pageDefinition
 
   const page = new Page(pageDefinition)
 
   if (route.method === 'get') {
     return async (request, h) => {
-      const state = await getExistingData(request)
+      const state = await getData(request)
       const formData = page.getFormDataFromState(state)
       return h.view(page.viewName, page.getViewModel(formData))
     }
@@ -24,15 +24,18 @@ const handlerProvider = (route, handlerOptions) => {
       if (formResult.errors) {
         return h.view(page.viewName, page.getViewModel(payload, formResult.errors))
       } else {
-        const update = page.getStateFromValidForm(formResult.value)
-        const setDataResult = await setData(request, update)
+        const dataToSet = page.getStateFromValidForm(formResult.value)
+        const setDataResult = await setData(request, dataToSet)
 
         if (setDataResult && setDataResult.errors) {
           return h.view(page.viewName, page.getViewModel(payload, setDataResult.errors))
         } else {
-          const nextPagePath = await getNextPagePath(request)
-
-          return h.redirect(nextPagePath)
+          if (getNextPath) {
+            const nextPath = await getNextPath(request)
+            return h.redirect(nextPath)
+          } else {
+            return h.redirect(request.path)
+          }
         }
       }
     }

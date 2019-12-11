@@ -10,7 +10,7 @@ class CheckboxesWithTextField extends CheckboxesField {
         const titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
         const nameForErrorText = titleForErrorText.charAt(0).toLowerCase() + titleForErrorText.slice(1)
 
-        let schema = joi.string().label(title)
+        let schema = joi.string().label(titleForErrorText)
         if (max) {
           schema = schema.max(max)
         }
@@ -52,7 +52,7 @@ class CheckboxesWithTextField extends CheckboxesField {
   mapItemForViewModel (formData, errors, item, checked) {
     const itemModel = super.mapItemForViewModel(formData, errors, item, checked)
     if (item.conditionalTextField) {
-      const { name, title, hint, max } = item.conditionalTextField
+      const { name, title, hint, schema: { max } = {} } = item.conditionalTextField
       const label = title || item.text
 
       const conditionalInputModel = {
@@ -99,15 +99,15 @@ class CheckboxesWithTextField extends CheckboxesField {
     return formData
   }
 
-  getStateFromValidForm (payload) {
-    const state = super.getStateFromValidForm(payload) || {}
+  getStateFromValidForm (validatedFormData) {
+    const state = super.getStateFromValidForm(validatedFormData)
 
     const checkBoxesValue = state[this.name] || []
     const checked = Array.isArray(checkBoxesValue) ? checkBoxesValue : [checkBoxesValue]
 
     const textFieldsState = this.items.reduce((acc, { value, conditionalTextField: { name } = {} }) => {
       if (name) {
-        acc[name] = (checked.includes(value) && name in payload && payload[name] !== '') ? payload[name] : null
+        acc[name] = (checked.includes(value) && name in validatedFormData && validatedFormData[name] !== '') ? validatedFormData[name] : null
       }
       return acc
     }, {})
