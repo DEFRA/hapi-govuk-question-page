@@ -25,11 +25,12 @@ const mapErrorsForDisplay = (joiError) => {
 }
 
 class Page {
-  constructor (pageDef) {
+  constructor (pageDef, pageTemplateName) {
     const { title, sectionTitle, hasNext = true } = pageDef
     this.title = title
     this.sectionTitle = sectionTitle
     this.hasNext = hasNext
+    this.pageTemplateName = pageTemplateName
 
     const components = pageDef.components.map(def => new componentTypes[def.type](def))
     const formComponents = components.filter(component => component.isFormComponent)
@@ -52,6 +53,7 @@ class Page {
     let showTitle = true
     let pageTitle = this.title
     const sectionTitle = this.sectionTitle
+    const templateName = this.pageTemplateName
     const useForm = this.hasFormComponents || this.hasNext
     const components = this.components.map(component => ({ type: component.type, isFormComponent: component.isFormComponent, model: component.getViewModel(formData, errors) }))
 
@@ -69,7 +71,7 @@ class Page {
       showTitle = false
     }
 
-    return { pageTitle, sectionTitle, showTitle, useForm, components, errors }
+    return { templateName, pageTitle, sectionTitle, showTitle, useForm, components, errors }
   }
 
   getFormDataFromState (state) {

@@ -96,6 +96,7 @@ async function createServer () {
     path: '/',
     handler: {
       'digital-form-page': {
+        pageTemplateName: 'layout.html',
         getData: async (request) => {
           return data
         },

@@ -99,6 +99,27 @@ lab.experiment('plugin', () => {
     const response = await handlerForPost({ payload: { textField: 'text' } }, h)
     expect(response).to.equal('next path')
   })
+  lab.test('POST handler redirects to defined fixed path if next path isn\'t defined', async ({ context }) => {
+    const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
+    const setData = () => {}
+    const getNextPath = () => false
+    const handlerForPost = context.method({ method: 'post' }, { setData, getNextPath, nextPath: 'next path', pageDefinition })
+    const h = {
+      redirect: (path) => path
+    }
+    const response = await handlerForPost({ payload: { textField: 'text' } }, h)
+    expect(response).to.equal('next path')
+  })
+  lab.test('POST handler redirects to defined fixed path if next path is defined but doesn\'t return a response', async ({ context }) => {
+    const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
+    const setData = () => {}
+    const handlerForPost = context.method({ method: 'post' }, { setData, nextPath: 'next path', pageDefinition })
+    const h = {
+      redirect: (path) => path
+    }
+    const response = await handlerForPost({ payload: { textField: 'text' } }, h)
+    expect(response).to.equal('next path')
+  })
   lab.test('POST handler redirects to the requested path if next path isn\'t defined', async ({ context }) => {
     const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
     const setData = () => {}

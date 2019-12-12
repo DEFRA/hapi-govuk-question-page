@@ -1,14 +1,19 @@
 const pkg = require('./package.json')
-
 const Page = require('./page')
 
-const handlerProvider = (route, handlerOptions) => {
-  const getData = handlerOptions.getData || (() => ({}))
-  const setData = handlerOptions.setData || (() => {})
-  const getNextPath = handlerOptions.getNextPath
-  const pageDefinition = handlerOptions.pageDefinition
+const DEFAULT_PAGE_TEMPLATE_NAME = 'layout.html'
 
-  const page = new Page(pageDefinition)
+const handlerProvider = (route, handlerOptions) => {
+  const {
+    pageTemplateName = DEFAULT_PAGE_TEMPLATE_NAME,
+    pageDefinition,
+    getData = () => ({}),
+    setData = () => {},
+    nextPath,
+    getNextPath
+  } = handlerOptions
+
+  const page = new Page(pageDefinition, pageTemplateName)
 
   if (route.method === 'get') {
     return async (request, h) => {
@@ -30,9 +35,9 @@ const handlerProvider = (route, handlerOptions) => {
         if (setDataResult && setDataResult.errors) {
           return h.view(page.viewName, page.getViewModel(payload, setDataResult.errors))
         } else {
-          if (getNextPath) {
-            const nextPath = await getNextPath(request)
-            return h.redirect(nextPath)
+          const redirectPath = (getNextPath && await getNextPath(request)) || nextPath
+          if (redirectPath) {
+            return h.redirect(redirectPath)
           } else {
             return h.redirect(request.path)
           }
