@@ -25,9 +25,8 @@ const visionPlugin = {
       }
     },
     path: [
-      'views',
-      'node_modules/govuk-frontend/govuk',
-      'node_modules/govuk-frontend/govuk/components/',
+      'node_modules/govuk-frontend',
+      '.', // When included as a module this would be 'node_modules/digital-form-page'
       'test-harness'
     ],
     isCached: false,

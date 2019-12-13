@@ -47,10 +47,6 @@ const paraDefinition = {
 }
 
 lab.experiment('Page', () => {
-  lab.test('provides correct view name', () => {
-    const page = new Page(standardDefinition)
-    expect(page.viewName).to.equal('index')
-  })
   lab.experiment('getFormDataFromState', () => {
     lab.beforeEach(({ context }) => {
       context.page = new Page(standardDefinition)

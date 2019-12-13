@@ -1,6 +1,7 @@
 const pkg = require('./package.json')
 const Page = require('./page')
 
+const VIEW_NAME = 'digital-form-page/page.html'
 const DEFAULT_PAGE_TEMPLATE_NAME = 'layout.html'
 
 const handlerProvider = (route, handlerOptions) => {
@@ -19,7 +20,7 @@ const handlerProvider = (route, handlerOptions) => {
     return async (request, h) => {
       const state = await getData(request)
       const formData = page.getFormDataFromState(state)
-      return h.view(page.viewName, page.getViewModel(formData))
+      return h.view(VIEW_NAME, page.getViewModel(formData))
     }
   } else if (route.method === 'post') {
     return async (request, h) => {
@@ -27,13 +28,13 @@ const handlerProvider = (route, handlerOptions) => {
       const formResult = page.validateForm(payload)
 
       if (formResult.errors) {
-        return h.view(page.viewName, page.getViewModel(payload, formResult.errors))
+        return h.view(VIEW_NAME, page.getViewModel(payload, formResult.errors))
       } else {
         const dataToSet = page.getStateFromValidForm(formResult.value)
         const setDataResult = await setData(request, dataToSet)
 
         if (setDataResult && setDataResult.errors) {
-          return h.view(page.viewName, page.getViewModel(payload, setDataResult.errors))
+          return h.view(VIEW_NAME, page.getViewModel(payload, setDataResult.errors))
         } else {
           const redirectPath = (getNextPath && await getNextPath(request)) || nextPath
           if (redirectPath) {

@@ -5,7 +5,6 @@ const componentTypes = componentTypesList.reduce((acc, { name }) => {
   return acc
 }, {})
 
-const VIEW_NAME = 'index'
 const ERROR_SUMMARY_TITLE = 'Fix the following errors'
 const VALIDATION_OPTIONS = { abortEarly: false }
 
@@ -94,8 +93,6 @@ class Page {
 
     return { value: result.value, errors }
   }
-
-  get viewName () { return VIEW_NAME }
 }
 
 module.exports = Page
