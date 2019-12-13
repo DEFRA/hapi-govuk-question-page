@@ -5,6 +5,8 @@ approach to implementing simple pages using the [GOV.UK Design System](https://d
 
 It is based on the original work for the [digital-form-builder](https://github.com/DEFRA/digital-form-builder).
 
+The [API documentation](API.md) contains details of how to configure the plugin.
+
 ## Prerequisites
 
 This plugin is for use inside a Hapi digital application.  To use it, you will need to create an application
@@ -27,7 +29,7 @@ Register the plugin with your Hapi server, as with any other plugin
 
 This adds a custom `digital-form-page` handler to your server that you can use in your routes
 
-> ```
+> ```js
 >  server.route({
 >    method: ['GET', 'POST'],
 >    path: '/',
@@ -41,6 +43,9 @@ This adds a custom `digital-form-page` handler to your server that you can use i
 >    }
 >  })
 > ```
+
+For pages to be correctly served, you will also have to perform setup of Vision, Nunjucks and the GOV.UK Frontend.
+Details on this are in the [API documentation](API.md).
 
 ### Development and Test
 
