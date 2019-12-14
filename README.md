@@ -7,9 +7,41 @@ It is based on the original work for the [digital-form-builder](https://github.c
 
 The [API documentation](API.md) contains details of how to configure the plugin.
 
+## Purpose
+
+We have a wide range of services, many involving quite lengthy and complex interactions with our users.
+As we break these interactions down into simple steps to make them as easy as possible to use,
+we often end up with a service journey that includes a large number of quite simple
+[question pages](https://design-system.service.gov.uk/patterns/question-pages).
+
+This plugin is designed to help create those simple pages, by providing these two features:
+  - A way to implement pages by just listing the components that need to appear on them and providing a minimal
+    amount of configuration information.
+  - A basic request handler that just deals with processing the page requests and validating the inputs.
+
+Those features are already met by a combination of Nunjucks, the GOV.UK Design System and the Hapi request lifecycle,
+but using them out of the box results in a lot of repeated, boilerplate code and templates.
+
+The purpose of this plugin is to put all of that boilerplate into one place where it can be tested once and reused
+multiple times.
+
+## GOV.UK Design System components and patterns
+
+The plugin provides an implementation of the Question Page pattern and *most* of the components and patterns from
+the Design System. Those not included are:
+ - Components such as the Back Link or Error Summary that are built into the page and do not need to be added
+   separately.
+ - The Accordian and Tabs components, as these are not *simple* question pages and would make the configuration
+   probably more complex than the equivalent code.
+ - Components and patterns such as the Panel, the Summary List, Confirmation Pages and Task List Pages that are not
+   required for a Question Page.
+ - Patterns such as National Insurance Numbers that we haven't found a need for yet.
+ - Patterns such as Addresses and Confirm an Email Address that require more complex interaction design and
+   functionality than a simple question page.
+
 ## Prerequisites
 
-This plugin is for use inside a Hapi digital application.  To use it, you will need to create an application
+This plugin is for use inside a Hapi GOV.UK application.  To use it, you will need to create an application
 based on the following:
 - [Node.js](https://nodejs.org) version 10 or higher
 - [Hapi](https://hapi.dev/) version 18.4 or higher

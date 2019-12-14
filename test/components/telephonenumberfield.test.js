@@ -24,7 +24,7 @@ lab.experiment('TelephoneNumberField', () => {
     })
     lab.test('sets classes when not provided in options', () => {
       const definitionWithOptions = {
-        name: 'testEmailAddressField',
+        name: 'testTelephoneNumberField',
         options: {}
       }
       telephoneNumberField = new TelephoneNumberField(definitionWithOptions)
@@ -32,7 +32,7 @@ lab.experiment('TelephoneNumberField', () => {
     })
     lab.test('doesn\'t set classes when provided in options', () => {
       const definitionWithOptions = {
-        name: 'testEmailAddressField',
+        name: 'testTelephoneNumberField',
         options: { classes: 'test classes' }
       }
       telephoneNumberField = new TelephoneNumberField(definitionWithOptions)
@@ -46,6 +46,15 @@ lab.experiment('TelephoneNumberField', () => {
     })
     lab.test('is correct type', () => {
       expect(viewModel.type).to.equal(expectedType)
+    })
+    lab.test('sets autocomplete attribute', () => {
+      const definitionWithOptions = {
+        name: 'testTelephoneNumberField',
+        options: { autocomplete: true }
+      }
+      telephoneNumberField = new TelephoneNumberField(definitionWithOptions)
+      viewModel = telephoneNumberField.getViewModel({ testTelephoneNumberField: null })
+      expect(viewModel.autocomplete).to.equal(expectedType)
     })
   })
 })

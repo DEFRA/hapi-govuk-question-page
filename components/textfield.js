@@ -5,14 +5,16 @@ class TextField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, schema: { max, trim } = {}, options: { required } = {} } = this
+    const { titleForErrorText, nameForErrorText, schema: { max, maxwords, trim } = {}, options: { required } = {} } = this
 
     let schema = joi.string().prefs({ abortEarly: true }).label(titleForErrorText)
-    if (max) {
-      schema = schema.max(max)
-    }
     if (trim !== false) {
       schema = schema.trim()
+    }
+    if (maxwords) {
+      schema = schema.pattern(/^(\w*\W*){0,10}$/, 'words')
+    } else if (max) {
+      schema = schema.max(max)
     }
     if (required === false) {
       schema = schema.allow('')
@@ -22,7 +24,8 @@ class TextField extends FormComponent {
     schema = schema.messages({
       'any.required': `Enter ${nameForErrorText}`,
       'string.empty': `Enter ${nameForErrorText}`,
-      'string.max': `${titleForErrorText} must be ${max} characters or fewer`
+      'string.max': `${titleForErrorText} must be ${max} characters or fewer`,
+      'string.pattern.name': `${titleForErrorText} must be ${maxwords} words or fewer`
     })
     this.formSchema = schema
   }
@@ -32,13 +35,11 @@ class TextField extends FormComponent {
   }
 
   getViewModel (formData, errors) {
-    const { schema: { max } = {} } = this
+    const { schema: { max, maxwords } = {} } = this
     const viewModel = super.getViewModel(formData, errors)
 
-    if (typeof max === 'number') {
-      viewModel.attributes = {
-        maxlength: max
-      }
+    if (!maxwords && typeof max === 'number') {
+      viewModel.attributes.maxlength = max
     }
 
     return viewModel

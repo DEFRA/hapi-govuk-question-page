@@ -11,7 +11,7 @@ const definition = {
   content: 'Test content'
 }
 
-lab.experiment('Html', () => {
+lab.experiment('Details', () => {
   let details
   lab.beforeEach(() => {
     details = new Details(definition)

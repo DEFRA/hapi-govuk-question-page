@@ -1,0 +1,5 @@
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% macro CharacterCountField(component) %}
+  {{ govukCharacterCount(component.model) }}
+{% endmacro %}

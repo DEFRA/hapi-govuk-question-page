@@ -1,23 +1,23 @@
 const TextField = require('./textfield')
 
-class TelephoneNumberField extends TextField {
+class NamesField extends TextField {
   constructor (definition) {
     super(definition)
 
     const options = this.options = this.options || {}
     if (!options.classes) {
-      options.classes = 'govuk-input--width-10'
+      options.classes = 'govuk-input--width-20'
     }
   }
 
   getViewModel (formData, errors) {
     const viewModel = super.getViewModel(formData, errors)
-    viewModel.type = 'tel'
+    viewModel.attributes.spellcheck = 'false'
     if (this.options.autocomplete) {
-      viewModel.autocomplete = 'tel'
+      viewModel.autocomplete = 'name'
     }
     return viewModel
   }
 }
 
-module.exports = TelephoneNumberField
+module.exports = NamesField

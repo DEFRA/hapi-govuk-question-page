@@ -30,6 +30,33 @@ module.exports = {
     type: 'MultilineTextField',
     name: 'multilineTextField',
     title: 'Multiline text field',
+    options: {
+      rows: 10
+    },
+    hint: 'Help text'
+  }, {
+    type: 'CharacterCountField',
+    name: 'characterCountField',
+    title: 'Character count field',
+    schema: {
+      max: 100
+    },
+    options: {
+      rows: 2,
+      threshold: 10
+    },
+    hint: 'Help text'
+  }, {
+    type: 'CharacterCountField',
+    name: 'wordCountField',
+    title: 'Word count field',
+    schema: {
+      maxwords: 10
+    },
+    options: {
+      rows: 5,
+      threshold: 50
+    },
     hint: 'Help text'
   }, {
     type: 'NumberField',
@@ -46,6 +73,15 @@ module.exports = {
     name: 'yesNoField',
     title: 'Yes/No field',
     options: { yesFirst: false }
+  }, {
+    type: 'NamesField',
+    name: 'namesField',
+    title: 'Full name',
+    titleForError: 'Your name',
+    schema: {
+      max: 50
+    },
+    hint: 'As you would like to be known'
   }, {
     type: 'EmailAddressField',
     name: 'emailAddressField',
@@ -325,7 +361,11 @@ module.exports = {
     content: 'Inset text'
   }, {
     type: 'Details',
-    title: 'Title',
-    content: 'Content'
+    title: 'Details title',
+    content: 'Details content'
+  }, {
+    type: 'WarningText',
+    text: 'Warning text',
+    summary: 'A warning'
   }]
 }

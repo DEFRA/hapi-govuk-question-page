@@ -10,7 +10,7 @@ const definition = {
   name: 'testMultilineTextField'
 }
 
-lab.experiment('EmailAddressField', () => {
+lab.experiment('MultilineTextField', () => {
   let multilineTextField
   lab.beforeEach(() => {
     multilineTextField = new MultilineTextField(definition)

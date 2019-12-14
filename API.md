@@ -151,13 +151,15 @@ Form components capture information from a user and are rendered inside an HTML 
 The available `type` values for these are:
   - [TextField](#textfield-component)
   - [NumberField](#numberfield-component)
+  - [NamesField](#namesfield-component)
   - [TelephoneNumberField](#telephonenumberfield-component)
   - [EmailAddressField](#emailaddressfield-component)
   - [MultilineTextField](#multilinetextfield-component)
+  - [CharacterCountField](#charactercountfield-component)
   - [DatePartsField](#datepartsfield-component)
   - [SelectField](#selectfield-component)
   - [RadiosField](#radiosfield-component)
-  - YesNoField
+  - [YesNoField](#yesnofield-component)
   - [CheckboxesField](#checkboxesfield-component)
   - [CheckboxesWithTextField](#checkboxeswithtextfield-component)
 
@@ -185,8 +187,20 @@ Some components only display simple HTML markup rather than providing input elem
 The available `type` values for these are:
   - [Para](#para-component)
   - [InsetText](#insettext-component)
+  - [WarningText](#warningtext-component)
   - [Details](#details-component)
   - [Html](#html-component)
+
+## `CharacterCountField` component
+Text field that displays a multi-line input with a character count using the Character Count component.
+Has the same properties as a [MultilineTextField](#multilinetextfield-component), but also:
+  - `options`:
+    - `threshold` - number - the completion percentage threshold at which to display the character count message.
+  - `schema`:
+    - `maxwords` - number - the number of words to allow. If specified, the `max` property is ignored.
+
+Note that unlike the `TextField` and `MultilineTextField` components, the `CharacterCountField` does not restrict
+what the user can enter into the field, instead using validation to notify them of the error.
 
 ## `CheckboxesField` component
 List of check boxes using the Checkboxes component. Check box items are defined in a list object.
@@ -211,7 +225,10 @@ Show/hide details section using the Details component.
 
 ## `EmailAddressField` component
 Text field that performs additional validation to ensure that the text entered is a valid email address format.
-Has the same properties as a [TextField](#textfield-component).
+Has the same properties as a [TextField](#textfield-component), with additional:
+  - `options`:
+    - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
+      own email address.
 
 ## `Html` component
 Raw HTML markup to include in the page.
@@ -219,13 +236,20 @@ Raw HTML markup to include in the page.
 
 ## `InsetText` component
 Text using the Inset Text component.
-  - `content` - string of text to display
+  - `content` - string of text to display.
 
 ## `MultilineTextField` component
 Text field that displays a multi-line input using the Textarea component.
 Has the same properties as a [TextField](#textfield-component), but also:
   - `options`:
     - `rows` - number - the number of rows of text to display on the page.
+
+## `NamesField` component
+Text field that implements the Names pattern for full name.
+Has the same properties as a [TextField](#textfield-component), with additional:
+  - `options`:
+    - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
+      own name.
 
 ## `NumberField` component
 Text field that has a number input and checks that the text is a valid number.
@@ -253,13 +277,21 @@ A select list using the Select component.
 
 ## `TelephoneNumberField` component
 Text field that follows the Telephone number pattern.
-Has the same properties as a [TextField](#textfield-component).
+Has the same properties as a [TextField](#textfield-component), with additional:
+  - `options`:
+    - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
+      own telephone number.
 
 ## `TextField` component
 Simple text field.
   - `schema`:
     - `max` - number - the maximum length of text to allow.
     - `trim` - boolean - whether to force whitespace trimming from the start and end of the text.
+
+## `WarningText` component
+Text using the Warning Text component.
+  - `text` - string of text to display.
+  - `summary` - optional string displayed as the icon fallback, defaults to `'Warning'`.
 
 ## `YesNoField` component
 Side by side radio using the Radios component, with just Yes and No as options.

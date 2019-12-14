@@ -17,6 +17,10 @@ class EmailAddressField extends TextField {
   getViewModel (formData, errors) {
     const viewModel = super.getViewModel(formData, errors)
     viewModel.type = 'email'
+    viewModel.attributes.spellcheck = 'false'
+    if (this.options.autocomplete) {
+      viewModel.autocomplete = 'email'
+    }
     return viewModel
   }
 }

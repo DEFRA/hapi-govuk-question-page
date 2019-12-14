@@ -44,13 +44,14 @@ class FormComponent extends Component {
     const label = (title || name) + (isOptional ? ' (optional)' : '')
 
     const model = {
+      id: name,
+      name,
+      classes,
+      attributes: {},
       label: {
         text: label,
         classes: 'govuk-label--s'
       },
-      id: name,
-      name,
-      classes,
       value: formData[name]
     }
 

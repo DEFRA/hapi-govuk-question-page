@@ -10,6 +10,11 @@ module.exports = [
     subType: 'field'
   },
   {
+    name: 'CharacterCountField',
+    title: 'Character count field',
+    subType: 'field'
+  },
+  {
     name: 'YesNoField',
     title: 'Yes/No field',
     subType: 'field'
@@ -40,6 +45,11 @@ module.exports = [
     subType: 'field'
   },
   {
+    name: 'NamesField',
+    title: 'Names field',
+    subType: 'field'
+  },
+  {
     name: 'TelephoneNumberField',
     title: 'Telephone number field',
     subType: 'field'
@@ -67,6 +77,11 @@ module.exports = [
   {
     name: 'Details',
     title: 'Details',
+    subType: 'content'
+  },
+  {
+    name: 'WarningText',
+    title: 'Warning text',
     subType: 'content'
   },
   {

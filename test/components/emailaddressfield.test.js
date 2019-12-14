@@ -47,5 +47,17 @@ lab.experiment('EmailAddressField', () => {
     lab.test('is correct type', () => {
       expect(viewModel.type).to.equal(expectedType)
     })
+    lab.test('sets spellcheck attribute', () => {
+      expect(viewModel.attributes.spellcheck).to.equal('false')
+    })
+    lab.test('sets autocomplete attribute', () => {
+      const definitionWithOptions = {
+        name: 'testEmailAddressField',
+        options: { autocomplete: true }
+      }
+      emailAddressField = new EmailAddressField(definitionWithOptions)
+      viewModel = emailAddressField.getViewModel({ testEmailAddressField: null })
+      expect(viewModel.autocomplete).to.equal(expectedType)
+    })
   })
 })

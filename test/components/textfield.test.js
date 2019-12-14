@@ -15,6 +15,10 @@ const definitionWithConfiguration = {
   schema: { max: 10, trim: false },
   options: { required: false }
 }
+const maxWordsDefinition = {
+  name: componentName,
+  schema: { max: 10, maxwords: 10 }
+}
 const formData = {
   [componentName]: null
 }
@@ -24,13 +28,18 @@ lab.experiment('TextField', () => {
     lab.test('doesn\'t include maxlength when not configured', () => {
       const textField = new TextField(standardDefinition)
       const viewModel = textField.getViewModel(formData)
-      expect(viewModel.attributes).to.not.exist()
+      expect(viewModel.attributes.maxlength).to.not.exist()
     })
     lab.test('includes maxlength when configured', () => {
       const textField = new TextField(definitionWithConfiguration)
       const viewModel = textField.getViewModel(formData)
       expect(viewModel.attributes).to.exist()
       expect(viewModel.attributes.maxlength).to.equal(10)
+    })
+    lab.test('doesn\'t include maxlength when maxwords is configured', () => {
+      const textField = new TextField(maxWordsDefinition)
+      const viewModel = textField.getViewModel(formData)
+      expect(viewModel.attributes.maxlength).to.not.exist()
     })
   })
   lab.experiment('getFormSchemaKeys', () => {
@@ -78,6 +87,15 @@ lab.experiment('TextField', () => {
       let result = schema.validate('1234567890')
       expect(result.error).to.not.exist()
       result = schema.validate('12345678910')
+      expect(result.error).to.exist()
+    })
+    lab.test('maxwords', () => {
+      const textField = new TextField(maxWordsDefinition)
+      const formSchemaKeys = textField.getFormSchemaKeys()
+      const schema = formSchemaKeys[componentName]
+      let result = schema.validate('12345678910')
+      expect(result.error).to.not.exist()
+      result = schema.validate('1 2 3 4 5 6 7 8 9 10 11')
       expect(result.error).to.exist()
     })
   })
