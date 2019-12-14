@@ -1,0 +1,5 @@
+{% from "./checkboxeswithtextfield/macro.njk" import hapiGovukQuestionPageCheckboxesWithText %}
+
+{% macro CheckboxesWithTextField(component) %}
+  {{ hapiGovukQuestionPageCheckboxesWithText(component.model) }}
+{% endmacro %}

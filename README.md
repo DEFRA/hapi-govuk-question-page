@@ -1,6 +1,6 @@
-# digital-form-page
+# Hapi Simple GOV.UK Question Page
 
-The **digital-form-page** is a plugin for [Hapi](https://hapi.dev/) that provides a configuration-driven
+The **hapi-govuk-question-page** module is a plugin for [Hapi](https://hapi.dev/) that provides a configuration-driven
 approach to implementing simple pages using the [GOV.UK Design System](https://design-system.service.gov.uk/).
 
 It is based on the original work for the [digital-form-builder](https://github.com/DEFRA/digital-form-builder).
@@ -53,20 +53,20 @@ based on the following:
 
 To use this plugin in your application, simply
 
-> `npm install @envage/digital-form-page`
+> `npm install @envage/hapi-govuk-question-page`
 
 Register the plugin with your Hapi server, as with any other plugin
 
-> `await server.register(require('@envage/digital-form-page'))`
+> `await server.register(require('@envage/hapi-govuk-question-page'))`
 
-This adds a custom `digital-form-page` handler to your server that you can use in your routes
+This adds a custom `hapi-govuk-question-page` handler to your server that you can use in your routes
 
 > ```js
 >  server.route({
 >    method: ['GET', 'POST'],
 >    path: '/',
 >    handler: {
->      'digital-form-page': {
+>      'hapi-govuk-question-page': {
 >        pageDefinition,
 >        getData,
 >        setData,
@@ -83,17 +83,18 @@ Details on this are in the [API documentation](API.md).
 
 When developing this plugin, simply clone this repository
 
-`git clone https://github.com/DEFRA/digital-form-page.git`
+> `git clone https://github.com/DEFRA/hapi-govuk-question-page.git`
 
 and run
 
-`npm install`
+> `npm install`
 
 ## Running in development
 
-The project includes a test harness that shows the different form components on a single page. This can be run using
+The project includes a test harness that shows the different form components on a single page.
+This can be run using
 
-`npm run test-harness`
+> `npm run test-harness`
 
 and then navigating in your browser to http://localhost:3000
 
@@ -101,7 +102,7 @@ and then navigating in your browser to http://localhost:3000
 
 Unit tests can be run using
 
-`npm run unit-test`
+> `npm run unit-test`
 
 ## Contributing to this project
 
@@ -121,7 +122,7 @@ THIS INFORMATION IS LICENSED UNDER THE CONDITIONS OF THE OPEN GOVERNMENT LICENCE
 
 The following attribution statement MUST be cited in your products and applications when using this information.
 
->Contains public sector information licensed under the Open Government licence v3
+> Contains public sector information licensed under the Open Government licence v3
 
 ### About the licence
 

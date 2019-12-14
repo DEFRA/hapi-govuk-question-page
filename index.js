@@ -1,7 +1,7 @@
 const pkg = require('./package.json')
 const Page = require('./page')
 
-const VIEW_NAME = 'digital-form-page/page.html'
+const VIEW_NAME = 'hapi-govuk-question-page/page.html'
 const DEFAULT_PAGE_TEMPLATE_NAME = 'layout.html'
 
 const handlerProvider = (route, handlerOptions) => {
@@ -52,6 +52,6 @@ module.exports = {
   pkg,
   once: true,
   register: (server) => {
-    server.decorate('handler', 'digital-form-page', handlerProvider)
+    server.decorate('handler', 'hapi-govuk-question-page', handlerProvider)
   }
 }

@@ -1,9 +1,9 @@
-# digital-form-page API
+# Hapi Simple GOV.UK Question Page API
 
 ## Introduction
 
-Using the **digital-form-page** plugin mostly just requires [registering](#registration) it with your server, but
-there are some other pre-requisites before you can start adding routes.
+Using the **hapi-govuk-question-page** plugin mostly just requires [registering](#registration) it with your server,
+but there are some other pre-requisites before you can start adding routes.
 
 It should be used inside a GOV.UK application and so expects Vision view handlers to be configured to serve
 the GOV.UK Design System components as well as the pages from the plugin itself.
@@ -17,22 +17,23 @@ To configure your application to use the plugin, you need to do the following:
 
 ### 1. Configure Vision to serve files with the `.html` extension
 
-Vision can be configured to use a number of different file extensions.  The **digital-form-page** plugin requires
-that it is configured to use the `.html` extension.
+Vision can be configured to use a number of different file extensions.  The **hapi-govuk-question-page** plugin
+requires that it is configured to use the `.html` extension.
 
 ### 2. Use Nunjucks as the rendering engine for `.html` files
 
-The **digital-form-page** plugin and GOV.UK Frontend both require Nunjucks to be configured as the Vision engine
-for rendering pages.
+The **hapi-govuk-question-page** plugin and GOV.UK Frontend both require Nunjucks to be configured as the Vision
+engine for rendering pages.
 
-### 3. Configure Nunjucks to use GOV.UK Frontend and **digital-form-page**
+### 3. Configure Nunjucks to use GOV.UK Frontend and **hapi-govuk-question-page**
 
 Nunjucks needs to be configured with the paths where it can find templates. This will need to include paths for
-both GOV.UK Frontend and the **digital-form-page**. In order for the plugin to find the GOV.UK Frontend components,
+both GOV.UK Frontend and the **hapi-govuk-question-page**.
+In order for the plugin to find the GOV.UK Frontend components,
 the module root needs to be exposed, so that the contents can be uniquely referenced as `govuk`.
 
-The same approach is applied with **digital-form-page** - expose the module root so that the contents can be
-referenced using the `digital-form-page` container.
+The same approach is applied with **hapi-govuk-question-page** - expose the module root so that the contents can be
+referenced using the `hapi-govuk-question-page` container.
 
 ### Vision configuration
 
@@ -58,7 +59,7 @@ const visionPlugin = {
     },
     path: [
       'node_modules/govuk-frontend',
-      'node_modules/digital-form-page'
+      'node_modules/hapi-govuk-question-page'
     ]
   }
 }
@@ -68,7 +69,7 @@ const visionPlugin = {
 
 Registration is simple:
 
-`await server.register(require('@envage/digital-form-page'))`
+`await server.register(require('@envage/hapi-govuk-question-page'))`
 
 The plugin has no registration-time options and is defined using the `once` directive so any multiple attempts at
 registration will just be ignored by the Hapi server.
@@ -78,7 +79,7 @@ as they need to.
 
 ## Handler
 
-With the plugin registered on your server, you will be able to use the special handler type `digital-form-page` as
+With the plugin registered on your server, you will be able to use the special handler type `hapi-govuk-question-page` as
 with any other Hapi handler type:
 
 ```js
@@ -86,7 +87,7 @@ server.route({
   method: ['GET', 'POST'],
   path: '/',
   handler: {
-    'digital-form-page': { ... }
+    'hapi-govuk-question-page': { ... }
   }
 })
 ```

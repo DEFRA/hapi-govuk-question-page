@@ -26,15 +26,15 @@ const visionPlugin = {
     },
     path: [
       'node_modules/govuk-frontend',
-      '.', // When included as a module this would be 'node_modules/digital-form-page'
+      '.', // When included as a module this would be 'node_modules/hapi-govuk-question-page'
       'test-harness'
     ],
     isCached: false,
     context: {
       appVersion: '0.0.1',
       assetPath: '/assets',
-      serviceName: 'Digital form page test harness',
-      pageTitle: 'Digital form page - GOV.UK',
+      serviceName: 'Simple question page test harness',
+      pageTitle: 'Simple question page - GOV.UK',
       analyticsAccount: undefined
     }
   }
@@ -94,7 +94,7 @@ async function createServer () {
     method: ['GET', 'POST'],
     path: '/',
     handler: {
-      'digital-form-page': {
+      'hapi-govuk-question-page': {
         pageTemplateName: 'layout.html',
         getData: async (request) => {
           return data

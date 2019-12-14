@@ -18,7 +18,7 @@ lab.experiment('plugin', () => {
   })
   lab.test('registers correct type and name', ({ context }) => {
     expect(context.type).to.equal('handler')
-    expect(context.property).to.equal('digital-form-page')
+    expect(context.property).to.equal('hapi-govuk-question-page')
   })
   lab.test('provides handler for GET route', ({ context }) => {
     const handlerForGet = context.method({ method: 'get' }, { pageDefinition: { title: 'Title', components: [] } })
