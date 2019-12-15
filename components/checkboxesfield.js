@@ -51,9 +51,9 @@ class CheckboxesField extends FormComponent {
     }
   }
 
-  getViewModel (formData, errors) {
+  getViewModel (config, formData, errors) {
     const { name, items = [] } = this
-    const viewModel = super.getViewModel(formData, errors)
+    const viewModel = super.getViewModel(config, formData, errors)
     let formDataItems = []
 
     if (name in formData) {
@@ -70,14 +70,14 @@ class CheckboxesField extends FormComponent {
         // Do a loose string based check as state may or
         // may not match the item value types.
         const itemIsSelected = !!formDataItems.find(i => '' + item.value === i)
-        return this.mapItemForViewModel(formData, errors, item, itemIsSelected)
+        return this.mapItemForViewModel(config, formData, errors, item, itemIsSelected)
       })
     })
 
     return viewModel
   }
 
-  mapItemForViewModel (formData, errors, item, checked = false) {
+  mapItemForViewModel (config, formData, errors, item, checked = false) {
     const { options: { bold } = {} } = this
     const { text, value, description, conditionalHtml } = item
 

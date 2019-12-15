@@ -54,8 +54,8 @@ class NumberField extends FormComponent {
     return { [this.name]: this.formSchema }
   }
 
-  getViewModel (formData, errors) {
-    const viewModel = super.getViewModel(formData, errors)
+  getViewModel (config, formData, errors) {
+    const viewModel = super.getViewModel(config, formData, errors)
     viewModel.type = 'number'
     return viewModel
   }

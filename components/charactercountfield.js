@@ -1,9 +1,9 @@
 const MultilineTextField = require('./multilinetextfield')
 
 class CharacterCountField extends MultilineTextField {
-  getViewModel (formData, errors) {
+  getViewModel (config, formData, errors) {
     const { options: { threshold } = {}, schema: { max, maxwords } = {} } = this
-    const viewModel = super.getViewModel(formData, errors)
+    const viewModel = super.getViewModel(config, formData, errors)
 
     delete viewModel.attributes.maxlength
     if (maxwords) {

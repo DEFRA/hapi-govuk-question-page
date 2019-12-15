@@ -108,9 +108,9 @@ class DatePartsField extends FormComponent {
       : ''
   }
 
-  getViewModel (formData, errors) {
+  getViewModel (config, formData, errors) {
     const { name: componentName } = this
-    const viewModel = super.getViewModel(formData, errors)
+    const viewModel = super.getViewModel(config, formData, errors)
 
     viewModel.items = PARTS.map((label, index) => {
       const name = `${componentName}${SUFFIXES[index]}`

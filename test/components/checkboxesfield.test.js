@@ -36,7 +36,7 @@ lab.experiment('CheckboxesField', () => {
     lab.experiment('standard configuration', () => {
       lab.beforeEach(({ context }) => {
         context.checkboxesField = new CheckboxesField(standardDefinition)
-        context.viewModel = context.checkboxesField.getViewModel(formData)
+        context.viewModel = context.checkboxesField.getViewModel({}, formData)
       })
       lab.test('includes items', ({ context }) => {
         expect(context.viewModel.items.length).to.equal(1)
@@ -54,14 +54,14 @@ lab.experiment('CheckboxesField', () => {
         expect(context.viewModel.items[0].checked).to.be.false()
       })
       lab.test('selection missing', ({ context }) => {
-        const viewModel = context.checkboxesField.getViewModel({})
+        const viewModel = context.checkboxesField.getViewModel({}, {})
         expect(viewModel.items[0].checked).to.be.false()
       })
     })
     lab.experiment('with additional configuration', () => {
       lab.beforeEach(({ context }) => {
         context.checkboxesField = new CheckboxesField(definitionWithConfiguration)
-        context.viewModel = context.checkboxesField.getViewModel(formData)
+        context.viewModel = context.checkboxesField.getViewModel({}, formData)
       })
       lab.test('includes items', ({ context }) => {
         expect(context.viewModel.items.length).to.equal(3)
@@ -76,16 +76,16 @@ lab.experiment('CheckboxesField', () => {
         expect(context.viewModel.items[2].conditional.html).to.equal('<p class="govuk-body">Conditional HTML</p>')
       })
       lab.test('selects item', ({ context }) => {
-        const viewModel = context.checkboxesField.getViewModel({ [componentName]: '2' })
+        const viewModel = context.checkboxesField.getViewModel({}, { [componentName]: '2' })
         expect(viewModel.items[1].checked).to.be.true()
       })
       lab.test('selects array of items', ({ context }) => {
-        const viewModel = context.checkboxesField.getViewModel({ [componentName]: ['2', '3'] })
+        const viewModel = context.checkboxesField.getViewModel({}, { [componentName]: ['2', '3'] })
         expect(viewModel.items[1].checked).to.be.true()
         expect(viewModel.items[2].checked).to.be.true()
       })
       lab.test('selects multiple items in text', ({ context }) => {
-        const viewModel = context.checkboxesField.getViewModel({ [componentName]: '2,3' })
+        const viewModel = context.checkboxesField.getViewModel({}, { [componentName]: '2,3' })
         expect(viewModel.items[1].checked).to.be.true()
         expect(viewModel.items[2].checked).to.be.true()
       })

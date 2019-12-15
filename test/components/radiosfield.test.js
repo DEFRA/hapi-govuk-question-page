@@ -36,7 +36,7 @@ lab.experiment('RadiosField', () => {
     lab.experiment('standard configuration', () => {
       lab.beforeEach(({ context }) => {
         const radiosField = new RadiosField(standardDefinition)
-        context.viewModel = radiosField.getViewModel(formData)
+        context.viewModel = radiosField.getViewModel({}, formData)
       })
       lab.test('includes items', ({ context }) => {
         expect(context.viewModel.items.length).to.equal(1)
@@ -57,7 +57,7 @@ lab.experiment('RadiosField', () => {
     lab.experiment('with additional configuration', () => {
       lab.beforeEach(({ context }) => {
         context.radiosField = new RadiosField(definitionWithConfiguration)
-        context.viewModel = context.radiosField.getViewModel(formData)
+        context.viewModel = context.radiosField.getViewModel({}, formData)
       })
       lab.test('includes items', ({ context }) => {
         expect(context.viewModel.items.length).to.equal(3)
@@ -72,7 +72,7 @@ lab.experiment('RadiosField', () => {
         expect(context.viewModel.items[2].conditional.html).to.equal('<p class="govuk-body">Conditional HTML</p>')
       })
       lab.test('selects item', ({ context }) => {
-        const viewModel = context.radiosField.getViewModel({ [componentName]: '2' })
+        const viewModel = context.radiosField.getViewModel({}, { [componentName]: '2' })
         expect(viewModel.items[1].checked).to.be.true()
       })
     })

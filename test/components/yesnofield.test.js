@@ -26,7 +26,7 @@ lab.experiment('YesNoField', () => {
     lab.experiment('standard configuration', () => {
       lab.beforeEach(({ context }) => {
         const yesNoField = new YesNoField(standardDefinition)
-        context.viewModel = yesNoField.getViewModel(formData)
+        context.viewModel = yesNoField.getViewModel({}, formData)
       })
       lab.test('includes items', ({ context }) => {
         expect(context.viewModel.items.length).to.equal(2)
@@ -44,7 +44,7 @@ lab.experiment('YesNoField', () => {
     lab.experiment('with additional configuration', () => {
       lab.beforeEach(({ context }) => {
         context.yesNoField = new YesNoField(definitionWithConfiguration)
-        context.viewModel = context.yesNoField.getViewModel(formData)
+        context.viewModel = context.yesNoField.getViewModel({}, formData)
       })
       lab.test('has no first', ({ context }) => {
         expect(context.viewModel.items[0].value).to.be.false()
@@ -54,7 +54,7 @@ lab.experiment('YesNoField', () => {
         expect(context.viewModel.classes).to.equal('test classes')
       })
       lab.test('selects item', ({ context }) => {
-        const viewModel = context.yesNoField.getViewModel({ [componentName]: true })
+        const viewModel = context.yesNoField.getViewModel({}, { [componentName]: true })
         expect(viewModel.items[1].checked).to.be.true()
       })
     })

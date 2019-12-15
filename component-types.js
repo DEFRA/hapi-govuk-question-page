@@ -40,6 +40,11 @@ module.exports = [
     subType: 'field'
   },
   {
+    name: 'CheckboxesWithTextField',
+    title: 'Checkboxes with text boxes field',
+    subType: 'field'
+  },
+  {
     name: 'NumberField',
     title: 'Number field',
     subType: 'field'
@@ -70,6 +75,11 @@ module.exports = [
     subType: 'content'
   },
   {
+    name: 'DynamicHtml',
+    title: 'Html with parameterised content',
+    subType: 'content'
+  },
+  {
     name: 'InsetText',
     title: 'Inset text',
     subType: 'content'
@@ -83,10 +93,5 @@ module.exports = [
     name: 'WarningText',
     title: 'Warning text',
     subType: 'content'
-  },
-  {
-    name: 'CheckboxesWithTextField',
-    title: 'Checkboxes with text boxes field',
-    subType: 'field'
   }
 ]

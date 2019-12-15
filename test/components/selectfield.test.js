@@ -31,18 +31,18 @@ lab.experiment('SelectField', () => {
   lab.experiment('getViewModel', () => {
     lab.test('includes blank item', () => {
       const selectField = new SelectField(standardDefinition)
-      const viewModel = selectField.getViewModel(formData)
+      const viewModel = selectField.getViewModel({}, formData)
       expect(viewModel.items.length).to.equal(1)
       expect(viewModel.items[0].text).to.equal('')
     })
     lab.test('includes items', () => {
       const selectField = new SelectField(definitionWithConfiguration)
-      const viewModel = selectField.getViewModel(formData)
+      const viewModel = selectField.getViewModel({}, formData)
       expect(viewModel.items.length).to.equal(4)
     })
     lab.test('selects item', () => {
       const selectField = new SelectField(definitionWithConfiguration)
-      const viewModel = selectField.getViewModel({ [componentName]: '2' })
+      const viewModel = selectField.getViewModel({}, { [componentName]: '2' })
       expect(viewModel.items[2].selected).to.be.true()
     })
   })

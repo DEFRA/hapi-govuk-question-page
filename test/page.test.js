@@ -124,42 +124,42 @@ lab.experiment('Page', () => {
   lab.experiment('getViewModel', () => {
     lab.test('normal page title when multiple form components', () => {
       const page = new Page(standardDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.pageTitle).to.equal('Title')
     })
     lab.test('normal page title when no form components', () => {
       const page = new Page(paraDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.pageTitle).to.equal('Title')
     })
     lab.test('normal page title when non-form components before single form component', () => {
       const page = new Page(htmlWithTextFieldDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.pageTitle).to.equal('Title')
     })
     lab.test('page title from single form component', () => {
       const page = new Page(singleFieldDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.pageTitle).to.equal('Text Field')
     })
     lab.test('section title included with single form component', () => {
       const page = new Page(singleFieldWithSectionDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.components[0].model.label.html).to.contain('Section')
     })
     lab.test('use form when has form components', () => {
       const page = new Page(singleFieldDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.useForm).to.be.true()
     })
     lab.test('use form when has next', () => {
       const page = new Page(paraDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.useForm).to.be.true()
     })
     lab.test('no form when no form components and doesn\'t have next', () => {
       const page = new Page(htmlDefinition)
-      const viewModel = page.getViewModel({})
+      const viewModel = page.getViewModel({}, {})
       expect(viewModel.useForm).to.be.false()
     })
   })

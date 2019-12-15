@@ -10,8 +10,8 @@ class TelephoneNumberField extends TextField {
     }
   }
 
-  getViewModel (formData, errors) {
-    const viewModel = super.getViewModel(formData, errors)
+  getViewModel (config, formData, errors) {
+    const viewModel = super.getViewModel(config, formData, errors)
     viewModel.type = 'tel'
     if (this.options.autocomplete) {
       viewModel.autocomplete = 'tel'

@@ -66,24 +66,24 @@ lab.experiment('FormComponent', () => {
         context.formComponent = new FormComponent(standardDefinition)
       })
       lab.test('has label', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel(formData)
+        const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.label).to.exist()
         expect(viewModel.label.text).to.equal('Title')
       })
       lab.test('no error message', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel(formData)
+        const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.errorMessage).to.not.exist()
       })
       lab.test('has error message when error', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel(formData, { errorList: [{ name: componentName, text: 'error' }] })
+        const viewModel = context.formComponent.getViewModel({}, formData, { errorList: [{ name: componentName, text: 'error' }] })
         expect(viewModel.errorMessage.text).to.equal('error')
       })
       lab.test('doesn\'t have non-matching error', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel(formData, { errorList: [{ name: `NOT${componentName}`, text: 'error' }] })
+        const viewModel = context.formComponent.getViewModel({}, formData, { errorList: [{ name: `NOT${componentName}`, text: 'error' }] })
         expect(viewModel.errorMessage).to.not.exist()
       })
       lab.test('has value', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel({ [componentName]: 'test' })
+        const viewModel = context.formComponent.getViewModel({}, { [componentName]: 'test' })
         expect(viewModel.value).to.equal('test')
       })
     })
@@ -92,23 +92,23 @@ lab.experiment('FormComponent', () => {
         context.formComponent = new FormComponent(definitionWithConfiguration)
       })
       lab.test('is optional', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel(formData)
+        const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.label).to.exist()
         expect(viewModel.label.text).to.equal('Title (optional)')
       })
       lab.test('has hint', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel(formData)
+        const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.hint).to.exist()
         expect(viewModel.hint.html).to.equal('Hint')
       })
       lab.test('is optional', ({ context }) => {
-        const viewModel = context.formComponent.getViewModel(formData)
+        const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.errorMessage).to.not.exist()
       })
     })
     lab.test('with no title', () => {
       const formComponent = new FormComponent({ name: componentName })
-      const viewModel = formComponent.getViewModel(formData)
+      const viewModel = formComponent.getViewModel({}, formData)
       expect(viewModel.label).to.exist()
       expect(viewModel.label.text).to.equal('testFormComponent')
     })

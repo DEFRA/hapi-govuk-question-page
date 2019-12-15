@@ -21,7 +21,7 @@ lab.experiment('CharacterCountField', () => {
   lab.experiment('getViewModel', () => {
     let viewModel
     lab.beforeEach(() => {
-      viewModel = characterCountField.getViewModel({ testCharacterCountField: null })
+      viewModel = characterCountField.getViewModel({}, { testCharacterCountField: null })
     })
     lab.test('includes maxlength when maxwords not configured', () => {
       expect(viewModel.maxlength).to.equal(10)
@@ -33,7 +33,7 @@ lab.experiment('CharacterCountField', () => {
         schema: { maxwords: 5 }
       }
       characterCountField = new CharacterCountField(definitionWithRows)
-      viewModel = characterCountField.getViewModel({ testCharacterCountField: null })
+      viewModel = characterCountField.getViewModel({}, { testCharacterCountField: null })
       expect(viewModel.maxlength).to.not.exist()
       expect(viewModel.maxwords).to.equal(5)
     })
@@ -46,7 +46,7 @@ lab.experiment('CharacterCountField', () => {
         options: { threshold: 10 }
       }
       characterCountField = new CharacterCountField(definitionWithRows)
-      viewModel = characterCountField.getViewModel({ testCharacterCountField: null })
+      viewModel = characterCountField.getViewModel({}, { testCharacterCountField: null })
       expect(viewModel.threshold).to.equal(10)
     })
   })

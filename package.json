@@ -16,13 +16,13 @@
   "author": "Department for Environment, Food and Rural Affairs <https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs>.",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
+    "@hapi/hoek": "^8.5.0",
     "@hapi/joi": "16.1.2",
     "moment": "2.22.2"
   },
   "devDependencies": {
     "@hapi/code": "^7.0.0",
     "@hapi/hapi": "18.4.0",
-    "@hapi/hoek": "^8.5.0",
     "@hapi/inert": "5.2.2",
     "@hapi/lab": "^21.0.0",
     "@hapi/vision": "5.5.4",

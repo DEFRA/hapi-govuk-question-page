@@ -27,18 +27,18 @@ lab.experiment('TextField', () => {
   lab.experiment('getViewModel', () => {
     lab.test('doesn\'t include maxlength when not configured', () => {
       const textField = new TextField(standardDefinition)
-      const viewModel = textField.getViewModel(formData)
+      const viewModel = textField.getViewModel({}, formData)
       expect(viewModel.attributes.maxlength).to.not.exist()
     })
     lab.test('includes maxlength when configured', () => {
       const textField = new TextField(definitionWithConfiguration)
-      const viewModel = textField.getViewModel(formData)
+      const viewModel = textField.getViewModel({}, formData)
       expect(viewModel.attributes).to.exist()
       expect(viewModel.attributes.maxlength).to.equal(10)
     })
     lab.test('doesn\'t include maxlength when maxwords is configured', () => {
       const textField = new TextField(maxWordsDefinition)
-      const viewModel = textField.getViewModel(formData)
+      const viewModel = textField.getViewModel({}, formData)
       expect(viewModel.attributes.maxlength).to.not.exist()
     })
   })

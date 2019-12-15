@@ -38,9 +38,9 @@ class YesNoField extends FormComponent {
     return item ? item.text : ''
   }
 
-  getViewModel (formData, errors) {
+  getViewModel (config, formData, errors) {
     const { name, items } = this
-    const viewModel = super.getViewModel(formData, errors)
+    const viewModel = super.getViewModel(config, formData, errors)
 
     Object.assign(viewModel, {
       fieldset: {

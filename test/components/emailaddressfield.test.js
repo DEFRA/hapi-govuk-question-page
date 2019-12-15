@@ -42,7 +42,7 @@ lab.experiment('EmailAddressField', () => {
   lab.experiment('getViewModel', () => {
     let viewModel
     lab.beforeEach(() => {
-      viewModel = emailAddressField.getViewModel({ testEmailAddressField: null })
+      viewModel = emailAddressField.getViewModel({}, { testEmailAddressField: null })
     })
     lab.test('is correct type', () => {
       expect(viewModel.type).to.equal(expectedType)
@@ -56,7 +56,7 @@ lab.experiment('EmailAddressField', () => {
         options: { autocomplete: true }
       }
       emailAddressField = new EmailAddressField(definitionWithOptions)
-      viewModel = emailAddressField.getViewModel({ testEmailAddressField: null })
+      viewModel = emailAddressField.getViewModel({}, { testEmailAddressField: null })
       expect(viewModel.autocomplete).to.equal(expectedType)
     })
   })

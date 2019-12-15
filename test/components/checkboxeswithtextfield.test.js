@@ -36,37 +36,37 @@ lab.experiment('CheckboxesWithTextField', () => {
       context.items = context.checkboxesWithTextField.items
     })
     lab.test('has no conditional content', ({ context }) => {
-      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, null, context.items[1], false)
+      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[1], false)
       expect(itemForViewModel.conditional).to.not.exist()
     })
     lab.test('has conditional content', ({ context }) => {
-      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, null, context.items[0], false)
+      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[0], false)
       expect(itemForViewModel.conditional).to.exist()
       expect(itemForViewModel.conditional.input).to.exist()
     })
     lab.test('has label when has no title', ({ context }) => {
-      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, null, context.items[2], false)
+      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[2], false)
       expect(itemForViewModel.conditional.input.label.text).to.equal('C')
     })
     lab.test('has hint', ({ context }) => {
-      let itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, null, context.items[0], false)
+      let itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[0], false)
       expect(itemForViewModel.conditional.input.hint.html).to.equal('Hint A')
-      itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, null, context.items[3], false)
+      itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[3], false)
       expect(itemForViewModel.conditional.input.hint).to.not.exist()
     })
     lab.test('includes maxlength', ({ context }) => {
-      let itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, null, context.items[0], false)
+      let itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[0], false)
       expect(itemForViewModel.conditional.input.attributes).to.exist()
       expect(itemForViewModel.conditional.input.attributes.maxlength).to.equal(10)
-      itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, null, context.items[3], false)
+      itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[3], false)
       expect(itemForViewModel.conditional.input.attributes).to.not.exist()
     })
     lab.test('has error', ({ context }) => {
-      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, { errorList: [{ name: 'textA', text: 'error' }] }, context.items[0], false)
+      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, { errorList: [{ name: 'textA', text: 'error' }] }, context.items[0], false)
       expect(itemForViewModel.conditional.input.errorMessage.text).to.equal('error')
     })
     lab.test('doesn\'t have matching error', ({ context }) => {
-      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel(formData, { errorList: [{ name: 'textC', text: 'error' }] }, context.items[0], false)
+      const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, { errorList: [{ name: 'textC', text: 'error' }] }, context.items[0], false)
       expect(itemForViewModel.conditional.input.errorMessage).to.not.exist()
     })
   })

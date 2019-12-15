@@ -34,9 +34,9 @@ class TextField extends FormComponent {
     return { [this.name]: this.formSchema }
   }
 
-  getViewModel (formData, errors) {
+  getViewModel (config, formData, errors) {
     const { schema: { max, maxwords } = {} } = this
-    const viewModel = super.getViewModel(formData, errors)
+    const viewModel = super.getViewModel(config, formData, errors)
 
     if (!maxwords && typeof max === 'number') {
       viewModel.attributes.maxlength = max

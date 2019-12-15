@@ -367,5 +367,9 @@ module.exports = {
     type: 'WarningText',
     text: 'Warning text',
     summary: 'A warning'
+  }, {
+    type: 'DynamicHtml',
+    name: 'dynamicHtml',
+    templateHtml: '<p class="govuk-body">The current date and time here at <a href="$PARAM$">the test harness</a> is $PARAM$</p>'
   }]
 }

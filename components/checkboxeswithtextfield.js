@@ -49,8 +49,8 @@ class CheckboxesWithTextField extends CheckboxesField {
     return formSchemaKeys
   }
 
-  mapItemForViewModel (formData, errors, item, checked) {
-    const itemModel = super.mapItemForViewModel(formData, errors, item, checked)
+  mapItemForViewModel (config, formData, errors, item, checked) {
+    const itemModel = super.mapItemForViewModel(config, formData, errors, item, checked)
     if (item.conditionalTextField) {
       const { name, title, hint, schema: { max } = {} } = item.conditionalTextField
       const label = title || item.text

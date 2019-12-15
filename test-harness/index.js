@@ -96,6 +96,13 @@ async function createServer () {
     handler: {
       'hapi-govuk-question-page': {
         pageTemplateName: 'layout.html',
+        getConfig: async (request) => {
+          return {
+            dynamicHtml: {
+              parameterValues: [request.url, new Date()]
+            }
+          }
+        },
         getData: async (request) => {
           return data
         },

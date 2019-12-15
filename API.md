@@ -79,8 +79,8 @@ as they need to.
 
 ## Handler
 
-With the plugin registered on your server, you will be able to use the special handler type `hapi-govuk-question-page` as
-with any other Hapi handler type:
+With the plugin registered on your server, you will be able to use the special handler type `hapi-govuk-question-page`
+as with any other Hapi handler type:
 
 ```js
 server.route({
@@ -95,9 +95,10 @@ server.route({
 The handler is configured with [handler options](#options).
 
 ## `options`
-  - `pageDefinition` - required object that defines the contents of the page as specified by [page definition object](#pagedefinition).
+  - `pageDefinition` - required object that defines the contents of the page as specified
+    by [page definition object](#pagedefinition).
   
-  - `getData` - a function with signature `function(request)` that is called by the handler in response to the
+  - `getData` - a function with signature `async function(request)` that is called by the handler in response to the
     given `request` and should return the data to be displayed on the page.
     - `request` - the Hapi `request` object received by the handler.
     - returns - an object with a key for each named form component. If nothing is returned or keys are
@@ -105,9 +106,9 @@ The handler is configured with [handler options](#options).
     
     This parameter is not required if the page does not display any dynamic data.
     
-  - `setData` - a function with signature `function(request, data)` that is called by the handler after successful
-    submission of a valid form. The provided function should perform whatever tasks are necessary to update your
-    application's data.
+  - `setData` - a function with signature `async function(request, data)` that is called by the handler after
+    successful submission of a valid form.
+    The provided function should perform whatever tasks are necessary to update your application's data.
     - `request` - the Hapi `request` object received by the handler. This will always be a POST request.
     - `data` - an object containing the data to be set, with a key for each named form component.
     - returns - nothing, or a Joi validation result. If a Joi validation result is returned and it has an `error`
@@ -115,6 +116,15 @@ The handler is configured with [handler options](#options).
       messages from the `error` object.
     
     This parameter is not required if the page does not contain any form components or has no POST route defined.
+    
+  - `getConfig` - a function with signature `async function(request)` that is called by the handler in response to the
+    given `request` and should return the request-specific configuration information for any components that support it.
+    - `request` - the Hapi `request` object received by the handler.
+    - returns - an object with a key for each named component that supports request-specific configuration.
+      The behaviour when configuration is not provided is component-specific - see the documentation for the individual
+      [page components](#components).            
+    
+    This parameter is not required if the page does not have any components that need request-specific configuration.
     
   - `nextPath` - a string that the handler will redirect the client to following successful completion of the page.
     
@@ -191,6 +201,7 @@ The available `type` values for these are:
   - [WarningText](#warningtext-component)
   - [Details](#details-component)
   - [Html](#html-component)
+  - [DynamicHtml](#dynamichtml-component)
 
 ## `CharacterCountField` component
 Text field that displays a multi-line input with a character count using the Character Count component.
@@ -219,10 +230,78 @@ with the exception of `options.required` and `options.classes`.
 ## `DatePartsField` component
 Date field using the Date Input component following the Dates pattern, with separate inputs for day, month and year.
 
+The `getData` function should return this value as a Javascript date object - the component will take care of
+splitting the date into the separate parts.
+
+Similarly, when the plugin calls `setDate` it will provide the value as a full Javascript date object.
+
+Example:
+```js
+server.route({
+  method: 'GET',
+  path: '/date-required',
+  handler: {
+    'hapi-govuk-question-page': {
+      pageDefinition: {
+        components: [
+          { type: 'DatePartsField', title: 'Date required' name: 'dateRequired' },
+          ... // other form components
+        ]
+      },
+      getData: async (request) => {
+        const storedDate = await ... // Get value from data store
+        return {
+          dateRequired: storedDate || new Date(),
+          ... // data for other fields
+        }
+      },
+      setData: async (request, data) => {
+        const dateRequired = data.dateRequired
+        const yearRequired = dateRequired.getFullYear()
+        // ... check the year
+      }
+    }
+  }
+})
+```
+
 ## `Details` component
 Show/hide details section using the Details component.
-  - `title` - string of raw HTML used in the "collapsed" form as the summary
-  - `content` - string of raw HTML used in the hidden details section
+  - `title` - string of raw HTML used in the "collapsed" form as the summary.
+  - `content` - string of raw HTML used in the hidden details section.
+
+## `DynamicHtml` component
+Raw HTML markup that supports request-specific parameters.
+  - `templateHtml` - string of raw HTML, with placeholders for parameter values written as `$PARAM$`.
+
+The occurrences of `$PARAM$` in the HTML will be replaced, in order, by the array of `parameterValues` returned by the
+`getConfig` function.
+
+Example:
+```js
+server.route({
+  method: 'GET',
+  path: '/current-time',
+  handler: {
+    'hapi-govuk-question-page': {
+      pageDefinition: {
+        components: [{
+          type: 'DynamicHtml',
+          name: 'currentDateTimeHere',
+          templateHtml: '<p>The current date and time here at <a href="$PARAM$">the hapi-govuk-question-page plugin</a> is $PARAM$</p>'
+        }]
+      },
+      getConfig: async (request) => {
+        return {
+          currentDateTimeHere: {
+            parameterValues: [request.url, new Date()]
+          }
+        }
+      }
+    }
+  }
+})
+```
 
 ## `EmailAddressField` component
 Text field that performs additional validation to ensure that the text entered is a valid email address format.

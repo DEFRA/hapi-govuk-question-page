@@ -42,7 +42,7 @@ lab.experiment('TelephoneNumberField', () => {
   lab.experiment('getViewModel', () => {
     let viewModel
     lab.beforeEach(() => {
-      viewModel = telephoneNumberField.getViewModel({ testTelephoneNumberField: null })
+      viewModel = telephoneNumberField.getViewModel({}, { testTelephoneNumberField: null })
     })
     lab.test('is correct type', () => {
       expect(viewModel.type).to.equal(expectedType)
@@ -53,7 +53,7 @@ lab.experiment('TelephoneNumberField', () => {
         options: { autocomplete: true }
       }
       telephoneNumberField = new TelephoneNumberField(definitionWithOptions)
-      viewModel = telephoneNumberField.getViewModel({ testTelephoneNumberField: null })
+      viewModel = telephoneNumberField.getViewModel({}, { testTelephoneNumberField: null })
       expect(viewModel.autocomplete).to.equal(expectedType)
     })
   })

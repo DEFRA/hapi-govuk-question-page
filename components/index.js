@@ -38,7 +38,7 @@ class FormComponent extends Component {
     }
   }
 
-  getViewModel (formData, errors) {
+  getViewModel (config, formData, errors) {
     const { name, title, hint, options: { classes, required = true } = {} } = this
     const isOptional = required === false
     const label = (title || name) + (isOptional ? ' (optional)' : '')

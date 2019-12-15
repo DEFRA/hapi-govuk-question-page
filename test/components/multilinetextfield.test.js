@@ -18,7 +18,7 @@ lab.experiment('MultilineTextField', () => {
   lab.experiment('getViewModel', () => {
     let viewModel
     lab.beforeEach(() => {
-      viewModel = multilineTextField.getViewModel({ testMultilineTextField: null })
+      viewModel = multilineTextField.getViewModel({}, { testMultilineTextField: null })
     })
     lab.test('doesn\'t include rows when not configured', () => {
       expect(viewModel.rows).to.not.exist()
@@ -29,7 +29,7 @@ lab.experiment('MultilineTextField', () => {
         options: { rows: 3 }
       }
       multilineTextField = new MultilineTextField(definitionWithRows)
-      viewModel = multilineTextField.getViewModel({ testMultilineTextField: null })
+      viewModel = multilineTextField.getViewModel({}, { testMultilineTextField: null })
       expect(viewModel.rows).to.equal(3)
     })
   })

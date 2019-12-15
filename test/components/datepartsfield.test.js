@@ -63,7 +63,7 @@ lab.experiment('DatePartsField', () => {
   })
   lab.experiment('getViewModel', () => {
     lab.test('includes items', ({ context }) => {
-      const viewModel = context.datePartsField.getViewModel(formData)
+      const viewModel = context.datePartsField.getViewModel({}, formData)
       expect(viewModel.items.length).to.equal(3)
       expect(viewModel.items[0].name).to.equal(dayName)
       expect(viewModel.items[1].name).to.equal(monthName)
@@ -73,13 +73,13 @@ lab.experiment('DatePartsField', () => {
       expect(viewModel.items[2].value).to.equal('2000')
     })
     lab.test('doesn\'t add error classes when no error', ({ context }) => {
-      const viewModel = context.datePartsField.getViewModel(formData)
+      const viewModel = context.datePartsField.getViewModel({}, formData)
       expect(viewModel.items[0].classes).to.not.include('govuk-input--error')
       expect(viewModel.items[1].classes).to.not.include('govuk-input--error')
       expect(viewModel.items[2].classes).to.not.include('govuk-input--error')
     })
     lab.test('adds error classes when error', ({ context }) => {
-      const viewModel = context.datePartsField.getViewModel(formData, { errorList: [{ name: componentName, text: 'Error' }] })
+      const viewModel = context.datePartsField.getViewModel({}, formData, { errorList: [{ name: componentName, text: 'Error' }] })
       expect(viewModel.items[0].classes).to.include('govuk-input--error')
       expect(viewModel.items[1].classes).to.include('govuk-input--error')
       expect(viewModel.items[2].classes).to.include('govuk-input--error')

@@ -28,7 +28,7 @@ lab.experiment('NumberField', () => {
   lab.experiment('getViewModel', () => {
     lab.test('is number type', () => {
       const numberField = new NumberField(standardDefinition)
-      const viewModel = numberField.getViewModel(formData)
+      const viewModel = numberField.getViewModel({}, formData)
       expect(viewModel.type).to.equal('number')
     })
   })

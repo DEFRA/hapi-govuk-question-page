@@ -41,7 +41,7 @@ lab.experiment('NamesField', () => {
   lab.experiment('getViewModel', () => {
     let viewModel
     lab.beforeEach(() => {
-      viewModel = namesField.getViewModel({ testNamesField: null })
+      viewModel = namesField.getViewModel({}, { testNamesField: null })
     })
     lab.test('sets spellcheck attribute', () => {
       expect(viewModel.attributes.spellcheck).to.equal('false')
@@ -52,7 +52,7 @@ lab.experiment('NamesField', () => {
         options: { autocomplete: true }
       }
       namesField = new NamesField(definitionWithOptions)
-      viewModel = namesField.getViewModel({ testNamesField: null })
+      viewModel = namesField.getViewModel({}, { testNamesField: null })
       expect(viewModel.autocomplete).to.equal('name')
     })
   })

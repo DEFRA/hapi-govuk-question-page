@@ -8,6 +8,7 @@ const handlerProvider = (route, handlerOptions) => {
   const {
     pageTemplateName = DEFAULT_PAGE_TEMPLATE_NAME,
     pageDefinition,
+    getConfig = () => ({}),
     getData = () => ({}),
     setData = () => {},
     nextPath,
@@ -18,23 +19,25 @@ const handlerProvider = (route, handlerOptions) => {
 
   if (route.method === 'get') {
     return async (request, h) => {
+      const config = await getConfig(request)
       const state = await getData(request)
-      const formData = page.getFormDataFromState(state)
-      return h.view(VIEW_NAME, page.getViewModel(formData))
+      const formData = page.getFormDataFromState(state, config)
+      return h.view(VIEW_NAME, page.getViewModel(config, formData))
     }
   } else if (route.method === 'post') {
     return async (request, h) => {
       const payload = request.payload
-      const formResult = page.validateForm(payload)
+      const config = await getConfig(request)
+      const formResult = page.validateForm(payload, config)
 
       if (formResult.errors) {
-        return h.view(VIEW_NAME, page.getViewModel(payload, formResult.errors))
+        return h.view(VIEW_NAME, page.getViewModel(config, payload, formResult.errors))
       } else {
-        const dataToSet = page.getStateFromValidForm(formResult.value)
+        const dataToSet = page.getStateFromValidForm(formResult.value, config)
         const setDataResult = await setData(request, dataToSet)
 
         if (setDataResult && setDataResult.errors) {
-          return h.view(VIEW_NAME, page.getViewModel(payload, setDataResult.errors))
+          return h.view(VIEW_NAME, page.getViewModel(config, payload, setDataResult.errors))
         } else {
           const redirectPath = (getNextPath && await getNextPath(request)) || nextPath
           if (redirectPath) {

@@ -1,0 +1,3 @@
+{% macro DynamicHtml(component) %}
+  {{ component.model.content | safe }}
+{% endmacro %}
