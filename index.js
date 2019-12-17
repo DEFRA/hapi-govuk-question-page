@@ -1,7 +1,7 @@
 const pkg = require('./package.json')
 const Page = require('./page')
 
-const VIEW_NAME = 'hapi-govuk-question-page/page.html'
+const VIEW_NAME = 'hapi-govuk-question-page/page'
 const DEFAULT_PAGE_TEMPLATE_NAME = 'layout.html'
 
 const handlerProvider = (route, handlerOptions) => {

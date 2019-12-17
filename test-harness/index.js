@@ -6,7 +6,7 @@ const visionPlugin = {
   plugin: require('@hapi/vision'),
   options: {
     engines: {
-      html: {
+      njk: {
         compile: (src, options) => {
           const template = nunjucks.compile(src, options.environment)
 
@@ -15,7 +15,7 @@ const visionPlugin = {
           }
         },
         prepare: (options, next) => {
-          options.compileOptions.environment = nunjucks.configure(options.path, {
+          options.compileOptions.environment = nunjucks.configure(['node_modules/govuk-frontend', 'test-harness/page-template', ...options.path], {
             autoescape: true,
             watch: false
           })
@@ -25,9 +25,7 @@ const visionPlugin = {
       }
     },
     path: [
-      'node_modules/govuk-frontend',
-      '.', // When included as a module this would be 'node_modules/hapi-govuk-question-page'
-      'test-harness'
+      '.' // When included as a module this would be 'node_modules/hapi-govuk-question-page'
     ],
     isCached: false,
     context: {
@@ -95,7 +93,7 @@ async function createServer () {
     path: '/',
     handler: {
       'hapi-govuk-question-page': {
-        pageTemplateName: 'layout.html',
+        pageTemplateName: 'page.template.njk',
         getConfig: async (request) => {
           return {
             dynamicHtml: {

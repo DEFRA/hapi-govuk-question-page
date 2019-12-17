@@ -9,60 +9,114 @@ It should be used inside a GOV.UK application and so expects Vision view handler
 the GOV.UK Design System components as well as the pages from the plugin itself.
 
 Also, the plugin does not define entire GOV.UK pages, it expects you to already have a template for your application.
-The pages it serves will inherit from the template that you specify.  If you do not specify a template then it will
-expect to find a template named `layout.html` in your configured Vision path.
+The pages it serves will inherit from the template that you specify.  If you do not specify a page template then it
+will expect to find a template named `layout.html` in your configured Vision path.
 
 ## Application configuration
 To configure your application to use the plugin, you need to do the following:
 
-### 1. Configure Vision to serve files with the `.html` extension
+### 1. Configure Vision to use Nunjucks as the rendering engine
 
-Vision can be configured to use a number of different file extensions.  The **hapi-govuk-question-page** plugin
-requires that it is configured to use the `.html` extension.
+Vision can be configured to use any file extensions, but the **hapi-govuk-question-page** plugin uses Nunjucks so 
+follows the community practice of using `.njk` as the file extension.
+However, as it is also quite common practice to use `.html` for view files the plugin supports this as well.
+So Vision can be configured to use either `.html` or `.njk`  as the default extension.
 
-### 2. Use Nunjucks as the rendering engine for `.html` files
+Example:
+```js
+await server.register(require('@hapi/vision'))
+server.views({
+  engines: {
+    html: {
+      compile: (src, options) => {
+        const template = nunjucks.compile(src, options.environment)
+        return (context) => {
+          return template.render(context)
+        }
+      },
+      prepare: (options, next) => {
+        options.compileOptions.environment = nunjucks.configure(options.path)
+        return next()
+      }
+    }
+  },
+  ...
+})
+```
 
-The **hapi-govuk-question-page** plugin and GOV.UK Frontend both require Nunjucks to be configured as the Vision
-engine for rendering pages.
+### 2. Configure Vision to serve the **hapi-govuk-question-page** view
 
-### 3. Configure Nunjucks to use GOV.UK Frontend and **hapi-govuk-question-page**
+The **hapi-govuk-question-page** plugin needs to have its directory `node_modules/hapi-govuk-question-page` on the
+Visio path so that it can use Vision's `h.view()` response toolkit extension to serve its page.
+
+Example:
+```js
+await server.register(require('@hapi/vision'))
+server.views({
+  engines: { ... },
+  path: [
+    'node_modules/hapi-govuk-question-page'
+  ]
+})
+```
+
+### 3. Configure Nunjucks to use GOV.UK Frontend and **hapi-govuk-question-page** components
 
 Nunjucks needs to be configured with the paths where it can find templates. This will need to include paths for
-both GOV.UK Frontend and the **hapi-govuk-question-page**.
+both GOV.UK Frontend and the **hapi-govuk-question-page** components.
+
 In order for the plugin to find the GOV.UK Frontend components,
 the module root needs to be exposed, so that the contents can be uniquely referenced as `govuk`.
 
 The same approach is applied with **hapi-govuk-question-page** - expose the module root so that the contents can be
 referenced using the `hapi-govuk-question-page` container.
 
+Example:
+```js
+await server.register(require('@hapi/vision'))
+server.views({
+  engines: {
+    html: {
+      ...
+      prepare: (options, next) => {
+        options.compileOptions.environment = nunjucks.configure([
+          'node_modules/govuk-frontend',
+          'node_modules/hapi-govuk-question-page'
+        ])
+        return next()
+      }
+    }
+  },
+  ...
+})
+```
+
 ### Vision configuration
 
-The Vision plugin configuration would look something like this:
+A complete Vision plugin configuration would look something like this:
 
 ```js
-const visionPlugin = {
-  plugin: require('@hapi/vision'),
-  options: {
-    engines: {
-      html: {
-        compile: (src, options) => {
-          const template = nunjucks.compile(src, options.environment)
-          return (context) => {
-            return template.render(context)
-          }
-        },
-        prepare: (options, next) => {
-          options.compileOptions.environment = nunjucks.configure(options.path)
-          return next()
+await server.register(require('@hapi/vision'))
+server.views({
+  engines: {
+    html: {
+      compile: (src, options) => {
+        const template = nunjucks.compile(src, options.environment)
+        return (context) => {
+          return template.render(context)
         }
+      },
+      prepare: (options, next) => {
+        options.compileOptions.environment = nunjucks.configure(['node_modules/govuk-frontend', ...options.path])
+        return next()
       }
-    },
-    path: [
-      'node_modules/govuk-frontend',
-      'node_modules/hapi-govuk-question-page'
-    ]
-  }
-}
+    }
+  },
+  path: [
+    'node_modules/hapi-govuk-question-page',
+    'your/template/path'
+  ]
+})
 ```
 
 ## Registration

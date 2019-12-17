@@ -1,0 +1,35 @@
+{% extends templateName %}
+
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "./components.njk" import componentList %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if errors %}
+        {{ govukErrorSummary(errors) }}
+      {% endif %}
+
+      {% if showTitle %}
+        <h1 class="govuk-heading-xl">
+          {% if sectionTitle %}
+            <span class="govuk-caption-xl">{{sectionTitle}}</span>
+          {% endif %}
+          {{pageTitle}}
+        </h1>
+      {% endif %}
+
+      {% if useForm %}
+        <form method="post" autocomplete="off" novalidate>
+          {{ componentList(components) }}
+          {{ govukButton({ attributes: { id: "submit" }, text: "Continue" }) }}
+        </form>
+      {% else %}
+        {{ componentList(components) }}
+      {% endif %}
+
+      <pre>{{ value | dump(2) | safe }}</pre>
+    </div>
+  </div>
+{% endblock %}
