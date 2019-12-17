@@ -1,6 +1,26 @@
 const joi = require('@hapi/joi')
-const componentTypesList = require('./component-types')
-const componentTypes = componentTypesList.reduce((acc, { name }) => {
+const componentTypesList = [
+  'TextField',
+  'MultilineTextField',
+  'CharacterCountField',
+  'YesNoField',
+  'DatePartsField',
+  'SelectField',
+  'RadiosField',
+  'CheckboxesField',
+  'CheckboxesWithTextField',
+  'NumberField',
+  'NamesField',
+  'TelephoneNumberField',
+  'EmailAddressField',
+  'Para',
+  'Html',
+  'DynamicHtml',
+  'InsetText',
+  'Details',
+  'WarningText'
+]
+const componentTypes = componentTypesList.reduce((acc, name) => {
   acc[name] = require(`./components/${name.toLowerCase()}`)
   return acc
 }, {})
