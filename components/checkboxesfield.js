@@ -5,14 +5,13 @@ class CheckboxesField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, options: { required, list: { type, items = [] } = {} } = {} } = this
-    this.items = items
+    const { titleForErrorText, nameForErrorText, options: { required, filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
+    this.listItems = listItems
+    const listValues = listItems.map(listItem => listItem.value)
+    this.listType = listType
+    this.listValues = listValues
 
-    const values = items.map(item => item.value)
-    const itemSchema = joi[type]().valid(...values)
-    const itemsSchema = joi.array().items(itemSchema)
-
-    let formSchema = joi.alternatives([itemSchema, itemsSchema]).prefs({ abortEarly: true }).label(titleForErrorText)
+    let formSchema = joi.alternatives().prefs({ abortEarly: true }).label(titleForErrorText)
     if (required === false) {
       formSchema = formSchema.allow('')
     } else {
@@ -27,15 +26,38 @@ class CheckboxesField extends FormComponent {
       'alternatives.types': `${titleForErrorText} must be from the list`,
       'alternatives.match': `${titleForErrorText} must be from the list`
     })
+
+    if (!filterable) {
+      const itemSchema = joi[listType]().valid(...listValues)
+      const itemsSchema = joi.array().items(itemSchema)
+      formSchema = formSchema.try(itemSchema, itemsSchema)
+    }
+
     this.formSchema = formSchema
   }
 
-  getFormSchemaKeys () {
-    return { [this.name]: this.formSchema }
+  getFormSchemaKeys (config = {}) {
+    const { name, listValues, listType, options: { filterable } = {} } = this
+    const { [name]: { filter } = {} } = config
+
+    let schema = this.formSchema
+    if (filterable) {
+      let values = listValues
+      if (filter && Array.isArray(filter)) {
+        values = values.filter(value => filter.includes(value))
+        values = values.length < 2 ? listValues : values
+      }
+
+      const itemSchema = joi[listType]().valid(...values)
+      const itemsSchema = joi.array().items(itemSchema)
+      schema = schema.try(itemSchema, itemsSchema)
+    }
+
+    return { [name]: schema }
   }
 
   getDisplayStringFromState (state) {
-    const { name, items = [] } = this
+    const { name, listItems = [] } = this
 
     if (name in state) {
       const value = state[name]
@@ -45,14 +67,15 @@ class CheckboxesField extends FormComponent {
       }
 
       const checked = Array.isArray(value) ? value : [value]
-      return items.filter(item => checked.find(check => check === item.value)).map(item => item.text).join(', ')
+      return listItems.filter(item => checked.find(check => check === item.value)).map(item => item.text).join(', ')
     } else {
       return ''
     }
   }
 
   getViewModel (config, formData, errors) {
-    const { name, items = [] } = this
+    const { name, listItems = [], options: { filterable } } = this
+    const { [name]: { filter } = {} } = config
     const viewModel = super.getViewModel(config, formData, errors)
     let formDataItems = []
 
@@ -60,6 +83,12 @@ class CheckboxesField extends FormComponent {
       formDataItems = Array.isArray(formData[name])
         ? formData[name]
         : formData[name].split(',')
+    }
+
+    let items = listItems
+    if (filterable && filter && Array.isArray(filter)) {
+      items = items.filter(({ value }) => filter.includes(value))
+      items = items.length < 2 ? listItems : items
     }
 
     Object.assign(viewModel, {

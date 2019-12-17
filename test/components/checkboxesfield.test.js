@@ -13,9 +13,9 @@ const standardDefinition = {
 }
 const definitionWithConfiguration = {
   name: componentName,
-  type: 'number',
   options: {
     required: false,
+    filterable: true,
     bold: true,
     list: {
       type: 'number',
@@ -90,6 +90,23 @@ lab.experiment('CheckboxesField', () => {
         expect(viewModel.items[2].checked).to.be.true()
       })
     })
+    lab.experiment('with filter', () => {
+      lab.beforeEach(({ context }) => {
+        context.checkboxesField = new CheckboxesField(definitionWithConfiguration)
+      })
+      lab.test('includes items', ({ context }) => {
+        const viewModel = context.checkboxesField.getViewModel({ [componentName]: { filter: [1, 2] } }, formData)
+        expect(viewModel.items.length).to.equal(2)
+      })
+      lab.test('filter is not array', ({ context }) => {
+        const viewModel = context.checkboxesField.getViewModel({ [componentName]: { filter: 1 } }, formData)
+        expect(viewModel.items.length).to.equal(3)
+      })
+      lab.test('filter has fewer than 2 valid items', ({ context }) => {
+        const viewModel = context.checkboxesField.getViewModel({ [componentName]: { filter: [1, 99] } }, formData)
+        expect(viewModel.items.length).to.equal(3)
+      })
+    })
   })
   lab.experiment('getDisplayStringFromState', () => {
     lab.beforeEach(({ context }) => {
@@ -150,6 +167,35 @@ lab.experiment('CheckboxesField', () => {
       lab.test('invalid number', ({ context }) => {
         const result = context.schema.validate('not a number')
         expect(result.error).to.exist()
+      })
+    })
+    lab.experiment('with filter', () => {
+      lab.beforeEach(({ context }) => {
+        context.checkboxesField = new CheckboxesField(definitionWithConfiguration)
+      })
+      lab.test('valid value', ({ context }) => {
+        const formSchemaKeys = context.checkboxesField.getFormSchemaKeys({ [componentName]: { filter: [1, 2] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('1')
+        expect(result.error).to.not.exist()
+      })
+      lab.test('invalid value', ({ context }) => {
+        const formSchemaKeys = context.checkboxesField.getFormSchemaKeys({ [componentName]: { filter: [1, 2] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.exist()
+      })
+      lab.test('filter is not array', ({ context }) => {
+        const formSchemaKeys = context.checkboxesField.getFormSchemaKeys({ [componentName]: { filter: 1 } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.not.exist()
+      })
+      lab.test('filter has fewer than 2 valid items', ({ context }) => {
+        const formSchemaKeys = context.checkboxesField.getFormSchemaKeys({ [componentName]: { filter: [1, 99] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.not.exist()
       })
     })
   })

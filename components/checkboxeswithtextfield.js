@@ -5,7 +5,7 @@ class CheckboxesWithTextField extends CheckboxesField {
   constructor (definition) {
     super(definition)
 
-    this.textboxSchemas = this.items.filter(({ conditionalTextField }) => conditionalTextField)
+    this.textboxSchemas = this.listItems.filter(({ conditionalTextField }) => conditionalTextField)
       .reduce((schemas, { value, conditionalTextField: { name, title, titleForError, schema: { max, trim } = {} } }) => {
         const titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
         const nameForErrorText = titleForErrorText.charAt(0).toLowerCase() + titleForErrorText.slice(1)
@@ -87,7 +87,7 @@ class CheckboxesWithTextField extends CheckboxesField {
   getFormDataFromState (state) {
     const formData = super.getFormDataFromState(state) || {}
 
-    const textFieldsFormData = this.items.reduce((acc, { conditionalTextField: { name } = {} }) => {
+    const textFieldsFormData = this.listItems.reduce((acc, { conditionalTextField: { name } = {} }) => {
       if (name) {
         acc[name] = state[name] || ''
       }
@@ -105,7 +105,7 @@ class CheckboxesWithTextField extends CheckboxesField {
     const checkBoxesValue = state[this.name] || []
     const checked = Array.isArray(checkBoxesValue) ? checkBoxesValue : [checkBoxesValue]
 
-    const textFieldsState = this.items.reduce((acc, { value, conditionalTextField: { name } = {} }) => {
+    const textFieldsState = this.listItems.reduce((acc, { value, conditionalTextField: { name } = {} }) => {
       if (name) {
         acc[name] = (checked.includes(value) && name in validatedFormData && validatedFormData[name] !== '') ? validatedFormData[name] : null
       }

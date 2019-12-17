@@ -8,13 +8,16 @@ const lab = exports.lab = Lab.script()
 
 const componentName = 'testSelectField'
 const standardDefinition = {
-  name: componentName
+  name: componentName,
+  options: { list: { type: 'number', items: [{ value: 1, text: 'A' }] } }
 }
 const definitionWithConfiguration = {
   name: componentName,
   options: {
     required: false,
+    filterable: true,
     list: {
+      type: 'number',
       items: [
         { value: 1, text: 'A' },
         { value: 2, text: 'B' },
@@ -32,7 +35,7 @@ lab.experiment('SelectField', () => {
     lab.test('includes blank item', () => {
       const selectField = new SelectField(standardDefinition)
       const viewModel = selectField.getViewModel({}, formData)
-      expect(viewModel.items.length).to.equal(1)
+      expect(viewModel.items.length).to.equal(2)
       expect(viewModel.items[0].text).to.equal('')
     })
     lab.test('includes items', () => {
@@ -44,6 +47,23 @@ lab.experiment('SelectField', () => {
       const selectField = new SelectField(definitionWithConfiguration)
       const viewModel = selectField.getViewModel({}, { [componentName]: '2' })
       expect(viewModel.items[2].selected).to.be.true()
+    })
+    lab.experiment('with filter', () => {
+      lab.beforeEach(({ context }) => {
+        context.selectField = new SelectField(definitionWithConfiguration)
+      })
+      lab.test('includes items', ({ context }) => {
+        const viewModel = context.selectField.getViewModel({ [componentName]: { filter: [1, 2] } }, formData)
+        expect(viewModel.items.length).to.equal(3)
+      })
+      lab.test('filter is not array', ({ context }) => {
+        const viewModel = context.selectField.getViewModel({ [componentName]: { filter: 1 } }, formData)
+        expect(viewModel.items.length).to.equal(4)
+      })
+      lab.test('filter has fewer than 2 valid items', ({ context }) => {
+        const viewModel = context.selectField.getViewModel({ [componentName]: { filter: [1, 99] } }, formData)
+        expect(viewModel.items.length).to.equal(4)
+      })
     })
   })
   lab.experiment('getDisplayStringFromState', () => {
@@ -98,6 +118,35 @@ lab.experiment('SelectField', () => {
       const schema = formSchemaKeys[componentName]
       const result = schema.validate('99')
       expect(result.error).to.exist()
+    })
+    lab.experiment('with filter', () => {
+      lab.beforeEach(({ context }) => {
+        context.selectField = new SelectField(definitionWithConfiguration)
+      })
+      lab.test('valid value', ({ context }) => {
+        const formSchemaKeys = context.selectField.getFormSchemaKeys({ [componentName]: { filter: [1, 2] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('1')
+        expect(result.error).to.not.exist()
+      })
+      lab.test('invalid value', ({ context }) => {
+        const formSchemaKeys = context.selectField.getFormSchemaKeys({ [componentName]: { filter: [1, 2] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.exist()
+      })
+      lab.test('filter is not array', ({ context }) => {
+        const formSchemaKeys = context.selectField.getFormSchemaKeys({ [componentName]: { filter: 1 } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.not.exist()
+      })
+      lab.test('filter has fewer than 2 valid items', ({ context }) => {
+        const formSchemaKeys = context.selectField.getFormSchemaKeys({ [componentName]: { filter: [1, 99] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.not.exist()
+      })
     })
   })
 })

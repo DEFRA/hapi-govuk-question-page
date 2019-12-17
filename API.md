@@ -272,6 +272,47 @@ what the user can enter into the field, instead using validation to notify them 
 List of check boxes using the Checkboxes component. Check box items are defined in a list object.
   - `options`:
     - `list` - required [list object](#list-object) that defines the radios to display.
+    - `filterable` - boolean indicating that the list can be filtered with request-specific configuration.
+
+If the checkboxes are filterable then the `getConfig` function can return an array called `filter` containing the list
+of item values to include.  Note that if this results in a list of less than two items, the component will just display
+the full list.
+
+Example:
+```js
+server.route({
+  method: 'GET',
+  path: '/choices',
+  handler: {
+    'hapi-govuk-question-page': {
+      pageDefinition: {
+        components: [{
+          type: 'CheckboxesField',
+          name: 'choices',
+          title: 'Select your choices',
+          options: {
+            filterable: true,
+            list: {
+              type: 'number',
+              items: [{ value: 1, text: ' Choice 1' }, { value: 2, text: ' Choice 2' }, { value: 3, text: ' Choice 3' }]
+            }
+          }
+        }]
+      },
+      getConfig: async (request) => {
+        let filter = null
+        const personType = await ... // Get value from data store
+        if (personType === 1) { // A type 1 person only gets these two choices
+          filter = [1, 3]
+        }
+        return {
+          choices: { filter }
+        }
+      }
+    }
+  }
+})
+```
 
 ## `CheckboxesWithTextField` component
 Uses the Checkboxes component, but adds an additional text field as conditional content that is revealed when the
@@ -403,11 +444,25 @@ A radios list using the Radios component.
   - `options`:
     - `list` - required [list object](#list-object) that defines the radios to display.
     - `bold` - boolean indicating whether to display the list items as bold (strong), defaults to false.
+    - `filterable` - boolean indicating that the list can be filtered with request-specific configuration.
+
+If the radios are filterable then the `getConfig` function can return an array called `filter` containing the list
+of item values to include.  Note that if this results in a list of less than two items, the component will just display
+the full list.
+
+See the [CheckboxesField component](#checkboxesfield-component) for an example of using the filter.
 
 ## `SelectField` component
 A select list using the Select component.
   - `options`:
     - `list` - required [list object](#list-object) that defines the items to display in the list.
+    - `filterable` - boolean indicating that the list can be filtered with request-specific configuration.
+
+If the select field is  filterable then the `getConfig` function can return an array called `filter` containing the list
+of item values to include.  Note that if this results in a list of less than two items, the component will just display
+the full list.
+
+See the [CheckboxesField component](#checkboxesfield-component) for an example of using the filter.
 
 ## `TelephoneNumberField` component
 Text field that follows the Telephone number pattern.

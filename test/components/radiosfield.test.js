@@ -13,9 +13,9 @@ const standardDefinition = {
 }
 const definitionWithConfiguration = {
   name: componentName,
-  type: 'number',
   options: {
     required: false,
+    filterable: true,
     bold: true,
     list: {
       type: 'number',
@@ -76,6 +76,23 @@ lab.experiment('RadiosField', () => {
         expect(viewModel.items[1].checked).to.be.true()
       })
     })
+    lab.experiment('with filter', () => {
+      lab.beforeEach(({ context }) => {
+        context.radiosField = new RadiosField(definitionWithConfiguration)
+      })
+      lab.test('includes items', ({ context }) => {
+        const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: [1, 2] } }, formData)
+        expect(viewModel.items.length).to.equal(2)
+      })
+      lab.test('filter is not array', ({ context }) => {
+        const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: 1 } }, formData)
+        expect(viewModel.items.length).to.equal(3)
+      })
+      lab.test('filter has fewer than 2 valid items', ({ context }) => {
+        const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: [1, 99] } }, formData)
+        expect(viewModel.items.length).to.equal(3)
+      })
+    })
   })
   lab.experiment('getDisplayStringFromState', () => {
     lab.beforeEach(({ context }) => {
@@ -124,6 +141,35 @@ lab.experiment('RadiosField', () => {
       lab.test('invalid value', ({ context }) => {
         const result = context.schema.validate('99')
         expect(result.error).to.exist()
+      })
+    })
+    lab.experiment('with filter', () => {
+      lab.beforeEach(({ context }) => {
+        context.radiosField = new RadiosField(definitionWithConfiguration)
+      })
+      lab.test('valid value', ({ context }) => {
+        const formSchemaKeys = context.radiosField.getFormSchemaKeys({ [componentName]: { filter: [1, 2] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('1')
+        expect(result.error).to.not.exist()
+      })
+      lab.test('invalid value', ({ context }) => {
+        const formSchemaKeys = context.radiosField.getFormSchemaKeys({ [componentName]: { filter: [1, 2] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.exist()
+      })
+      lab.test('filter is not array', ({ context }) => {
+        const formSchemaKeys = context.radiosField.getFormSchemaKeys({ [componentName]: { filter: 1 } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.not.exist()
+      })
+      lab.test('filter has fewer than 2 valid items', ({ context }) => {
+        const formSchemaKeys = context.radiosField.getFormSchemaKeys({ [componentName]: { filter: [1, 99] } })
+        context.schema = formSchemaKeys[componentName]
+        const result = context.schema.validate('3')
+        expect(result.error).to.not.exist()
       })
     })
   })

@@ -33,7 +33,7 @@ lab.experiment('CheckboxesWithTextField', () => {
   lab.experiment('mapItemForViewModel', () => {
     lab.beforeEach(({ context }) => {
       context.checkboxesWithTextField = new CheckboxesWithTextField(definition)
-      context.items = context.checkboxesWithTextField.items
+      context.items = context.checkboxesWithTextField.listItems
     })
     lab.test('has no conditional content', ({ context }) => {
       const itemForViewModel = context.checkboxesWithTextField.mapItemForViewModel({}, formData, null, context.items[1], false)

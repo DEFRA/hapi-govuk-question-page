@@ -6,12 +6,14 @@ module.exports = {
     title: 'Checkboxes with text field',
     hint: 'Pick one',
     options: {
-      // required: false,
+      filterable: true,
+      required: false,
       list: {
         type: 'string',
         items: [
-          { text: 'Email', value: 'email', conditionalTextField: { name: 'email', title: 'Email address', hint: 'This is your email', max: 2 } },
+          { text: 'Email', value: 'email', conditionalTextField: { name: 'email', title: 'Email address', hint: 'This is your email', schema: { max: 20 } } },
           { text: 'Phone', value: 'phone', conditionalTextField: { name: 'phone', title: 'Phone number', hint: 'This is your phone number' } },
+          { text: 'Work', value: 'work', conditionalTextField: { name: 'work', title: 'Work phone number', hint: 'To contact you at work' } },
           { text: 'Text', value: 'text', conditionalTextField: { name: 'text', title: 'Mobile number', hint: 'This is your mobile number' } }
         ]
       }
@@ -95,6 +97,7 @@ module.exports = {
     name: 'radiosField',
     title: 'Radios field',
     options: {
+      filterable: true,
       list: {
         type: 'string',
         items: [
@@ -112,6 +115,7 @@ module.exports = {
     name: 'numericRadiosField',
     title: 'Numeric radios field',
     options: {
+      filterable: true,
       list: {
         type: 'number',
         items: [
@@ -127,9 +131,8 @@ module.exports = {
     name: 'selectField',
     title: 'Select field',
     options: {
+      filterable: true,
       list: {
-        name: 'country',
-        title: 'Country',
         type: 'number',
         items: [
           { text: 'Afghanistan', value: 910400000 },
@@ -340,6 +343,7 @@ module.exports = {
     title: 'Checkboxes field',
     hint: 'Please help',
     options: {
+      filterable: true,
       list: {
         name: 'horseBreed',
         title: 'Horse breed',

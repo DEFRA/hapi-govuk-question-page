@@ -5,36 +5,60 @@ class RadiosField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, options: { list: { type, items = [] } = {} } = {} } = this
-    this.items = items
+    const { titleForErrorText, nameForErrorText, options: { filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
+    this.listItems = listItems
+    const listValues = listItems.map(listItem => listItem.value)
+    this.listType = listType
+    this.listValues = listValues
 
-    const values = items.map(item => item.value)
-
-    let formSchema = joi[type]().empty('').required().label(titleForErrorText)
-    formSchema = formSchema.valid(...values)
+    let formSchema = joi[listType]().empty('').required().label(titleForErrorText)
     formSchema = formSchema.messages({
       'any.required': `Select ${nameForErrorText}`,
       'string.empty': `Select ${nameForErrorText}`,
       'any.only': `${titleForErrorText} must be from the list`
     })
 
+    if (!filterable) {
+      formSchema = formSchema.valid(...listValues)
+    }
+
     this.formSchema = formSchema
   }
 
-  getFormSchemaKeys () {
-    return { [this.name]: this.formSchema }
+  getFormSchemaKeys (config = {}) {
+    const { name, listValues, options: { filterable } = {} } = this
+    const { [name]: { filter } = {} } = config
+
+    let schema = this.formSchema
+    if (filterable) {
+      let values = listValues
+      if (filter && Array.isArray(filter)) {
+        values = values.filter(value => filter.includes(value))
+        values = values.length < 2 ? listValues : values
+      }
+      schema = schema.valid(...values)
+    }
+
+    return { [name]: schema }
   }
 
   getDisplayStringFromState (state) {
-    const { name, items } = this
+    const { name, listItems } = this
     const value = state[name]
-    const item = items.find(item => item.value === value)
+    const item = listItems.find(item => item.value === value)
     return item ? item.text : ''
   }
 
   getViewModel (config, formData, errors) {
-    const { name, options: { bold } = {}, items = [] } = this
+    const { name, options: { filterable, bold } = {}, listItems = [] } = this
+    const { [name]: { filter } = {} } = config
     const viewModel = super.getViewModel(config, formData, errors)
+
+    let items = listItems
+    if (filterable && filter && Array.isArray(filter)) {
+      items = items.filter(({ value }) => filter.includes(value))
+      items = items.length < 2 ? listItems : items
+    }
 
     Object.assign(viewModel, {
       fieldset: {

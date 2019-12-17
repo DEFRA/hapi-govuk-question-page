@@ -61,13 +61,6 @@ class Page {
     this.formComponents = formComponents
     this.hasFormComponents = !!formComponents.length
     this.hasSingleFormComponentFirst = formComponents.length === 1 && formComponents[0] === components[0]
-
-    // Schema
-    const formSchemaKeys = formComponents.reduce((acc, formComponent) => {
-      Object.assign(acc, formComponent.getFormSchemaKeys())
-      return acc
-    }, {})
-    this.formSchema = joi.object().keys(formSchemaKeys).required()
   }
 
   getViewModel (config, formData, errors) {
@@ -110,7 +103,12 @@ class Page {
   }
 
   validateForm (payload, config) {
-    const result = this.formSchema.validate(payload, VALIDATION_OPTIONS)
+    const formSchemaKeys = this.formComponents.reduce((acc, formComponent) => {
+      Object.assign(acc, formComponent.getFormSchemaKeys(config))
+      return acc
+    }, {})
+    const formSchema = joi.object().keys(formSchemaKeys).required()
+    const result = formSchema.validate(payload, VALIDATION_OPTIONS)
     const errors = result.error ? mapErrorsForDisplay(result.error) : null
 
     return { value: result.value, errors }
