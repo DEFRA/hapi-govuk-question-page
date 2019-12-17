@@ -12,7 +12,8 @@ class TextField extends FormComponent {
       schema = schema.trim()
     }
     if (maxwords) {
-      schema = schema.pattern(/^(\w*\W*){0,10}$/, 'words')
+      const wordLimitRegex = new RegExp(`^(\\w*\\W*){0,${maxwords}}$`)
+      schema = schema.pattern(wordLimitRegex, 'words')
     } else if (max) {
       schema = schema.max(max)
     }

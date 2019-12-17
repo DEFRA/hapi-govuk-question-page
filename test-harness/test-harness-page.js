@@ -51,13 +51,13 @@ module.exports = {
     name: 'wordCountField',
     title: 'Word count field',
     schema: {
-      maxwords: 10
+      maxwords: 20
     },
     options: {
       rows: 5,
-      threshold: 50
+      threshold: 20
     },
-    hint: 'Help text'
+    hint: 'No more than 20 words'
   }, {
     type: 'NumberField',
     name: 'numberField',

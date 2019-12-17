@@ -89,11 +89,18 @@ lab.experiment('TextField', () => {
       result = schema.validate('12345678910')
       expect(result.error).to.exist()
     })
+    lab.test('maxwords overrides max', () => {
+      const textField = new TextField(maxWordsDefinition)
+      const formSchemaKeys = textField.getFormSchemaKeys()
+      const schema = formSchemaKeys[componentName]
+      const result = schema.validate('12345678910')
+      expect(result.error).to.not.exist()
+    })
     lab.test('maxwords', () => {
       const textField = new TextField(maxWordsDefinition)
       const formSchemaKeys = textField.getFormSchemaKeys()
       const schema = formSchemaKeys[componentName]
-      let result = schema.validate('12345678910')
+      let result = schema.validate('1 2 3 4 5 6 7 8 9 10')
       expect(result.error).to.not.exist()
       result = schema.validate('1 2 3 4 5 6 7 8 9 10 11')
       expect(result.error).to.exist()
