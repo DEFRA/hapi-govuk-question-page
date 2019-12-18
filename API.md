@@ -176,7 +176,17 @@ The handler is configured with [handler options](#options).
     - `request` - the Hapi `request` object received by the handler.
     - returns - an object with a key for each named component that supports request-specific configuration.
       The behaviour when configuration is not provided is component-specific - see the documentation for the individual
-      [page components](#components).            
+      [page components](#components).
+    
+    It is possible to use this function to override the title and caption for a page by returning them as parameters
+    of a key called`$PAGE$`. For example:
+    ```js
+    const getConfig = (request) => {
+      if (request.params.name) {
+        return { $PAGE$: { title: `Detail for ${request.params.name}` } }
+      }
+    }
+    ```
     
     This parameter is not required if the page does not have any components that need request-specific configuration.
     
@@ -198,8 +208,9 @@ The handler is configured with [handler options](#options).
       
 ## `pageDefinition`
   - `title` - the text to display as the heading on the page and also to use in the `<title>` element. If a page has
-    a single form component and that is the first component on the page then the label of that component will be used
-    as the title instead of this property.
+    a single form component and that is the first component on the page then you can omit this value and the plugin
+    will use the label of that component as the title instead.
+  - `caption` - optional text to display above the page title as a caption.
   - `components` - a required array of [page components](#components). Components will be rendered on the page in the
     order that they appear in this array.
 

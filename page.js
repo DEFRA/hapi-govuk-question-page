@@ -25,6 +25,7 @@ const componentTypes = componentTypesList.reduce((acc, name) => {
   return acc
 }, {})
 
+const DEFAULT_PAGE_TITLE = 'Question'
 const ERROR_SUMMARY_TITLE = 'Fix the following errors'
 const VALIDATION_OPTIONS = { abortEarly: false }
 
@@ -45,47 +46,54 @@ const mapErrorsForDisplay = (joiError) => {
 
 class Page {
   constructor (pageDef, pageTemplateName) {
-    const { title, sectionTitle, hasNext = true } = pageDef
+    const { title, caption, hasNext = true } = pageDef
     this.title = title
-    this.sectionTitle = sectionTitle
+    this.caption = caption
     this.hasNext = hasNext
     this.pageTemplateName = pageTemplateName
 
     const components = pageDef.components.map(def => new componentTypes[def.type](def))
-    const dynamicComponents = components.filter(component => component.isDynamicComponent)
     const formComponents = components.filter(component => component.isFormComponent)
 
     // Components collection
     this.components = components
-    this.dynamicComponents = dynamicComponents
     this.formComponents = formComponents
     this.hasFormComponents = !!formComponents.length
     this.hasSingleFormComponentFirst = formComponents.length === 1 && formComponents[0] === components[0]
   }
 
-  getViewModel (config, formData, errors) {
-    let showTitle = true
-    let pageTitle = this.title
-    const sectionTitle = this.sectionTitle
+  getViewModel (config = {}, formData, errors) {
+    const { $PAGE$: pageConfig = {} } = config
+    let { title: pageTitle = this.title, caption: pageCaption = this.caption } = pageConfig
+    let showTitle = Boolean(pageTitle)
+
     const templateName = this.pageTemplateName
     const useForm = this.hasFormComponents || this.hasNext
-    const components = this.components.map(component => ({ type: component.type, isFormComponent: component.isFormComponent, model: component.getViewModel(config, formData, errors) }))
 
-    if (this.hasSingleFormComponentFirst) {
-      const label = components[0].model.label
+    const components = this.components.map(component => ({
+      type: component.type,
+      isFormComponent: component.isFormComponent,
+      model: component.getViewModel(config, formData, errors)
+    }))
 
-      if (this.sectionTitle) {
-        label.html =
-          `<span class="govuk-caption-xl">${this.sectionTitle}</span> ${label.text}`
+    if (!showTitle) {
+      if (this.hasSingleFormComponentFirst) {
+        const label = components[0].model.label
+
+        if (pageCaption) {
+          label.html = `<span class="govuk-caption-xl">${pageCaption}</span> ${label.text}`
+        }
+
+        label.isPageHeading = true
+        label.classes = 'govuk-label--xl'
+        pageTitle = label.text
+      } else {
+        pageTitle = DEFAULT_PAGE_TITLE
+        showTitle = true
       }
-
-      label.isPageHeading = true
-      label.classes = 'govuk-label--xl'
-      pageTitle = label.text
-      showTitle = false
     }
 
-    return { templateName, pageTitle, sectionTitle, showTitle, useForm, components, errors }
+    return { templateName, pageTitle, pageCaption, showTitle, useForm, components, errors }
   }
 
   getFormDataFromState (state, config) {

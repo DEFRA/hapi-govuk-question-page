@@ -6,41 +6,41 @@ const lab = exports.lab = Lab.script()
 const Page = require('../page')
 
 const standardDefinition = {
-  title: 'Title',
   components: [
     { type: 'TextField', name: 'textField', title: 'Text Field' },
     { type: 'TextField', name: 'textField2', title: 'Text Field 2' }
   ]
 }
 const singleFieldDefinition = {
-  title: 'Title',
   components: [
     { type: 'TextField', name: 'textField', title: 'Text Field' }
   ]
 }
-const singleFieldWithSectionDefinition = {
+const singleFieldWithCaptionDefinition = {
+  caption: 'Caption',
+  components: [
+    { type: 'TextField', name: 'textField', title: 'Text Field' }
+  ]
+}
+const singleFieldWithPageTitleDefinition = {
   title: 'Title',
-  sectionTitle: 'Section',
   components: [
     { type: 'TextField', name: 'textField', title: 'Text Field' }
   ]
 }
 const htmlWithTextFieldDefinition = {
-  title: 'Title',
   components: [
     { type: 'Html' },
     { type: 'TextField', name: 'textField', title: 'Text Field' }
   ]
 }
 const htmlDefinition = {
-  title: 'Title',
   hasNext: false,
   components: [
     { type: 'Html' }
   ]
 }
 const paraDefinition = {
-  title: 'Title',
   components: [
     { type: 'Para' }
   ]
@@ -122,30 +122,50 @@ lab.experiment('Page', () => {
     })
   })
   lab.experiment('getViewModel', () => {
-    lab.test('normal page title when multiple form components', () => {
+    lab.test('default page title when multiple form components', () => {
       const page = new Page(standardDefinition)
       const viewModel = page.getViewModel({}, {})
-      expect(viewModel.pageTitle).to.equal('Title')
+      expect(viewModel.pageTitle).to.equal('Question')
     })
-    lab.test('normal page title when no form components', () => {
+    lab.test('default page title when no form components', () => {
       const page = new Page(paraDefinition)
       const viewModel = page.getViewModel({}, {})
-      expect(viewModel.pageTitle).to.equal('Title')
+      expect(viewModel.pageTitle).to.equal('Question')
     })
-    lab.test('normal page title when non-form components before single form component', () => {
+    lab.test('default page title when non-form components before single form component', () => {
       const page = new Page(htmlWithTextFieldDefinition)
       const viewModel = page.getViewModel({}, {})
-      expect(viewModel.pageTitle).to.equal('Title')
+      expect(viewModel.pageTitle).to.equal('Question')
     })
-    lab.test('page title from single form component', () => {
+    lab.test('page title from single form component when no title configured', () => {
       const page = new Page(singleFieldDefinition)
       const viewModel = page.getViewModel({}, {})
       expect(viewModel.pageTitle).to.equal('Text Field')
     })
-    lab.test('section title included with single form component', () => {
-      const page = new Page(singleFieldWithSectionDefinition)
+    lab.test('configured page title even when single form component', () => {
+      const page = new Page(singleFieldWithPageTitleDefinition)
       const viewModel = page.getViewModel({}, {})
-      expect(viewModel.components[0].model.label.html).to.contain('Section')
+      expect(viewModel.pageTitle).to.equal('Title')
+    })
+    lab.test('caption included with single form component', () => {
+      const page = new Page(singleFieldWithCaptionDefinition)
+      const viewModel = page.getViewModel({}, {})
+      expect(viewModel.components[0].model.label.html).to.contain('Caption')
+    })
+    lab.test('request-specific page title', () => {
+      const page = new Page(standardDefinition)
+      const viewModel = page.getViewModel({ $PAGE$: { title: 'Title' } }, {})
+      expect(viewModel.pageTitle).to.equal('Title')
+    })
+    lab.test('request-specific caption', () => {
+      const page = new Page(standardDefinition)
+      const viewModel = page.getViewModel({ $PAGE$: { caption: 'Caption' } }, {})
+      expect(viewModel.pageCaption).to.equal('Caption')
+    })
+    lab.test('request-specific caption included with single form component', () => {
+      const page = new Page(singleFieldDefinition)
+      const viewModel = page.getViewModel({ $PAGE$: { caption: 'Caption' } }, {})
+      expect(viewModel.components[0].model.label.html).to.contain('Caption')
     })
     lab.test('use form when has form components', () => {
       const page = new Page(singleFieldDefinition)

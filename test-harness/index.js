@@ -96,6 +96,7 @@ async function createServer () {
         pageTemplateName: 'page.template.njk',
         getConfig: async (request) => {
           return {
+            $PAGE$: { title: 'Test harness page', caption: new Date() },
             dynamicHtml: { parameterValues: [request.url, new Date()] },
             checkboxesField: { filter: ['Shetland', 'Shire'] },
             radiosField: { filter: ['soleTrader', 'privateLimitedCompany', 'limitedLiabilityPartnership', 'charity'] },
