@@ -43,11 +43,13 @@ the Design System. Those not included are:
 
 This plugin is for use inside a Hapi GOV.UK application.  To use it, you will need to create an application
 based on the following:
-- [Node.js](https://nodejs.org) version 10 or higher
-- [Hapi](https://hapi.dev/) version 18.4 or higher
-- The Hapi [Vision](https://github.com/hapijs/vision) plugin version 5, configured to use:
-  - [Nunjucks](https://mozilla.github.io/nunjucks/) version 3
-  - The [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend) version 3
+- [Node.js](https://nodejs.org)
+- [Hapi](https://hapi.dev/)
+- The Hapi [Vision](https://github.com/hapijs/vision) plugin, configured to use:
+  - [Nunjucks](https://mozilla.github.io/nunjucks/)
+  - The [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
+
+Specific versions of these dependencies are identified in the package.json.
 
 ## Setup
 

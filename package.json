@@ -1,6 +1,6 @@
 {
   "name": "@envage/hapi-govuk-question-page",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A hapi plugin for simple GOV.UK question pages",
   "main": "index.js",
   "scripts": {
@@ -15,18 +15,21 @@
   },
   "author": "Department for Environment, Food and Rural Affairs <https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs>.",
   "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "node": "^12.0.0"
+  },
   "dependencies": {
-    "@hapi/hoek": "^9.0.0",
+    "@hapi/hoek": "^9.0.3",
     "@hapi/joi": "^17.1.0",
     "moment": "^2.24.0"
   },
   "devDependencies": {
     "@hapi/code": "^8.0.1",
-    "@hapi/hapi": "^19.0.5",
+    "@hapi/hapi": "^19.1.1",
     "@hapi/inert": "^6.0.1",
     "@hapi/lab": "^22.0.3",
     "@hapi/vision": "^6.0.0",
-    "govuk-frontend": "^3.4.0",
+    "govuk-frontend": "^3.5.0",
     "nunjucks": "^3.2.0",
     "standard": "^14.3.0"
   },
