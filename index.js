@@ -46,7 +46,7 @@ const handlerProvider = (route, handlerOptions) => {
     }
   } else if (route.method === 'post') {
     return async (request, h) => {
-      const { path = '/', payload = {} } = request || {}
+      const { payload = {} } = request || {}
       const config = await getConfig(request)
       const formResult = page.validateForm(payload, config)
 
@@ -63,7 +63,7 @@ const handlerProvider = (route, handlerOptions) => {
           if (redirectPath) {
             return h.redirect(redirectPath)
           } else {
-            return h.redirect(path)
+            return h.continue
           }
         }
       }

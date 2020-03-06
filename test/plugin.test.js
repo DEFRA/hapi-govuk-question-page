@@ -120,15 +120,15 @@ lab.experiment('plugin', () => {
     const response = await handlerForPost({ payload: { textField: 'text' } }, h)
     expect(response).to.equal('next path')
   })
-  lab.test('POST handler redirects to the requested path if next path isn\'t defined', async ({ context }) => {
+  lab.test('POST handler doesn\'t redirect if no path specific', async ({ context }) => {
     const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
     const setData = () => {}
     const handlerForPost = context.method({ method: 'post' }, { setData, pageDefinition })
     const h = {
-      redirect: (path) => path
+      continue: 'continue'
     }
     const response = await handlerForPost({ path: '/', payload: { textField: 'text' } }, h)
-    expect(response).to.equal('/')
+    expect(response).to.equal('continue')
   })
   lab.test('Defaults to using request.app object on GET', async ({ context }) => {
     const handlerForGet = context.method({ method: 'get' }, { pageDefinition: { title: 'Title', components: [] } })
@@ -150,16 +150,16 @@ lab.experiment('plugin', () => {
     const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
     const handlerForPost = context.method({ method: 'post' }, { pageDefinition })
     const h = {
-      redirect: (path) => path,
+      continue: 'continue',
       view: () => 'view'
     }
     let response = await handlerForPost(undefined, h)
     expect(response).to.equal('view')
     response = await handlerForPost({ path: '/', payload: { textField: 'text' } }, h)
-    expect(response).to.equal('/')
+    expect(response).to.equal('continue')
     response = await handlerForPost({ path: '/', payload: { textField: 'text' }, app: {} }, h)
-    expect(response).to.equal('/')
+    expect(response).to.equal('continue')
     response = await handlerForPost({ path: '/', payload: { textField: 'text' }, app: { 'hapi-govuk-question-page': {} } }, h)
-    expect(response).to.equal('/')
+    expect(response).to.equal('continue')
   })
 })

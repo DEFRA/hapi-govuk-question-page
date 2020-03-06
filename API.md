@@ -252,20 +252,19 @@ To do this, you can use one of the following options:
 
   - `nextPath` - a string that the handler will redirect the client to following successful completion of the page.
     
-    Required if `getNextPath` is not specified and the page contains any form components or has a POST route defined.
-    
   - `getNextPath` - a function with signature `function(request)` that will be called by the handler to determine the
     redirect path that will be sent to the client following successful completion of the page.
     - `request` - the Hapi `request` object received by the handler. This will always be a POST request.
     - returns - a string that the handler will redirect the client to. If nothing is returned (or a falsey value) then
       the handler will use the value of the `nextPath` option instead.        
     
-You should provide one of these values if the page contains any form components or has a POST route defined,
-but if neither value is provided then the submitted page will send a redirect to itself.
+You should provide one of these values if the page contains any form components or has a POST route defined.
+If neither value is provided then the handler will **not** send a redirect and your application will need to set an
+appropriate response elsewhere in the request lifecycle.
 
 ### Page template
 By default, the handler will look for a page template called `layout.html` on your configured Vision path,
-but if you use a tempalte in a different location or with a different name you can use this option:
+but if you use a template in a different location or with a different name you can use this option:
 
   - `pageTemplateName` - a string specifying the filename of an alternative page template to use, rather than the
     default `layout.html`.
