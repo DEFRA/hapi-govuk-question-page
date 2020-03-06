@@ -108,12 +108,22 @@ async function createServer () {
         getData: async (request) => {
           return data
         },
-        setData: async (request, dataToSet) => {
-          hoek.merge(data, dataToSet, { mergeArrays: false })
-          console.log(data)
-        },
         getNextPath: async (request) => '/',
         pageDefinition: require('./test-harness-page')
+      }
+    },
+    options: {
+      ext: {
+        onPostHandler: {
+          method: async (request, h) => {
+            if (request.app['hapi-govuk-question-page']) {
+              const dataToSet = request.app['hapi-govuk-question-page'].data
+              hoek.merge(data, dataToSet, { mergeArrays: false })
+              console.log(data)
+            }
+            return h.continue
+          }
+        }
       }
     }
   })

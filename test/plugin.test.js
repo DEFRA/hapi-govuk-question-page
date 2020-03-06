@@ -130,4 +130,36 @@ lab.experiment('plugin', () => {
     const response = await handlerForPost({ path: '/', payload: { textField: 'text' } }, h)
     expect(response).to.equal('/')
   })
+  lab.test('Defaults to using request.app object on GET', async ({ context }) => {
+    const handlerForGet = context.method({ method: 'get' }, { pageDefinition: { title: 'Title', components: [] } })
+    const h = {
+      view: () => 'view'
+    }
+    let response = await handlerForGet(undefined, h)
+    expect(response).to.equal('view')
+    response = await handlerForGet({}, h)
+    expect(response).to.equal('view')
+    response = await handlerForGet({ app: {} }, h)
+    expect(response).to.equal('view')
+    response = await handlerForGet({ app: { 'hapi-govuk-question-page': {} } }, h)
+    expect(response).to.equal('view')
+    response = await handlerForGet({ app: { 'hapi-govuk-question-page': { config: {}, data: {} } } }, h)
+    expect(response).to.equal('view')
+  })
+  lab.test('Defaults to using request.app object on POST', async ({ context }) => {
+    const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
+    const handlerForPost = context.method({ method: 'post' }, { pageDefinition })
+    const h = {
+      redirect: (path) => path,
+      view: () => 'view'
+    }
+    let response = await handlerForPost(undefined, h)
+    expect(response).to.equal('view')
+    response = await handlerForPost({ path: '/', payload: { textField: 'text' } }, h)
+    expect(response).to.equal('/')
+    response = await handlerForPost({ path: '/', payload: { textField: 'text' }, app: {} }, h)
+    expect(response).to.equal('/')
+    response = await handlerForPost({ path: '/', payload: { textField: 'text' }, app: { 'hapi-govuk-question-page': {} } }, h)
+    expect(response).to.equal('/')
+  })
 })

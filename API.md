@@ -146,17 +146,141 @@ server.route({
 })
 ```
 
-The handler is configured with [handler options](#options).
+The handler is configured with [handler options](#handler-options).
 
-## `options`
-  - `pageDefinition` - required object that defines the contents of the page as specified
-    by [page definition object](#pagedefinition).
+## Application data
+
+There are two ways of using the handler to process data in your application:
+
+ - Provide functions to the handler to manage the data as required
+ - Pass the data to the handler on the Hapi `request` object
+
+The first method provides your application with complete control over how it manages its data, but needs more
+configuration of the handler.
+
+The second method can be easier to get going with, but its simplistic approach may not suit what you need to do.
+Also, passing data on the `request` object requires you to inject behaviour into the Hapi request lifecycle,
+which is fine if you're already familiar with it.
+
+The good news is that if you don't provide a specific callback function, the handler will default to using the
+`request` object, so you get the best of both worlds.
+
+### Using data functions
+If you want to use functions to supply data to the handler, you provide these in the[handler options](#handler-options).
+The functions you can provide are as follows:
+
+  - `getData` - supplies the current data values to be displayed on the page
+  - `setData` - sets the new, updated data values after the page has been completed
+  - `getConfig` - supplies any dynamic configuration information that is specific to the current request
+
+### Using the `request` object
+If callback functions have not been configured for any of the operations specified above, the handler will use the
+`request` object to get or set your application's data.
+
+To do this, it will use the `app` property of the `request` object, looking for a property called
+`hapi-govuk-question-page`. This will be an object with values as follows:
+
+  - `data` - the handler will try to read this value if no `getData` function has been provided and will set this
+    value if no `setData` function has been provided
+  - `config` - the handler will try to read this value if no `getConfig` function has been provided
+
+So a typical `request.app` object would look like this:
+```js
+request.app = {
+  ... ,
+  'hapi-govuk-question-page': {
+    data: {
+      ...
+    },
+    config: {
+      ...
+    }
+  }
+}
+```
+
+### Data format
+Whether the application data is provided by functions or on the `request` object, the structure should be the same.
+The data is a simple object with named attributes that correspond to the configured page components.
+
+### Request-specific configuration
+Some page components allow for additional configuration to be provided that is specific to the current request.
+In this case, the provided configuration should be a simple object with named attributes that correspond to the
+configured names of the page components.
+Each attribute is an object that includes the necessary configuration information.
+For example:
+
+```js
+const getConfig = (request) => {
+  return { localAuthority: { filter: [1, 3, 4, 5] } }
+}
+```
+
+It is also possible to supply request-specific configuration for the page itself.
+To override the title or caption, these can be provided as values for an attribute called `$PAGE$`.
+For example:
+
+```js
+const getConfig = (request) => {
+  if (request.params.name) {
+    return { $PAGE$: { title: `Detail for ${request.params.name}` } }
+  }
+}
+```
+
+or
+
+```js
+request.app['hapi-govuk-question-page'] = {
+  $PAGE$: {
+    title: `Detail for ${request.params.name}`
+  }
+}
+```
+
+## Handler options
+
+### Page definition
+The only value that must be provided in the handler options object is:
+
+  - `pageDefinition` - this defines the contents of the page as specified by the
+    [page definition object](#pagedefinition).
+
+### Next path
+Once the page has been completed, the handler will redirect to a path that you specify.
+To do this, you can use one of the following options:
+
+  - `nextPath` - a string that the handler will redirect the client to following successful completion of the page.
+    
+    Required if `getNextPath` is not specified and the page contains any form components or has a POST route defined.
+    
+  - `getNextPath` - a function with signature `function(request)` that will be called by the handler to determine the
+    redirect path that will be sent to the client following successful completion of the page.
+    - `request` - the Hapi `request` object received by the handler. This will always be a POST request.
+    - returns - a string that the handler will redirect the client to. If nothing is returned (or a falsey value) then
+      the handler will use the value of the `nextPath` option instead.        
+    
+You should provide one of these values if the page contains any form components or has a POST route defined,
+but if neither value is provided then the submitted page will send a redirect to itself.
+
+### Page template
+By default, the handler will look for a page template called `layout.html` on your configured Vision path,
+but if you use a tempalte in a different location or with a different name you can use this option:
+
+  - `pageTemplateName` - a string specifying the filename of an alternative page template to use, rather than the
+    default `layout.html`.
+      
+### Data functions
+If you use data functions rather than passing data on the `request` object, these should be provided as follows:
   
   - `getData` - a function with signature `async function(request)` that is called by the handler in response to the
     given `request` and should return the data to be displayed on the page.
     - `request` - the Hapi `request` object received by the handler.
     - returns - an object with a key for each named form component. If nothing is returned or keys are
       missing then those fields will just be empty on the page.            
+    
+    If this parameter is not provided, the plugin will look for the data in
+    `request.app['hapi-govuk-question-page'].data`.
     
     This parameter is not required if the page does not display any dynamic data.
     
@@ -169,6 +293,9 @@ The handler is configured with [handler options](#options).
       property then the plugin will treat the POST request as having failed validation and will display the error
       messages from the `error` object.
     
+    If this parameter is not provided, the plugin will set the value of
+    `request.app['hapi-govuk-question-page'].data` to the data from the page.
+    
     This parameter is not required if the page does not contain any form components or has no POST route defined.
     
   - `getConfig` - a function with signature `async function(request)` that is called by the handler in response to the
@@ -178,34 +305,11 @@ The handler is configured with [handler options](#options).
       The behaviour when configuration is not provided is component-specific - see the documentation for the individual
       [page components](#components).
     
-    It is possible to use this function to override the title and caption for a page by returning them as parameters
-    of a key called`$PAGE$`. For example:
-    ```js
-    const getConfig = (request) => {
-      if (request.params.name) {
-        return { $PAGE$: { title: `Detail for ${request.params.name}` } }
-      }
-    }
-    ```
+    If this parameter is not provided, the plugin will look for any request-specific configuration in
+    `request.app['hapi-govuk-question-page'].config`
     
     This parameter is not required if the page does not have any components that need request-specific configuration.
     
-  - `nextPath` - a string that the handler will redirect the client to following successful completion of the page.
-    
-    Required if `getNextPath` is not specified and the page contains any form components or has a POST route defined.
-    
-  - `getNextPath` - a function with signature `function(request)` that will be called by the handler to determine the
-    redirect path that will be sent to the client following successful completion of the page.
-    - `request` - the Hapi `request` object received by the handler. This will always be a POST request.
-    - returns - a string that the handler will redirect the client to. If nothing is returned (or a falsey value) then
-      the handler will use the value of the `nextPath` option instead.        
-    
-    Required if `nextPath` is not specified and the page contains any form components or has a POST route defined.
-    If neither value is provided then the submitted page will send a redirect to itself.
-    
-  - `pageTemplateName` - a string specifying the filename of an alternative page template to use, rather than the
-    default `layout.html`.
-      
 ## `pageDefinition`
   - `title` - the text to display as the heading on the page and also to use in the `<title>` element. If a page has
     a single form component and that is the first component on the page then you can omit this value and the plugin
@@ -241,7 +345,7 @@ The available `type` values for these are:
 
 Form components have four properties in addition to `type`:
   - `name` - required string name of the data item that the component is bound to.
-    This is the key used in the `getData` and `setData` functions.
+    This is the key used in the `getData`, `setData` and `getConfig` functions or the object on the `request`.
     This value must be unique within the list of components.
   - `title` - string title used as the label for the form component.
   - `titleForError` - optional string to use as the title/name for the component in error messages.
@@ -285,9 +389,9 @@ List of check boxes using the Checkboxes component. Check box items are defined 
     - `list` - required [list object](#list-object) that defines the radios to display.
     - `filterable` - boolean indicating that the list can be filtered with request-specific configuration.
 
-If the checkboxes are filterable then the `getConfig` function can return an array called `filter` containing the list
-of item values to include.  Note that if this results in a list of less than two items, the component will just display
-the full list.
+If the checkboxes are filterable then the `getConfig` function or the `request.app['hapi-govuk-question-page].config`
+attribute can provide an array called `filter` containing the list of item values to include.
+Note that if this results in a list of less than two items, the component will just display the full list.
 
 Example:
 ```js
@@ -381,7 +485,7 @@ Raw HTML markup that supports request-specific parameters.
   - `templateHtml` - string of raw HTML, with placeholders for parameter values written as `$PARAM$`.
 
 The occurrences of `$PARAM$` in the HTML will be replaced, in order, by the array of `parameterValues` returned by the
-`getConfig` function.
+`getConfig` function or provided in the `request.app['hapi-govuk-question-page].config` attribute.
 
 Example:
 ```js
@@ -457,9 +561,9 @@ A radios list using the Radios component.
     - `bold` - boolean indicating whether to display the list items as bold (strong), defaults to false.
     - `filterable` - boolean indicating that the list can be filtered with request-specific configuration.
 
-If the radios are filterable then the `getConfig` function can return an array called `filter` containing the list
-of item values to include.  Note that if this results in a list of less than two items, the component will just display
-the full list.
+If the radios are filterable then the `getConfig` function or the `request.app['hapi-govuk-question-page].config`
+attribute can provide an array called `filter` containing the list of item values to include.
+Note that if this results in a list of less than two items, the component will just display the full list.
 
 See the [CheckboxesField component](#checkboxesfield-component) for an example of using the filter.
 
@@ -469,9 +573,9 @@ A select list using the Select component.
     - `list` - required [list object](#list-object) that defines the items to display in the list.
     - `filterable` - boolean indicating that the list can be filtered with request-specific configuration.
 
-If the select field is  filterable then the `getConfig` function can return an array called `filter` containing the list
-of item values to include.  Note that if this results in a list of less than two items, the component will just display
-the full list.
+If the select field is filterable then the `getConfig` function or the `request.app['hapi-govuk-question-page].config`
+attribute can provide an array called `filter` containing the list of item values to include.
+Note that if this results in a list of less than two items, the component will just display the full list.
 
 See the [CheckboxesField component](#checkboxesfield-component) for an example of using the filter.
 

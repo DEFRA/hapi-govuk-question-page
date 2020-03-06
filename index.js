@@ -1,16 +1,36 @@
 const pkg = require('./package.json')
+const PLUGIN_NAME = pkg.name.split('/')[1]
 const Page = require('./page')
 
-const VIEW_NAME = 'hapi-govuk-question-page/page'
+const VIEW_NAME = `${PLUGIN_NAME}/page`
 const DEFAULT_PAGE_TEMPLATE_NAME = 'layout.html'
+
+const getConfigFromRequest = request => {
+  if (request && request.app && request.app[PLUGIN_NAME]) {
+    return request.app[PLUGIN_NAME].config
+  }
+}
+
+const getDataFromRequest = request => {
+  if (request && request.app && request.app[PLUGIN_NAME]) {
+    return request.app[PLUGIN_NAME].data
+  }
+}
+
+const setDataOnRequest = (request, dataToSet) => {
+  if (request.app) {
+    request.app[PLUGIN_NAME] = request.app[PLUGIN_NAME] || {}
+    request.app[PLUGIN_NAME].data = dataToSet
+  }
+}
 
 const handlerProvider = (route, handlerOptions) => {
   const {
     pageTemplateName = DEFAULT_PAGE_TEMPLATE_NAME,
     pageDefinition,
-    getConfig = () => ({}),
-    getData = () => ({}),
-    setData = () => {},
+    getConfig = getConfigFromRequest,
+    getData = getDataFromRequest,
+    setData = setDataOnRequest,
     nextPath,
     getNextPath
   } = handlerOptions
@@ -26,7 +46,7 @@ const handlerProvider = (route, handlerOptions) => {
     }
   } else if (route.method === 'post') {
     return async (request, h) => {
-      const payload = request.payload
+      const { path = '/', payload = {} } = request || {}
       const config = await getConfig(request)
       const formResult = page.validateForm(payload, config)
 
@@ -43,7 +63,7 @@ const handlerProvider = (route, handlerOptions) => {
           if (redirectPath) {
             return h.redirect(redirectPath)
           } else {
-            return h.redirect(request.path)
+            return h.redirect(path)
           }
         }
       }
@@ -55,6 +75,6 @@ module.exports = {
   pkg,
   once: true,
   register: (server) => {
-    server.decorate('handler', 'hapi-govuk-question-page', handlerProvider)
+    server.decorate('handler', `${PLUGIN_NAME}`, handlerProvider)
   }
 }
