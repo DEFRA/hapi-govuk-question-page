@@ -6,8 +6,9 @@ const EmailAddressField = require('../../components/emailaddressfield')
 const { expect } = Code
 const lab = exports.lab = Lab.script()
 
+const componentName = 'testEmailAddressField'
 const definition = {
-  name: 'testEmailAddressField'
+  name: componentName
 }
 
 const expectedType = 'email'
@@ -58,6 +59,16 @@ lab.experiment('EmailAddressField', () => {
       emailAddressField = new EmailAddressField(definitionWithOptions)
       viewModel = emailAddressField.getViewModel({}, { testEmailAddressField: null })
       expect(viewModel.autocomplete).to.equal(expectedType)
+    })
+  })
+  lab.experiment('getFormSchemaKeys', () => {
+    lab.test('is email', () => {
+      const formSchemaKeys = emailAddressField.getFormSchemaKeys()
+      const schema = formSchemaKeys[componentName]
+      let result = schema.validate('a@b.cd')
+      expect(result.error).to.not.exist()
+      result = schema.validate('abcd')
+      expect(result.error).to.exist()
     })
   })
 })

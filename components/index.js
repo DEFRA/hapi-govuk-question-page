@@ -12,10 +12,14 @@ class FormComponent extends Component {
   constructor (definition) {
     super(definition)
     this.isFormComponent = true
+  }
 
-    const { name, title, titleForError } = this
-    this.titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
-    this.nameForErrorText = this.titleForErrorText.charAt(0).toLowerCase() + this.titleForErrorText.slice(1)
+  getTextForErrors (config = {}) {
+    const { name } = this
+    const { [name]: { title = this.title, titleForError = this.titleForError } = {} } = config
+    const titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
+    const nameForErrorText = titleForErrorText.charAt(0).toLowerCase() + titleForErrorText.slice(1)
+    return { titleForErrorText, nameForErrorText }
   }
 
   getFormDataFromState (state) {
@@ -38,8 +42,9 @@ class FormComponent extends Component {
     }
   }
 
-  getViewModel (config, formData, errors) {
-    const { name, title, hint, options: { classes, required = true } = {} } = this
+  getViewModel (config = {}, formData, errors) {
+    const { name, options: { classes, required = true } = {} } = this
+    const { [name]: { title = this.title, hint = this.hint } = {} } = config
     const isOptional = required === false
     const label = (title || name) + (isOptional ? ' (optional)' : '')
 

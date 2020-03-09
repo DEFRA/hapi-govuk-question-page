@@ -352,6 +352,9 @@ Form components have four properties in addition to `type`:
     If not provided, the `title` property is used in error messages.
   - `hint` - optional string used to display hint text on the form component.
 
+The `title`, `titleForError` and `hint` properties can be set per request using the `getConfig` function or the
+`request.app['hapi-govuk-question-page].config` attribute.
+
 Form components generally all support the following in the `options` object:
   - `options`:
     - `required` - boolean specifying whether the data item is required, defaults to `true`.

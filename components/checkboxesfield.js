@@ -5,27 +5,23 @@ class CheckboxesField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, options: { required, filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
+    const { options: { list: { type: listType, items: listItems = [] } = {} } = {} } = this
     this.listItems = listItems
     const listValues = listItems.map(listItem => listItem.value)
     this.listType = listType
     this.listValues = listValues
+  }
 
-    let formSchema = joi.alternatives().prefs({ abortEarly: true }).label(titleForErrorText)
+  getFormSchemaKeys (config = {}) {
+    const { name, listValues, listType, options: { required, filterable } = {} } = this
+    const { [name]: { filter } = {} } = config
+
+    let formSchema = joi.alternatives().prefs({ abortEarly: true })
     if (required === false) {
       formSchema = formSchema.allow('')
     } else {
       formSchema = formSchema.empty('').required()
     }
-
-    formSchema = formSchema.messages({
-      'any.required': `Select ${nameForErrorText}`,
-      'string.empty': `Select ${nameForErrorText}`,
-      'any.only': `${titleForErrorText} must be from the list`,
-      'array.includes': `${titleForErrorText} must be from the list`,
-      'alternatives.types': `${titleForErrorText} must be from the list`,
-      'alternatives.match': `${titleForErrorText} must be from the list`
-    })
 
     if (!filterable) {
       const itemSchema = joi[listType]().valid(...listValues)
@@ -33,14 +29,6 @@ class CheckboxesField extends FormComponent {
       formSchema = formSchema.try(itemSchema, itemsSchema)
     }
 
-    this.formSchema = formSchema
-  }
-
-  getFormSchemaKeys (config = {}) {
-    const { name, listValues, listType, options: { filterable } = {} } = this
-    const { [name]: { filter } = {} } = config
-
-    let schema = this.formSchema
     if (filterable) {
       let values = listValues
       if (filter && Array.isArray(filter)) {
@@ -50,10 +38,20 @@ class CheckboxesField extends FormComponent {
 
       const itemSchema = joi[listType]().valid(...values)
       const itemsSchema = joi.array().items(itemSchema)
-      schema = schema.try(itemSchema, itemsSchema)
+      formSchema = formSchema.try(itemSchema, itemsSchema)
     }
 
-    return { [name]: schema }
+    const { titleForErrorText, nameForErrorText } = this.getTextForErrors(config)
+    formSchema = formSchema.messages({
+      'any.required': `Select ${nameForErrorText}`,
+      'string.empty': `Select ${nameForErrorText}`,
+      'any.only': `${titleForErrorText} must be from the list`,
+      'array.includes': `${titleForErrorText} must be from the list`,
+      'alternatives.types': `${titleForErrorText} must be from the list`,
+      'alternatives.match': `${titleForErrorText} must be from the list`
+    })
+
+    return { [name]: formSchema }
   }
 
   getDisplayStringFromState (state) {

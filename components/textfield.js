@@ -5,34 +5,38 @@ class TextField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, schema: { max, maxwords, trim } = {}, options: { required } = {} } = this
+    const { schema: { max, maxwords, trim } = {}, options: { required } = {} } = this
 
-    let schema = joi.string().prefs({ abortEarly: true }).label(titleForErrorText)
+    let formSchema = joi.string().prefs({ abortEarly: true })
     if (trim !== false) {
-      schema = schema.trim()
+      formSchema = formSchema.trim()
     }
     if (maxwords) {
       const wordLimitRegex = new RegExp(`^(\\w*\\W*){0,${maxwords}}$`)
-      schema = schema.pattern(wordLimitRegex, 'words')
+      formSchema = formSchema.pattern(wordLimitRegex, 'words')
     } else if (max) {
-      schema = schema.max(max)
+      formSchema = formSchema.max(max)
     }
     if (required === false) {
-      schema = schema.allow('')
+      formSchema = formSchema.allow('')
     } else {
-      schema = schema.required()
+      formSchema = formSchema.required()
     }
-    schema = schema.messages({
+    this.formSchema = formSchema
+  }
+
+  getFormSchemaKeys (config) {
+    const { name, schema: { max, maxwords } = {} } = this
+    const { titleForErrorText, nameForErrorText } = this.getTextForErrors(config)
+    let { formSchema } = this
+    formSchema = formSchema.messages({
       'any.required': `Enter ${nameForErrorText}`,
       'string.empty': `Enter ${nameForErrorText}`,
       'string.max': `${titleForErrorText} must be ${max} characters or fewer`,
       'string.pattern.name': `${titleForErrorText} must be ${maxwords} words or fewer`
     })
-    this.formSchema = schema
-  }
 
-  getFormSchemaKeys () {
-    return { [this.name]: this.formSchema }
+    return { [name]: formSchema }
   }
 
   getViewModel (config, formData, errors) {

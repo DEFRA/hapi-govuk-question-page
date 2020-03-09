@@ -8,10 +8,17 @@ class EmailAddressField extends TextField {
     if (!options.classes) {
       options.classes = 'govuk-input--width-20'
     }
+  }
 
-    this.formSchema = this.formSchema.email({ tlds: false }).messages({
-      'string.email': `Enter ${this.nameForErrorText} in the correct format`
+  getFormSchemaKeys (config) {
+    const { name } = this
+    const { nameForErrorText } = this.getTextForErrors(config)
+    let formSchema = super.getFormSchemaKeys(config)[name]
+    formSchema = formSchema.email({ tlds: false }).messages({
+      'string.email': `Enter ${nameForErrorText} in the correct format`
     })
+
+    return { [name]: formSchema }
   }
 
   getViewModel (config, formData, errors) {

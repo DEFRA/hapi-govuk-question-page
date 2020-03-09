@@ -49,22 +49,21 @@ class DatePartsField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, options: { required } = {} } = this
+    const { options: { required } = {} } = this
 
-    let schema = joi.object({ dummy: joi.any().default(1) }).default().custom(dateChecker(required))
+    this.formSchema = joi.object({ dummy: joi.any().default(1) }).default().custom(dateChecker(required))
+  }
 
-    schema = schema.messages({
+  getFormSchemaKeys (config) {
+    const { titleForErrorText, nameForErrorText } = this.getTextForErrors(config)
+    let { formSchema } = this
+    formSchema = formSchema.messages({
       'any.required': `Enter ${nameForErrorText}`,
       'date.format': `${titleForErrorText} must include a day, month and year`,
       'date.base': `Enter a real ${nameForErrorText}`
     })
-
-    this.formSchema = schema
-  }
-
-  getFormSchemaKeys () {
     return {
-      [this.name]: this.formSchema,
+      [this.name]: formSchema,
       [`${this.name}__day`]: joi.any(),
       [`${this.name}__month`]: joi.any(),
       [`${this.name}__year`]: joi.any()

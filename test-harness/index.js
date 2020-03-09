@@ -102,7 +102,8 @@ async function createServer () {
             radiosField: { filter: ['soleTrader', 'privateLimitedCompany', 'limitedLiabilityPartnership', 'charity'] },
             numericRadiosField: { filter: [1, 3] },
             checkboxesWithTextField: { filter: ['email', 'phone', 'text'] },
-            selectField: { filter: [910400184, 910400195, 910400196, 910400197, 910400198] }
+            selectField: { filter: [910400184, 910400195, 910400196, 910400197, 910400198] },
+            multilineTextField: { title: 'Multiline text field title set dynamically', titleForError: 'Multiline', hint: 'Allows more than one line' }
           }
         },
         getData: async (request) => {

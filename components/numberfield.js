@@ -5,9 +5,9 @@ class NumberField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, schema: { integer, min, max, greater, less } = {}, options: { required } = {} } = this
+    const { schema: { integer, min, max, greater, less } = {}, options: { required } = {} } = this
 
-    let schema = joi.any().label(titleForErrorText)
+    let schema = joi.any()
     if (required === false) {
       schema = schema.allow('')
     } else {
@@ -36,7 +36,14 @@ class NumberField extends FormComponent {
       then: numberSchema
     })
 
-    schema = schema.messages({
+    this.formSchema = schema
+  }
+
+  getFormSchemaKeys (config) {
+    const { name, schema: { integer, min, max, greater, less } = {} } = this
+    const { titleForErrorText, nameForErrorText } = this.getTextForErrors(config)
+    let { formSchema } = this
+    formSchema = formSchema.messages({
       'any.required': `Enter ${nameForErrorText}`,
       'string.empty': `Enter ${nameForErrorText}`,
       'number.base': `${titleForErrorText} must be a number`,
@@ -47,11 +54,7 @@ class NumberField extends FormComponent {
       'number.less': `${titleForErrorText} must be less than ${less}`
     })
 
-    this.formSchema = schema
-  }
-
-  getFormSchemaKeys () {
-    return { [this.name]: this.formSchema }
+    return { [name]: formSchema }
   }
 
   getViewModel (config, formData, errors) {

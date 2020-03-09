@@ -5,24 +5,18 @@ class SelectField extends FormComponent {
   constructor (definition) {
     super(definition)
 
-    const { titleForErrorText, nameForErrorText, options: { required, filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
+    const { options: { required, filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
     this.listItems = listItems
     const listValues = listItems.map(listItem => listItem.value)
     this.listType = listType
     this.listValues = listValues
 
-    let formSchema = joi[listType]().label(titleForErrorText)
+    let formSchema = joi[listType]()
     if (required === false) {
       formSchema = formSchema.allow('')
     } else {
       formSchema = formSchema.empty('').required()
     }
-
-    formSchema = formSchema.messages({
-      'any.required': `Select ${nameForErrorText}`,
-      'string.empty': `Select ${nameForErrorText}`,
-      'any.only': `${titleForErrorText} must be from the list`
-    })
 
     if (!filterable) {
       formSchema = formSchema.valid(...listValues)
@@ -33,19 +27,26 @@ class SelectField extends FormComponent {
 
   getFormSchemaKeys (config = {}) {
     const { name, listValues, options: { filterable } = {} } = this
+    const { titleForErrorText, nameForErrorText } = this.getTextForErrors(config)
+    let { formSchema } = this
     const { [name]: { filter } = {} } = config
 
-    let schema = this.formSchema
     if (filterable) {
       let values = listValues
       if (filter && Array.isArray(filter)) {
         values = values.filter(value => filter.includes(value))
         values = values.length < 2 ? listValues : values
       }
-      schema = schema.valid(...values)
+      formSchema = formSchema.valid(...values)
     }
 
-    return { [name]: schema }
+    formSchema = formSchema.messages({
+      'any.required': `Select ${nameForErrorText}`,
+      'string.empty': `Select ${nameForErrorText}`,
+      'any.only': `${titleForErrorText} must be from the list`
+    })
+
+    return { [name]: formSchema }
   }
 
   getDisplayStringFromState (state) {

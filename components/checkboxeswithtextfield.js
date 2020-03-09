@@ -2,10 +2,10 @@ const joi = require('@hapi/joi')
 const CheckboxesField = require('./checkboxesfield')
 
 class CheckboxesWithTextField extends CheckboxesField {
-  constructor (definition) {
-    super(definition)
+  getFormSchemaKeys (config) {
+    const formSchemaKeys = super.getFormSchemaKeys(config)
 
-    this.textboxSchemas = this.listItems.filter(({ conditionalTextField }) => conditionalTextField)
+    const textboxSchemas = this.listItems.filter(({ conditionalTextField }) => conditionalTextField)
       .reduce((schemas, { value, conditionalTextField: { name, title, titleForError, schema: { max, trim } = {} } }) => {
         const titleForErrorText = titleForError || title || name.charAt(0).toUpperCase() + name.slice(1)
         const nameForErrorText = titleForErrorText.charAt(0).toLowerCase() + titleForErrorText.slice(1)
@@ -41,11 +41,9 @@ class CheckboxesWithTextField extends CheckboxesField {
         schemas[name] = schema
         return schemas
       }, {})
-  }
 
-  getFormSchemaKeys () {
-    const formSchemaKeys = super.getFormSchemaKeys()
-    Object.assign(formSchemaKeys, this.textboxSchemas)
+    Object.assign(formSchemaKeys, textboxSchemas)
+
     return formSchemaKeys
   }
 

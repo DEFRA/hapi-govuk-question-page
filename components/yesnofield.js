@@ -9,26 +9,29 @@ class YesNoField extends FormComponent {
     if (!options.classes) {
       options.classes = 'govuk-radios--inline'
     }
+
     const { yesFirst = true } = options
-
     const [yes, no] = [{ text: 'Yes', value: true }, { text: 'No', value: false }]
-
     const items = yesFirst ? [yes, no] : [no, yes]
 
-    const { titleForErrorText, nameForErrorText } = this
-    let formSchema = joi.boolean().empty('').required().label(titleForErrorText)
+    const formSchema = joi.boolean().empty('').required()
+
+    this.items = items
+    this.formSchema = formSchema
+  }
+
+  getFormSchemaKeys (config) {
+    const { name, items } = this
+    const { titleForErrorText, nameForErrorText } = this.getTextForErrors(config)
+    let { formSchema } = this
+
     formSchema = formSchema.messages({
       'any.required': `Select ${nameForErrorText}`,
       'string.empty': `Select ${nameForErrorText}`,
       'boolean.base': `${titleForErrorText} must be ${items[0].text} or ${items[1].text}`
     })
 
-    this.items = items
-    this.formSchema = formSchema
-  }
-
-  getFormSchemaKeys () {
-    return { [this.name]: this.formSchema }
+    return { [name]: formSchema }
   }
 
   getDisplayStringFromState (state) {

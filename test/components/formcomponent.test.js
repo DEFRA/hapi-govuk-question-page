@@ -132,4 +132,19 @@ lab.experiment('FormComponent', () => {
       expect(displayStringFromState).to.equal('1')
     })
   })
+
+  lab.experiment('getTextForErrors', () => {
+    lab.test('without config', () => {
+      const formComponent = new FormComponent(definitionWithConfiguration)
+      const { titleForErrorText, nameForErrorText } = formComponent.getTextForErrors() || {}
+      expect(titleForErrorText).to.equal('The Title')
+      expect(nameForErrorText).to.equal('the Title')
+    })
+    lab.test('with config', () => {
+      const formComponent = new FormComponent(standardDefinition)
+      const { titleForErrorText, nameForErrorText } = formComponent.getTextForErrors({ [componentName]: { title: 'title', titleForError: 'titleForError' } })
+      expect(titleForErrorText).to.equal('titleForError')
+      expect(nameForErrorText).to.equal('titleForError')
+    })
+  })
 })
