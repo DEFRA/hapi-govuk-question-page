@@ -83,7 +83,7 @@ async function createServer () {
   // Register the plugins
   await server.register(visionPlugin)
   await server.register(require('@hapi/inert'))
-  await server.register(require('../index'))
+  await server.register({ plugin: require('../index'), options: { pageTemplateName: 'page.template.njk' } })
 
   server.route(assetsRoutes)
 
@@ -94,7 +94,6 @@ async function createServer () {
     path: '/',
     handler: {
       'hapi-govuk-question-page': {
-        pageTemplateName: 'page.template.njk',
         getConfig: async (request) => {
           return {
             $PAGE$: { title: 'Test harness page', caption: new Date() },

@@ -125,11 +125,22 @@ Registration is simple:
 
 `await server.register(require('@envage/hapi-govuk-question-page'))`
 
-The plugin has no registration-time options and is defined using the `once` directive so any multiple attempts at
-registration will just be ignored by the Hapi server.
+### Registration options
 
-This means that any plugins built on top of it that have it as a registration-time dependency can freely register it
-as they need to.
+You can provide options to the plugin at registration time in the standard way:
+
+`await server.register({ plugin: require('@envage/hapi-govuk-question-page'), options: { ... } })`
+
+The following options are supported:
+
+### Page template
+By default, the handler will look for a page template called `layout.html` on your configured Vision path,
+but if you use a template in a different location or with a different name you can use this option:
+
+  - `pageTemplateName` - a string specifying the filename of an alternative page template to use, rather than the
+    default `layout.html`.
+
+Note that this option is ignored on any routes where you specify an entirely bespoke view using the `viewName` option. 
 
 ## Handler
 
@@ -268,6 +279,8 @@ but if you use a template in a different location or with a different name you c
 
   - `pageTemplateName` - a string specifying the filename of an alternative page template to use, rather than the
     default `layout.html`.
+
+This option will override any `pageTemplateName` option that you provided when the plugin was registered.
 
 Note that this option is ignored if the `viewName` option is used to provide an entirely bespoke view.
       
