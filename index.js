@@ -2,7 +2,7 @@ const pkg = require('./package.json')
 const PLUGIN_NAME = pkg.name.split('/')[1]
 const Page = require('./page')
 
-const VIEW_NAME = `${PLUGIN_NAME}/page`
+const DEFAULT_VIEW_NAME = `${PLUGIN_NAME}/page`
 const DEFAULT_PAGE_TEMPLATE_NAME = 'layout.html'
 
 const getConfigFromRequest = request => {
@@ -27,6 +27,7 @@ const setDataOnRequest = (request, dataToSet) => {
 const handlerProvider = (route, handlerOptions) => {
   const {
     pageTemplateName = DEFAULT_PAGE_TEMPLATE_NAME,
+    viewName = DEFAULT_VIEW_NAME,
     pageDefinition,
     getConfig = getConfigFromRequest,
     getData = getDataFromRequest,
@@ -42,7 +43,7 @@ const handlerProvider = (route, handlerOptions) => {
       const config = await getConfig(request)
       const state = await getData(request)
       const formData = page.getFormDataFromState(state, config)
-      return h.view(VIEW_NAME, page.getViewModel(config, formData))
+      return h.view(viewName, page.getViewModel(config, formData))
     }
   } else if (route.method === 'post') {
     return async (request, h) => {
@@ -51,13 +52,13 @@ const handlerProvider = (route, handlerOptions) => {
       const formResult = page.validateForm(payload, config)
 
       if (formResult.errors) {
-        return h.view(VIEW_NAME, page.getViewModel(config, payload, formResult.errors))
+        return h.view(viewName, page.getViewModel(config, payload, formResult.errors))
       } else {
         const dataToSet = page.getStateFromValidForm(formResult.value, config)
         const setDataResult = await setData(request, dataToSet)
 
         if (setDataResult && setDataResult.errors) {
-          return h.view(VIEW_NAME, page.getViewModel(config, payload, setDataResult.errors))
+          return h.view(viewName, page.getViewModel(config, payload, setDataResult.errors))
         } else {
           const redirectPath = (getNextPath && await getNextPath(request)) || nextPath
           if (redirectPath) {

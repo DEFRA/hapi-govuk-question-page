@@ -48,6 +48,14 @@ lab.experiment('plugin', () => {
     const response = await handlerForGet(undefined, h)
     expect(response).to.equal('view')
   })
+  lab.test('GET handler shows custom view', async ({ context }) => {
+    const handlerForGet = context.method({ method: 'get' }, { viewName: 'customView', pageDefinition: { title: 'Title', components: [] } })
+    const h = {
+      view: template => template
+    }
+    const response = await handlerForGet(undefined, h)
+    expect(response).to.equal('customView')
+  })
   lab.test('POST handler shows view if form validation fails', async ({ context }) => {
     const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
     const handlerForPost = context.method({ method: 'post' }, { pageDefinition })
@@ -66,6 +74,16 @@ lab.experiment('plugin', () => {
     }
     const response = await handlerForPost({ payload: { textField: 'text' } }, h)
     expect(response).to.equal('view')
+  })
+  lab.test('POST handler shows custom view', async ({ context }) => {
+    const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }
+    const setData = () => ({ errors: { errorList: [] } })
+    const handlerForPost = context.method({ method: 'post' }, { setData, viewName: 'customView', pageDefinition })
+    const h = {
+      view: template => template
+    }
+    const response = await handlerForPost({ payload: { textField: 'text' } }, h)
+    expect(response).to.equal('customView')
   })
   lab.test('POST handler redirects to next path if setting data succeeds', async ({ context }) => {
     const pageDefinition = { title: 'Title', components: [{ type: 'TextField', name: 'textField', title: 'Text Field' }] }

@@ -1,0 +1,31 @@
+{% extends "page.template.njk" %}
+
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if errors %}
+        {{ govukErrorSummary(errors) }}
+      {% endif %}
+
+      <form method="post" autocomplete="off" novalidate>
+
+        {{ govukInput({
+          label: {
+          text: "A completely different label"
+        },
+          id: components[0].model.id,
+          name: components[0].model.name,
+          value: components[0].model.value,
+          errorMessage: components[0].model.errorMessage
+        }) }}
+
+        {{ govukButton({ attributes: { id: "submit" }, text: "Continue" }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

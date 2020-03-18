@@ -268,6 +268,19 @@ but if you use a template in a different location or with a different name you c
 
   - `pageTemplateName` - a string specifying the filename of an alternative page template to use, rather than the
     default `layout.html`.
+
+Note that this option is ignored if the `viewName` option is used to provide an entirely bespoke view.
+      
+### View name
+The handler uses its own built-in view to display an appropriate GOV.UK page. If necessary, you can provide your own
+entirely bespoke view to use:
+
+  - `viewName` - a string specifying the filename of a bespoke view to use, rather than the built-in view.
+
+If you provide this option then the `pageTemplateName` option is ignored and you need to implement all the features
+of a GOV.UK page, including extending a suitable template.
+
+For details on how to interact with the handler in a bespoke view, see [Bespoke views](#bespoke-views)
       
 ### Data functions
 If you use data functions rather than passing data on the `request` object, these should be provided as follows:
@@ -611,3 +624,61 @@ Side by side radio using the Radios component, with just Yes and No as options.
     - `text` - required string to display on the page for the item.
     - `description` - optional additional tet to display as a hint for the item.
     - `conditionalHtml` - optional conditional HTML to display when the list item is selected.
+
+## Bespoke views
+Rather than allowing the handler to render the page, it is possible to provide your own bespoke view and just have the
+handler dealing with the user interaction and validation of the form inputs.
+
+However, if you take this approach you will need to implement all of the necessary features of a GOV.UK page and will
+need to understand how the handler interacts with the page. There will still be some limitations on what you are able
+to provide, as there are certain things that the handler needs.
+
+It is worth bearing in mind that, if you require this level of customisation, then you could be better off not using
+this plugin at all and just coding your own Hapi route handlers. But you might find that the plugin works for the
+majority of your application and that for consistency it's desirable to keep everything working in the same way.
+
+### Required configuration
+Even when you supply your own view, the handler still requires a page definition so that it knows how to process the
+values provided by the user. You must provide a valid list of components and all mandatory configuration values for
+the components are still required. The most important value to consider is `name` as this must match the key for the
+data value that your form will submit.
+
+To supply your own view, ensure that the necessary path is included in your Vision `path` list and just provide the
+name of the view as the `viewName` value in your `hapi-govuk-question-page` configuration. This will tell the handler
+to pass the name of your view into Vision rather than using its own internal view definition.
+
+### Page context
+The handler uses the standard Vision [`h.view()`](https://hapi.dev/module/vision/api/#hviewtemplate-context-options)
+function to render the page that you define and passes its configuration and data as the page context.
+
+From within your page template, you can then access the following context values:
+
+  - `pageTitle` - a string containing the configured page title.
+  
+  - `pageCaption`- a string containing the configured page caption.
+  
+  - `showTitle` - a boolean indicating whether or not the title should be displayed on the page. `false` when there is
+    only one configured form component.
+    
+  - `useForm` - a boolean indicating whether or not a `<form>` element is required on the page. `false` when no form
+    components have been configured and there is no next page.
+    
+  - `components` - an array of all the configured form components, in the order that they appear in your page
+    definition. Each item in the array is an object with a property called `model` that contains all of the
+    information used to display the component and is defined by the underlying GOV.UK Design System component.
+    You can modify this object and pass it into GOV.UK Nunjucks macros or just read its values to use on your page.
+    
+    Two properties that you should pay particular attention to are:
+    
+      - `name` - this must matches a form field on your page so that the handler can receive the form data
+        when the user submits their form.
+        
+      - `errorMessage` - the message that you will need to display alongside the relevant field if there are any
+        validation errors. This value will be missing if there is no error to display for this component.
+        The GOV.UK Design System Nunjucks macros will handle this value automatically, but if you are
+        creating your own page content using HTML then you will need to display this message as per the error pattern.
+    
+  - `errors` - an array of any validation errors that the handler has generated. If there are no errors to be displayed
+    then this value will be missing.
+    Each item in the array is an object in the form expected by the GOV.UK Design System Nunjucks error
+    summary component.

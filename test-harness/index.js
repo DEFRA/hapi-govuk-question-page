@@ -25,7 +25,8 @@ const visionPlugin = {
       }
     },
     path: [
-      '.' // When included as a module this would be 'node_modules/hapi-govuk-question-page'
+      '.', // When included as a module this would be 'node_modules/hapi-govuk-question-page'
+      './test-harness'
     ],
     isCached: false,
     context: {
@@ -124,6 +125,30 @@ async function createServer () {
             }
             return h.continue
           }
+        }
+      }
+    }
+  })
+
+  // Add the route for the simple page
+  const simplePageData = {}
+  server.route({
+    method: ['GET', 'POST'],
+    path: '/simple-page',
+    handler: {
+      'hapi-govuk-question-page': {
+        viewName: 'simple-page.njk',
+        getData: async (request) => {
+          return simplePageData
+        },
+        setData: async (request, dataToSet) => {
+          hoek.merge(simplePageData, dataToSet, { mergeArrays: false })
+          console.log(simplePageData)
+        },
+        getNextPath: async (request) => '/simple-page',
+        pageDefinition: {
+          title: 'Test harness simple page',
+          components: [{ type: 'TextField', name: 'simpleTextField', title: 'Simple text field', schema: { max: 10 } }]
         }
       }
     }
