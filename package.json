@@ -1,6 +1,6 @@
 {
   "name": "@envage/hapi-govuk-question-page",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A hapi plugin for simple GOV.UK question pages",
   "main": "index.js",
   "scripts": {
