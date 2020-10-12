@@ -7,7 +7,7 @@ class RadiosField extends FormComponent {
 
     const { options: { filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
     this.listItems = listItems
-    const listValues = listItems.map(listItem => listItem.value)
+    const listValues = listItems.filter(listItem => !listItem.divider).map(listItem => listItem.value)
     this.listType = listType
     this.listValues = listValues
 
@@ -58,15 +58,27 @@ class RadiosField extends FormComponent {
 
     let items = listItems
     if (filterable && filter && Array.isArray(filter)) {
-      items = items.filter(({ value }) => filter.includes(value))
-      items = items.length < 2 ? listItems : items
+      items = items.filter(({ value, divider }) => filter.includes(value) || divider)
+
+      // Remove a divider if it now appears at the end of the list
+      if (items[items.length - 1].divider) {
+        items.pop()
+      }
+
+      const selectableItemCount = items.filter(({ divider }) => !divider).length
+
+      items = selectableItemCount < 2 ? listItems : items
     }
 
     Object.assign(viewModel, {
       fieldset: {
         legend: viewModel.label
       },
-      items: items.map(({ text, value, description, conditionalHtml }) => {
+      items: items.map(({ text, value, description, conditionalHtml, divider }) => {
+        if (divider) {
+          return { divider }
+        }
+
         const itemModel = {
           text,
           value,

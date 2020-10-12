@@ -637,6 +637,7 @@ Side by side radio using the Radios component, with just Yes and No as options.
     - `text` - required string to display on the page for the item.
     - `description` - optional additional tet to display as a hint for the item.
     - `conditionalHtml` - optional conditional HTML to display when the list item is selected.
+    - `divider` - string used to specify dividing text between groups of radios 
 
 ## Bespoke views
 Rather than allowing the handler to render the page, it is possible to provide your own bespoke view and just have the
