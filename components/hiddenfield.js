@@ -1,7 +1,7 @@
 const joi = require('@hapi/joi')
-const TextField = require('./textfield')
+const { FormComponent } = require('.')
 
-class HiddenField extends TextField {
+class HiddenField extends FormComponent {
   constructor(definition) {
     super(definition)
     let schema = joi.any()
@@ -17,7 +17,6 @@ class HiddenField extends TextField {
   getViewModel(config, formData, errors) {
     const { value } = this
     const viewModel = super.getViewModel(config, formData, errors)
-    viewModel.type = 'hidden'
     viewModel.value = this.value
     return viewModel
   }
