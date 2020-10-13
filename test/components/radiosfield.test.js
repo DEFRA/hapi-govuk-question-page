@@ -22,7 +22,9 @@ const definitionWithConfiguration = {
       items: [
         { value: 1, text: 'A' },
         { value: 2, text: 'B', description: 'B description' },
-        { value: 3, text: 'C', conditionalHtml: '<p class="govuk-body">Conditional HTML</p>' }
+        { divider: 'Divider text' },
+        { value: 3, text: 'C', conditionalHtml: '<p class="govuk-body">Conditional HTML</p>' },
+        { value: 4, text: 'D' }
       ]
     }
   }
@@ -60,7 +62,7 @@ lab.experiment('RadiosField', () => {
         context.viewModel = context.radiosField.getViewModel({}, formData)
       })
       lab.test('includes items', ({ context }) => {
-        expect(context.viewModel.items.length).to.equal(3)
+        expect(context.viewModel.items.length).to.equal(5)
       })
       lab.test('bolds items', ({ context }) => {
         expect(context.viewModel.items[0].label.classes).to.equal('govuk-label--s')
@@ -68,8 +70,11 @@ lab.experiment('RadiosField', () => {
       lab.test('hint', ({ context }) => {
         expect(context.viewModel.items[1].hint.html).to.equal('B description')
       })
+      lab.test('divider', ({ context }) => {
+        expect(context.viewModel.items[2].divider).to.equal('Divider text')
+      })
       lab.test('conditional content', ({ context }) => {
-        expect(context.viewModel.items[2].conditional.html).to.equal('<p class="govuk-body">Conditional HTML</p>')
+        expect(context.viewModel.items[3].conditional.html).to.equal('<p class="govuk-body">Conditional HTML</p>')
       })
       lab.test('selects item', ({ context }) => {
         const viewModel = context.radiosField.getViewModel({}, { [componentName]: '2' })
@@ -86,11 +91,24 @@ lab.experiment('RadiosField', () => {
       })
       lab.test('filter is not array', ({ context }) => {
         const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: 1 } }, formData)
-        expect(viewModel.items.length).to.equal(3)
+        expect(viewModel.items.length).to.equal(5)
       })
       lab.test('filter has fewer than 2 valid items', ({ context }) => {
         const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: [1, 99] } }, formData)
+        expect(viewModel.items.length).to.equal(5)
+      })
+      lab.test('includes divider items if not at the start or end of the list', ({ context }) => {
+        const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: [1, 3] } }, formData)
         expect(viewModel.items.length).to.equal(3)
+        expect(viewModel.items[1].divider).to.equal('Divider text')
+      })
+      lab.test('does not include divider items if at the start of the list', ({ context }) => {
+        const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: [3, 4] } }, formData)
+        expect(viewModel.items.map(item => item.divider)).to.only.include(undefined)
+      })
+      lab.test('does not include divider items if at end of the list', ({ context }) => {
+        const viewModel = context.radiosField.getViewModel({ [componentName]: { filter: [1, 2] } }, formData)
+        expect(viewModel.items.map(item => item.divider)).to.only.include(undefined)
       })
     })
   })

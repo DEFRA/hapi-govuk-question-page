@@ -1,13 +1,16 @@
 const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
 
+const isDivider = listItem => !!listItem.divider
+const isNotDivider = listItem => !isDivider(listItem)
+
 class RadiosField extends FormComponent {
   constructor (definition) {
     super(definition)
 
     const { options: { filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
     this.listItems = listItems
-    const listValues = listItems.map(listItem => listItem.value)
+    const listValues = listItems.filter(isNotDivider).map(listItem => listItem.value)
     this.listType = listType
     this.listValues = listValues
 
@@ -58,15 +61,31 @@ class RadiosField extends FormComponent {
 
     let items = listItems
     if (filterable && filter && Array.isArray(filter)) {
-      items = items.filter(({ value }) => filter.includes(value))
-      items = items.length < 2 ? listItems : items
+      items = items.filter(({ value, divider }) => filter.includes(value) || divider)
+
+      // Remove dividers if they now appear at beginning/end of list
+      if (isDivider(items[0])) {
+        items.shift()
+      }
+      if (isDivider(items[items.length - 1])) {
+        items.pop()
+      }
+
+      // Show entire list if fewer than 1 non-divider list items following filtering
+      const selectableItemCount = items.filter(isNotDivider).length
+
+      items = selectableItemCount < 2 ? listItems : items
     }
 
     Object.assign(viewModel, {
       fieldset: {
         legend: viewModel.label
       },
-      items: items.map(({ text, value, description, conditionalHtml }) => {
+      items: items.map(({ text, value, description, conditionalHtml, divider }) => {
+        if (divider) {
+          return { divider }
+        }
+
         const itemModel = {
           text,
           value,
