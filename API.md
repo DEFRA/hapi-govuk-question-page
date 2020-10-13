@@ -620,6 +620,11 @@ Simple text field.
     - `max` - number - the maximum length of text to allow.
     - `trim` - boolean - whether to force whitespace trimming from the start and end of the text.
 
+## `HiddenField` component
+Extends the text field component and behaves largely in the same way, but is fed a value.
+The input field type is automatically set to 'hidden', and the whole macro is wrapped with `display: none;` to prevent the field name and/or hint text from appearing in the UI.
+  - `value` - any string - the value given to the <input> element
+
 ## `WarningText` component
 Text using the Warning Text component.
   - `text` - string of text to display.
