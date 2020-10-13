@@ -4,7 +4,7 @@ const Lab = require('@hapi/lab')
 const HiddenField = require('../../components/hiddenfield')
 
 const { expect } = Code
-const lab = exports.lab = Lab.script()
+const lab = Lab.script()
 
 const componentName = 'testHiddenField'
 const standardDefinition = {
@@ -31,3 +31,5 @@ lab.experiment('HiddenField', () => {
     })
   })
 })
+
+module.exports.lab = lab

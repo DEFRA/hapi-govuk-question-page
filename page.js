@@ -46,7 +46,7 @@ const mapErrorsForDisplay = (joiError) => {
 }
 
 class Page {
-  constructor(pageDef, pageTemplateName) {
+  constructor (pageDef, pageTemplateName) {
     const { title, caption, hasNext = true } = pageDef
     this.title = title
     this.caption = caption
@@ -62,7 +62,7 @@ class Page {
     this.hasSingleFormComponentFirst = formComponents.length === 1 && formComponents[0] === components[0]
   }
 
-  getViewModel(config = {}, formData, errors) {
+  getViewModel (config = {}, formData, errors) {
     const { $PAGE$: pageConfig = {} } = config
     let { title: pageTitle = this.title, caption: pageCaption = this.caption } = pageConfig
     let showTitle = Boolean(pageTitle)
@@ -95,21 +95,21 @@ class Page {
     return { templateName, pageTitle, pageCaption, showTitle, useForm, components, errors }
   }
 
-  getFormDataFromState(state, config) {
+  getFormDataFromState (state, config) {
     return this.formComponents.reduce((acc, formComponent) => {
       Object.assign(acc, formComponent.getFormDataFromState(state, config))
       return acc
     }, {})
   }
 
-  getStateFromValidForm(validatedFormData, config) {
+  getStateFromValidForm (validatedFormData, config) {
     return this.formComponents.reduce((acc, formComponent) => {
       Object.assign(acc, formComponent.getStateFromValidForm(validatedFormData, config))
       return acc
     }, {})
   }
 
-  validateForm(payload, config) {
+  validateForm (payload, config) {
     const formSchemaKeys = this.formComponents.reduce((acc, formComponent) => {
       Object.assign(acc, formComponent.getFormSchemaKeys(config))
       return acc

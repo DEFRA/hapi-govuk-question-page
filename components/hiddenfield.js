@@ -2,22 +2,22 @@ const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
 
 class HiddenField extends FormComponent {
-  constructor(definition) {
+  constructor (definition) {
     super(definition)
-    let schema = joi.any()
+    const schema = joi.any()
     this.formSchema = schema
   }
 
-  getFormSchemaKeys(config) {
+  getFormSchemaKeys () {
     const { name } = this
-    let { formSchema } = this
+    const { formSchema } = this
     return { [name]: formSchema }
   }
 
-  getViewModel(config, formData, errors) {
+  getViewModel (config, formData, errors) {
     const { value } = this
     const viewModel = super.getViewModel(config, formData, errors)
-    viewModel.value = this.value
+    viewModel.value = value
     return viewModel
   }
 }
