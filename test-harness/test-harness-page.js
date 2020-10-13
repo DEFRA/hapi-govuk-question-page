@@ -109,6 +109,7 @@ module.exports = {
           { text: 'Private Limited Company', value: 'privateLimitedCompany' },
           { text: 'Public Limited Company', value: 'publicLimitedCompany' },
           { text: 'Limited Liability Partnership', value: 'limitedLiabilityPartnership' },
+          { divider: 'Or' },
           { text: 'Charity', value: 'charity' },
           { text: 'Other', value: 'other' }
         ]
