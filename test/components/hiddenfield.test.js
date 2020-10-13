@@ -17,11 +17,6 @@ const formData = {
 
 lab.experiment('HiddenField', () => {
   lab.experiment('getViewModel', () => {
-    lab.test('is hidden type', () => {
-      const hiddenField = new HiddenField(standardDefinition)
-      const viewModel = hiddenField.getViewModel({}, formData)
-      expect(viewModel.type).to.equal('hidden')
-    })
     lab.test('is given the defined value', () => {
       const hiddenField = new HiddenField(standardDefinition)
       const viewModel = hiddenField.getViewModel({}, formData)
