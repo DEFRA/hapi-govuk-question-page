@@ -1,13 +1,16 @@
 const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
 
+const isDivider = listItem => !!listItem.divider
+const isNotDivider = listItem => !isDivider(listItem)
+
 class RadiosField extends FormComponent {
   constructor (definition) {
     super(definition)
 
     const { options: { filterable, list: { type: listType, items: listItems = [] } = {} } = {} } = this
     this.listItems = listItems
-    const listValues = listItems.filter(listItem => !listItem.divider).map(listItem => listItem.value)
+    const listValues = listItems.filter(isNotDivider).map(listItem => listItem.value)
     this.listType = listType
     this.listValues = listValues
 
@@ -60,12 +63,16 @@ class RadiosField extends FormComponent {
     if (filterable && filter && Array.isArray(filter)) {
       items = items.filter(({ value, divider }) => filter.includes(value) || divider)
 
-      // Remove a divider if it now appears at the end of the list
-      if (items[items.length - 1].divider) {
+      // Remove dividers if they now appear at beginning/end of list
+      if (isDivider(items[0])) {
+        items.shift()
+      }
+      if (isDivider(items[items.length - 1])) {
         items.pop()
       }
 
-      const selectableItemCount = items.filter(({ divider }) => !divider).length
+      // Show entire list if fewer than 1 non-divider list items following filtering
+      const selectableItemCount = items.filter(isNotDivider).length
 
       items = selectableItemCount < 2 ? listItems : items
     }
