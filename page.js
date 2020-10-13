@@ -18,7 +18,8 @@ const componentTypesList = [
   'DynamicHtml',
   'InsetText',
   'Details',
-  'WarningText'
+  'WarningText',
+  'HiddenField'
 ]
 const componentTypes = componentTypesList.reduce((acc, name) => {
   acc[name] = require(`./components/${name.toLowerCase()}`)
@@ -45,13 +46,12 @@ const mapErrorsForDisplay = (joiError) => {
 }
 
 class Page {
-  constructor (pageDef, pageTemplateName) {
+  constructor(pageDef, pageTemplateName) {
     const { title, caption, hasNext = true } = pageDef
     this.title = title
     this.caption = caption
     this.hasNext = hasNext
     this.pageTemplateName = pageTemplateName
-
     const components = pageDef.components.map(def => new componentTypes[def.type](def))
     const formComponents = components.filter(component => component.isFormComponent)
 
@@ -62,14 +62,13 @@ class Page {
     this.hasSingleFormComponentFirst = formComponents.length === 1 && formComponents[0] === components[0]
   }
 
-  getViewModel (config = {}, formData, errors) {
+  getViewModel(config = {}, formData, errors) {
     const { $PAGE$: pageConfig = {} } = config
     let { title: pageTitle = this.title, caption: pageCaption = this.caption } = pageConfig
     let showTitle = Boolean(pageTitle)
 
     const templateName = this.pageTemplateName
     const useForm = this.hasFormComponents || this.hasNext
-
     const components = this.components.map(component => ({
       type: component.type,
       isFormComponent: component.isFormComponent,
@@ -96,21 +95,21 @@ class Page {
     return { templateName, pageTitle, pageCaption, showTitle, useForm, components, errors }
   }
 
-  getFormDataFromState (state, config) {
+  getFormDataFromState(state, config) {
     return this.formComponents.reduce((acc, formComponent) => {
       Object.assign(acc, formComponent.getFormDataFromState(state, config))
       return acc
     }, {})
   }
 
-  getStateFromValidForm (validatedFormData, config) {
+  getStateFromValidForm(validatedFormData, config) {
     return this.formComponents.reduce((acc, formComponent) => {
       Object.assign(acc, formComponent.getStateFromValidForm(validatedFormData, config))
       return acc
     }, {})
   }
 
-  validateForm (payload, config) {
+  validateForm(payload, config) {
     const formSchemaKeys = this.formComponents.reduce((acc, formComponent) => {
       Object.assign(acc, formComponent.getFormSchemaKeys(config))
       return acc

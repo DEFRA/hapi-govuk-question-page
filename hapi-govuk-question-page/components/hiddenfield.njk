@@ -1,0 +1,5 @@
+{% from "./textfield.njk" import TextField %}
+
+{% macro HiddenField(component) %}
+  <span style="display:none;">{{ TextField(component) }}</span>
+{% endmacro %}
