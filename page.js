@@ -19,7 +19,7 @@ const componentTypesList = [
   'InsetText',
   'Details',
   'WarningText',
-  'HiddenField'
+  'HiddenValue'
 ]
 const componentTypes = componentTypesList.reduce((acc, name) => {
   acc[name] = require(`./components/${name.toLowerCase()}`)

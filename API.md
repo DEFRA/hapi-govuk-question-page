@@ -355,7 +355,7 @@ All components are defined as an object with keys:
 Form components capture information from a user and are rendered inside an HTML form.
 The available `type` values for these are:
   - [TextField](#textfield-component)
-  - [HiddenField](#hiddenfield-component)
+  - [HiddenValue](#hiddenvalue-component)
   - [NumberField](#numberfield-component)
   - [NamesField](#namesfield-component)
   - [TelephoneNumberField](#telephonenumberfield-component)
@@ -621,7 +621,7 @@ Simple text field.
     - `max` - number - the maximum length of text to allow.
     - `trim` - boolean - whether to force whitespace trimming from the start and end of the text.
 
-## `HiddenField` component
+## `HiddenValue` component
 Renders an `<input>` with `type="hidden'`
   - `value` - string - the value given to the <input> element
 

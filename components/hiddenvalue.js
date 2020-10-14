@@ -1,7 +1,7 @@
 const joi = require('@hapi/joi')
 const { FormComponent } = require('.')
 
-class HiddenField extends FormComponent {
+class HiddenValue extends FormComponent {
   constructor (definition) {
     super(definition)
     const schema = joi.any()
@@ -22,4 +22,4 @@ class HiddenField extends FormComponent {
   }
 }
 
-module.exports = HiddenField
+module.exports = HiddenValue
