@@ -63,7 +63,7 @@ class Page {
   }
 
   getViewModel (config = {}, formData, errors) {
-    const { $PAGE$: pageConfig = {} } = config
+    const { $PAGE$: pageConfig = {}, $VIEW$: customViewData = {} } = config
     let { title: pageTitle = this.title, caption: pageCaption = this.caption } = pageConfig
     let showTitle = Boolean(pageTitle)
 
@@ -93,7 +93,7 @@ class Page {
       }
     }
 
-    return { templateName, pageTitle, pageCaption, showTitle, useForm, components, errors }
+    return { templateName, pageTitle, pageCaption, showTitle, useForm, components, errors, ...customViewData }
   }
 
   getFormDataFromState (state, config) {
