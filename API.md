@@ -250,8 +250,10 @@ request.app['hapi-govuk-question-page'] = {
 ```
 
 Sometimes it may be required to pass additional data to the view. 
-This can be provided via an optional $VIEW$ object, which is passed
-directly to the view:
+This can be provided via an optional $VIEW$ object.
+
+Members of this object are included in the object passed into the view, 
+so will be available for use in the view template.
 
 ```js
 const getConfig = (request) => {
