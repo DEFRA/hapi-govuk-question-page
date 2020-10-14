@@ -96,6 +96,7 @@ async function createServer () {
       'hapi-govuk-question-page': {
         getConfig: async (request) => {
           return {
+            $VIEW$: { serviceName: 'Custom service name' },
             $PAGE$: { title: 'Test harness page', caption: new Date() },
             dynamicHtml: { parameterValues: [request.url, new Date()] },
             checkboxesField: { filter: ['Shetland', 'Shire'] },
