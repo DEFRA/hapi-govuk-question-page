@@ -249,6 +249,29 @@ request.app['hapi-govuk-question-page'] = {
 }
 ```
 
+Sometimes it may be required to pass additional data to the view. 
+This can be provided via an optional $VIEW$ object, which is passed
+directly to the view:
+
+```js
+const getConfig = (request) => {
+  return {
+    $VIEW$ : {
+      isSpecialUser : request.auth.credentials.scope.includes('special')
+    }
+  }
+}
+```
+
+or
+
+```js
+request.app['hapi-govuk-question-page'] = {
+  $VIEW$: {
+    isSpecialUser : request.auth.credentials.scope.includes('special')
+  }
+}
+
 ## Handler options
 
 ### Page definition

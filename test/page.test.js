@@ -182,5 +182,14 @@ lab.experiment('Page', () => {
       const viewModel = page.getViewModel({}, {})
       expect(viewModel.useForm).to.be.false()
     })
+    lab.test('can set additional view data via $VIEW$ config property', () => {
+      const page = new Page(standardDefinition)
+      const viewModel = page.getViewModel({
+        $VIEW$: {
+          foo: 'bar'
+        }
+      }, {})
+      expect(viewModel.foo).to.equal('bar')
+    })
   })
 })
