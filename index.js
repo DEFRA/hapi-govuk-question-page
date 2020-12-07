@@ -25,12 +25,15 @@ const setDataOnRequest = (request, dataToSet) => {
 }
 
 const buildHandlerProviderForOptions = (options = {}) => {
-  const { pageTemplateName: defaultPageTemplateName = DEFAULT_PAGE_TEMPLATE_NAME } = options
+  const {
+    pageTemplateName: defaultPageTemplateName = DEFAULT_PAGE_TEMPLATE_NAME,
+    viewName: defaultviewName = DEFAULT_VIEW_NAME
+  } = options
 
   return (route, handlerOptions) => {
     const {
       pageTemplateName = defaultPageTemplateName,
-      viewName = DEFAULT_VIEW_NAME,
+      viewName = defaultviewName,
       pageDefinition,
       getConfig = getConfigFromRequest,
       getData = getDataFromRequest,
