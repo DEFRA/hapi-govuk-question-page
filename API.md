@@ -273,6 +273,7 @@ request.app['hapi-govuk-question-page'] = {
     isSpecialUser : request.auth.credentials.scope.includes('special')
   }
 }
+```
 
 ## Handler options
 
