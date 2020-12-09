@@ -46,7 +46,7 @@ server.views({
 
 ### 2. Configure Vision to serve the **hapi-govuk-question-page** view
 
-The **hapi-govuk-question-page** plugin needs to have its directory `node_modules/hapi-govuk-question-page` on the
+The **hapi-govuk-question-page** plugin needs to have its directory `node_modules/@envage/hapi-govuk-question-page` on the
 Visio path so that it can use Vision's `h.view()` response toolkit extension to serve its page.
 
 Example:
@@ -55,7 +55,7 @@ await server.register(require('@hapi/vision'))
 server.views({
   engines: { ... },
   path: [
-    'node_modules/hapi-govuk-question-page'
+    'node_modules/@envage/hapi-govuk-question-page'
   ]
 })
 ```
@@ -81,7 +81,7 @@ server.views({
       prepare: (options, next) => {
         options.compileOptions.environment = nunjucks.configure([
           'node_modules/govuk-frontend',
-          'node_modules/hapi-govuk-question-page'
+          'node_modules/@envage/hapi-govuk-question-page'
         ])
         return next()
       }
@@ -107,13 +107,13 @@ server.views({
         }
       },
       prepare: (options, next) => {
-        options.compileOptions.environment = nunjucks.configure(['node_modules/govuk-frontend', ...options.path])
+        options.compileOptions.environment = nunjucks.configure(['node_modules/@envage/hapi-govuk-question-page', ...options.path])
         return next()
       }
     }
   },
   path: [
-    'node_modules/hapi-govuk-question-page',
+    'node_modules/@envage/hapi-govuk-question-page',
     'your/template/path'
   ]
 })
@@ -137,8 +137,14 @@ The following options are supported:
 By default, the handler will look for a page template called `layout.html` on your configured Vision path,
 but if you use a template in a different location or with a different name you can use this option:
 
-  - `pageTemplateName` - a string specifying the filename of an alternative page template to use, rather than the
+  - `pageTemplateName` - a string specifying the filename of an alternative layout to use, rather than the
     default `layout.html`.
+
+### View name
+A default page view is provided with the `hapi-govuk-question-page` library. A custom one may be specified with the option:
+
+  - `viewName` - a string specifying the view name of an alternative page template to use, rather than the
+    default `page`. This should not have a suffix and must reside on the configured Vision path. 
 
 Note that this option is ignored on any routes where you specify an entirely bespoke view using the `viewName` option. 
 
