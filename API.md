@@ -141,12 +141,12 @@ but if you use a template in a different location or with a different name you c
     default `layout.html`.
 
 ### View name
-A default page view is provided with the `hapi-govuk-question-page` library. A custom one may be specified with the option:
+A default page view is provided with the `hapi-govuk-question-page` plugin. A custom one may be specified with the option:
 
   - `viewName` - a string specifying the view name of an alternative page template to use, rather than the
     default `page`. This should not have a suffix and must reside on the configured Vision path. 
 
-Note that this option is ignored on any routes where you specify an entirely bespoke view using the `viewName` option. 
+Note that the page view specified is overridden when specifying a `viewName` on an individual route's options. 
 
 ## Handler
 
