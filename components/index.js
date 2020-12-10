@@ -46,7 +46,7 @@ class FormComponent extends Component {
     const { name, options: { classes, required = true } = {} } = this
     const { [name]: { title = this.title, hint = this.hint } = {} } = config
     const isOptional = required === false
-    const label = (title || name) + (isOptional ? ' (optional)' : '')
+    const label = title === '' ? '' : (title || name) + (isOptional ? ' (optional)' : '')
 
     const model = {
       id: name,
