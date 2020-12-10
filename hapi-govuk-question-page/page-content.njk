@@ -23,7 +23,7 @@
       {% if useForm %}
         <form method="post" autocomplete="off" novalidate>
           {{ componentList(components) }}
-          {{ govukButton({ attributes: { id: "submit" }, text: "Continue" }) }}
+          {{ govukButton({ attributes: { id: "submit" }, text: buttonText }) }}
         </form>
       {% else %}
         {{ componentList(components) }}

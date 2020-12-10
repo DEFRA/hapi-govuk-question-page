@@ -28,6 +28,13 @@ const singleFieldWithPageTitleDefinition = {
     { type: 'TextField', name: 'textField', title: 'Text Field' }
   ]
 }
+const singleFieldWithSubmitButtonDefinition = {
+  title: 'Title',
+  submitButtonText: 'Save',
+  components: [
+    { type: 'TextField', name: 'textField', title: 'Text Field' }
+  ]
+}
 const htmlWithTextFieldDefinition = {
   components: [
     { type: 'Html' },
@@ -146,6 +153,16 @@ lab.experiment('Page', () => {
       const page = new Page(singleFieldWithPageTitleDefinition)
       const viewModel = page.getViewModel({}, {})
       expect(viewModel.pageTitle).to.equal('Title')
+    })
+    lab.test('use configured button text', () => {
+      const page = new Page(singleFieldWithSubmitButtonDefinition)
+      const viewModel = page.getViewModel({}, {})
+      expect(viewModel.buttonText).to.equal('Save')
+    })
+    lab.test('use default button text when not configured', () => {
+      const page = new Page(singleFieldWithPageTitleDefinition)
+      const viewModel = page.getViewModel({}, {})
+      expect(viewModel.buttonText).to.equal('Continue')
     })
     lab.test('caption included with single form component', () => {
       const page = new Page(singleFieldWithCaptionDefinition)
