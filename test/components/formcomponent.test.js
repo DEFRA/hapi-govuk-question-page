@@ -76,6 +76,11 @@ lab.experiment('FormComponent', () => {
         expect(viewModel.label).to.exist()
         expect(viewModel.label.isPageHeading).to.equal(false)
       })
+      lab.test('label is small', ({ context }) => {
+        const viewModel = context.formComponent.getViewModel({}, formData)
+        expect(viewModel.label).to.exist()
+        expect(viewModel.label.classes).to.equal('govuk-label--s')
+      })
       lab.test('no error message', ({ context }) => {
         const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.errorMessage).to.not.exist()
@@ -115,6 +120,11 @@ lab.experiment('FormComponent', () => {
         const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.label).to.exist()
         expect(viewModel.label.isPageHeading).to.equal(true)
+      })
+      lab.test('label is large', ({ context }) => {
+        const viewModel = context.formComponent.getViewModel({}, formData)
+        expect(viewModel.label).to.exist()
+        expect(viewModel.label.classes).to.equal('govuk-label--l')
       })
     })
     lab.test('with no title', () => {

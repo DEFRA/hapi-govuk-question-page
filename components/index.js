@@ -55,7 +55,7 @@ class FormComponent extends Component {
       attributes: {},
       label: {
         text: label,
-        classes: 'govuk-label--s',
+        classes: isPageHeading ? 'govuk-label--l' : 'govuk-label--s',
         isPageHeading
       },
       value: formData[name]
