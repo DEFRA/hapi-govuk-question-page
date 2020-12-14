@@ -112,12 +112,6 @@ lab.experiment('FormComponent', () => {
       expect(viewModel.label).to.exist()
       expect(viewModel.label.text).to.equal('testFormComponent')
     })
-    lab.test('with empty title', () => {
-      const formComponent = new FormComponent({ name: componentName, title: '' })
-      const viewModel = formComponent.getViewModel({}, formData)
-      expect(viewModel.label).to.exist()
-      expect(viewModel.label.text).to.equal('')
-    })
   })
   lab.experiment('getFormSchemaKeys', () => {
     lab.test('returns schema for defined name', () => {
