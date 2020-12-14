@@ -18,7 +18,8 @@ const definitionWithConfiguration = {
   hint: 'Hint',
   options: {
     required: false,
-    classes: 'test classes'
+    classes: 'test classes',
+    isPageHeading: true
   }
 }
 const formData = {
@@ -70,6 +71,11 @@ lab.experiment('FormComponent', () => {
         expect(viewModel.label).to.exist()
         expect(viewModel.label.text).to.equal('Title')
       })
+      lab.test('label is not page heading', ({ context }) => {
+        const viewModel = context.formComponent.getViewModel({}, formData)
+        expect(viewModel.label).to.exist()
+        expect(viewModel.label.isPageHeading).to.equal(false)
+      })
       lab.test('no error message', ({ context }) => {
         const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.errorMessage).to.not.exist()
@@ -104,6 +110,11 @@ lab.experiment('FormComponent', () => {
       lab.test('is optional', ({ context }) => {
         const viewModel = context.formComponent.getViewModel({}, formData)
         expect(viewModel.errorMessage).to.not.exist()
+      })
+      lab.test('label is page heading', ({ context }) => {
+        const viewModel = context.formComponent.getViewModel({}, formData)
+        expect(viewModel.label).to.exist()
+        expect(viewModel.label.isPageHeading).to.equal(true)
       })
     })
     lab.test('with no title', () => {
