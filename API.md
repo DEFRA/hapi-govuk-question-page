@@ -376,6 +376,7 @@ If you use data functions rather than passing data on the `request` object, thes
     a single form component and that is the first component on the page then you can omit this value and the plugin
     will use the label of that component as the title instead.
   - `caption` - optional text to display above the page title as a caption.
+  - `submitButtonText` - optional text for the submit button, defaults to `Continue`.
   - `components` - a required array of [page components](#components). Components will be rendered on the page in the
     order that they appear in this array.
 
