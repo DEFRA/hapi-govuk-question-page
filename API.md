@@ -423,7 +423,7 @@ Form components generally all support the following in the `options` object:
     - `required` - boolean specifying whether the data item is required, defaults to `true`.
       This value is ignored for certain form components that are always required, such as radio buttons.
     - `classes` - string to override the default CSS classes used on the form components.
-    - `isPageHeading` - boolean specifying whether the component's label should be used as the page heading. Useful for pages with a single component., defaults to `false`.
+    - `isPageHeading` - boolean specifying whether the component's label should be used as the page heading. Useful for pages with a single component, defaults to `false`.
 
 As form components are used to handle data, they will often have the following property:
   - `schema` - an object that has specific properties to define the constraints for the data field.
