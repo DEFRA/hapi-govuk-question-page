@@ -108,7 +108,6 @@ server.views({
       prepare: (options, next) => {
         options.compileOptions.environment = nunjucks.configure([
           'node_modules/govuk-frontend',
-          'node_modules/@envage/hapi-govuk-question-page',
           ...options.path
         ])
         return next()
