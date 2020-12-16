@@ -43,7 +43,7 @@ class FormComponent extends Component {
   }
 
   getViewModel (config = {}, formData, errors) {
-    const { name, options: { classes, required = true, isPageHeading = false } = {} } = this
+    const { name, options: { classes, required = true } = {} } = this
     const { [name]: { title = this.title, hint = this.hint } = {} } = config
     const isOptional = required === false
     const label = (title || name) + (isOptional ? ' (optional)' : '')
@@ -55,8 +55,7 @@ class FormComponent extends Component {
       attributes: {},
       label: {
         text: label,
-        classes: isPageHeading ? 'govuk-label--l' : 'govuk-label--s',
-        isPageHeading
+        classes: 'govuk-label--s'
       },
       value: formData[name]
     }
