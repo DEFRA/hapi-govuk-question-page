@@ -145,5 +145,12 @@ lab.experiment('DatePartsField', () => {
       const result = context.testSchema.validate(context.testData)
       expect(result.error).to.exist()
     })
+    lab.test('invalid date negative year', ({ context }) => {
+      context.testData[dayName] = '1'
+      context.testData[monthName] = '11'
+      context.testData[yearName] = '-1'
+      const result = context.testSchema.validate(context.testData)
+      expect(result.error).to.exist()
+    })
   })
 })
