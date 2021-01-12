@@ -26,6 +26,7 @@ const componentTypes = componentTypesList.reduce((acc, name) => {
 }, {})
 
 const DEFAULT_PAGE_TITLE = 'Question'
+const DEFAULT_SUBMIT_BUTTON_TEXT = 'Continue'
 const ERROR_SUMMARY_TITLE = 'Fix the following errors'
 const VALIDATION_OPTIONS = { abortEarly: false }
 
@@ -46,8 +47,9 @@ const mapErrorsForDisplay = (joiError) => {
 
 class Page {
   constructor (pageDef, pageTemplateName) {
-    const { title, caption, hasNext = true } = pageDef
+    const { title, caption, submitButtonText = DEFAULT_SUBMIT_BUTTON_TEXT, hasNext = true } = pageDef
     this.title = title
+    this.submitButtonText = submitButtonText
     this.caption = caption
     this.hasNext = hasNext
     this.pageTemplateName = pageTemplateName
@@ -64,7 +66,11 @@ class Page {
 
   getViewModel (config = {}, formData, errors) {
     const { $PAGE$: pageConfig = {}, $VIEW$: customViewData = {} } = config
-    let { title: pageTitle = this.title, caption: pageCaption = this.caption } = pageConfig
+    let {
+      title: pageTitle = this.title,
+      caption: pageCaption = this.caption,
+      submitButtonText: buttonText = this.submitButtonText
+    } = pageConfig
     let showTitle = Boolean(pageTitle)
 
     const templateName = this.pageTemplateName
@@ -93,7 +99,7 @@ class Page {
       }
     }
 
-    return { templateName, pageTitle, pageCaption, showTitle, useForm, components, errors, ...customViewData }
+    return { templateName, pageTitle, pageCaption, showTitle, buttonText, useForm, components, errors, ...customViewData }
   }
 
   getFormDataFromState (state, config) {

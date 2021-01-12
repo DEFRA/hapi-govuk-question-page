@@ -31,7 +31,7 @@ const dateChecker = (required) => {
     }
 
     const dateParts = datePartsText.map(datePartText => Number.parseFloat(datePartText))
-    const invalidEntry = dateParts.some(datePart => Number.isNaN(datePart) || !Number.isSafeInteger(datePart))
+    const invalidEntry = dateParts.some(datePart => Number.isNaN(datePart) || !Number.isSafeInteger(datePart) || Math.sign(datePart) === -1)
     if (invalidEntry) {
       return helpers.error('date.base')
     }
