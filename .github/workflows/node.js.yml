@@ -31,7 +31,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm test
-    - if: github.ref == 'refs/heads/master'
+    - if: github.ref == 'refs/heads/publish-npm-on-merge'
       uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.NPM_TOKEN }}
