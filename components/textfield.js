@@ -40,13 +40,12 @@ class TextField extends FormComponent {
   }
 
   getViewModel (config, formData, errors) {
-    const { schema: { max, maxwords } = {} } = this
+    const { schema: { max, maxwords } = {}, prefix, suffix } = this
     const viewModel = super.getViewModel(config, formData, errors)
-
+    Object.assign(viewModel, { prefix, suffix })
     if (!maxwords && typeof max === 'number') {
       viewModel.attributes.maxlength = max
     }
-
     return viewModel
   }
 }

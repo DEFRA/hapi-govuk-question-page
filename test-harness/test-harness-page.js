@@ -27,7 +27,15 @@ module.exports = {
       trim: false,
       max: 10
     },
-    hint: 'Help text'
+    hint: 'Help text',
+
+    prefix: {
+      text: '£'
+    },
+    suffix: {
+      text: 'per item'
+    }
+
   }, {
     type: 'MultilineTextField',
     name: 'multilineTextField',
