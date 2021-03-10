@@ -89,10 +89,10 @@ class DatePartsField extends FormComponent {
     const name = this.name
     const value = validatedFormData[`${name}__year`]
       ? moment([
-        validatedFormData[`${name}__year`],
-        validatedFormData[`${name}__month`] - 1,
-        validatedFormData[`${name}__day`]
-      ]).toDate()
+          validatedFormData[`${name}__year`],
+          validatedFormData[`${name}__month`] - 1,
+          validatedFormData[`${name}__day`]
+        ]).toDate()
       : null
     return {
       [name]: value
