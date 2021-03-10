@@ -6,8 +6,9 @@
   "scripts": {
     "lint": "standard",
     "unit-test": "lab",
+    "pretest": "npm run lint",
     "test": "npm run unit-test",
-    "test-harness": "node test-harness"
+    "test-harness": "nodemon test-harness"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "@hapi/lab": "^24.1.1",
     "@hapi/vision": "^6.0.0",
     "govuk-frontend": "^3.11.0",
+    "nodemon": "^2.0.7",
     "nunjucks": "^3.2.0",
     "standard": "^16.0.3"
   },
