@@ -49,13 +49,13 @@ const assetsRoutes = [{
   method: 'GET',
   path: '/assets/govuk-frontend.css',
   handler: {
-    file: 'test-harness/precompiled-css/govuk-frontend-3.10.2.min.css'
+    file: 'test-harness/precompiled-css/govuk-frontend-3.11.0.min.css'
   }
 }, {
   method: 'GET',
   path: '/assets/govuk-frontend-ie8.css',
   handler: {
-    file: 'test-harness/precompiled-css/govuk-frontend-ie8-3.10.2.min.css'
+    file: 'test-harness/precompiled-css/govuk-frontend-ie8-3.11.0.min.css'
   }
 }, {
   method: 'GET',
