@@ -28,14 +28,14 @@ module.exports = {
       max: 10
     },
     hint: 'Help text',
-
-    prefix: {
-      text: '£'
-    },
-    suffix: {
-      text: 'per item'
+    options: {
+      prefix: {
+        text: '£'
+      },
+      suffix: {
+        text: 'per item'
+      }
     }
-
   }, {
     type: 'MultilineTextField',
     name: 'multilineTextField',
@@ -72,7 +72,7 @@ module.exports = {
     type: 'NumberField',
     name: 'numberField',
     title: 'Number field',
-    options: { required: true }
+    options: { required: true, suffix: { text: 'km' } }
   }, {
     type: 'DatePartsField',
     name: 'datePartsField',
@@ -95,11 +95,13 @@ module.exports = {
   }, {
     type: 'EmailAddressField',
     name: 'emailAddressField',
-    title: 'Email address field'
+    title: 'Email address field',
+    options: { required: true, prefix: { text: 'primary' } }
   }, {
     type: 'TelephoneNumberField',
     name: 'telephoneNumberField',
-    title: 'Telephone number field'
+    title: 'Telephone number field',
+    options: { required: true, prefix: { text: 'mobile' } }
   }, {
     type: 'RadiosField',
     name: 'radiosField',

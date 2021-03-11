@@ -13,7 +13,7 @@ const standardDefinition = {
 const definitionWithConfiguration = {
   name: componentName,
   schema: { max: 10, trim: false },
-  options: { required: false }
+  options: { required: false, prefix: '£', suffix: 'K' }
 }
 const maxWordsDefinition = {
   name: componentName,
@@ -29,6 +29,16 @@ lab.experiment('TextField', () => {
       const textField = new TextField(standardDefinition)
       const viewModel = textField.getViewModel({}, formData)
       expect(viewModel.attributes.maxlength).to.not.exist()
+    })
+    lab.test('includes prefix when configured', () => {
+      const textField = new TextField(definitionWithConfiguration)
+      const viewModel = textField.getViewModel({}, formData)
+      expect(viewModel.prefix).to.equal('£')
+    })
+    lab.test('includes suffix when configured', () => {
+      const textField = new TextField(definitionWithConfiguration)
+      const viewModel = textField.getViewModel({}, formData)
+      expect(viewModel.suffix).to.equal('K')
     })
     lab.test('includes maxlength when configured', () => {
       const textField = new TextField(definitionWithConfiguration)

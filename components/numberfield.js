@@ -58,7 +58,9 @@ class NumberField extends FormComponent {
   }
 
   getViewModel (config, formData, errors) {
+    const { options: { prefix, suffix } = {} } = this
     const viewModel = super.getViewModel(config, formData, errors)
+    Object.assign(viewModel, { prefix, suffix })
     viewModel.type = 'number'
     return viewModel
   }
