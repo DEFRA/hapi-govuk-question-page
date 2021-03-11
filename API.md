@@ -582,6 +582,8 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own email address.
+    - `prefix` - optional prefix for the text field.
+    - `suffix` - optional suffix for the text field.
 
 ## `Html` component
 Raw HTML markup to include in the page.
@@ -603,6 +605,8 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own name.
+    - `prefix` - optional prefix for the text field.
+    - `suffix` - optional suffix for the text field.
 
 ## `NumberField` component
 Text field that has a number input and checks that the text is a valid number.
@@ -612,6 +616,8 @@ Text field that has a number input and checks that the text is a valid number.
     - `max` - number - the maximum value to allow.
     - `greater` - number - values must be greater than this.
     - `less` - number - values must be less than this.
+    - `prefix` - optional prefix for the text field.
+    - `suffix` - optional suffix for the text field.
 
 ## `Para` component
 A simple paragraph of text.
@@ -648,12 +654,19 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own telephone number.
+    - `prefix` - optional prefix for the text field.
+    - `suffix` - optional suffix for the text field.
 
 ## `TextField` component
 Simple text field.
   - `schema`:
     - `max` - number - the maximum length of text to allow.
     - `trim` - boolean - whether to force whitespace trimming from the start and end of the text.
+  - `options`:
+    - `prefix` - optional prefix for the text field.
+    - `suffix` - optional suffix for the text field.
+
+Some users may miss that the input already has a suffix or prefix, and enter a prefix or suffix into the input. Allow for this in your validation and do not show an error.
 
 ## `WarningText` component
 Text using the Warning Text component.
