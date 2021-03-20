@@ -18,7 +18,8 @@ const componentTypesList = [
   'DynamicHtml',
   'InsetText',
   'Details',
-  'WarningText'
+  'WarningText',
+  'HiddenValue'
 ]
 const componentTypes = componentTypesList.reduce((acc, name) => {
   acc[name] = require(`./components/${name.toLowerCase()}`)
@@ -53,7 +54,6 @@ class Page {
     this.caption = caption
     this.hasNext = hasNext
     this.pageTemplateName = pageTemplateName
-
     const components = pageDef.components.map(def => new componentTypes[def.type](def))
     const formComponents = components.filter(component => component.isFormComponent)
 
@@ -75,7 +75,6 @@ class Page {
 
     const templateName = this.pageTemplateName
     const useForm = this.hasFormComponents || this.hasNext
-
     const components = this.components.map(component => ({
       type: component.type,
       isFormComponent: component.isFormComponent,

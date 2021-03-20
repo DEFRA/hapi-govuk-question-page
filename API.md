@@ -390,6 +390,7 @@ All components are defined as an object with keys:
 Form components capture information from a user and are rendered inside an HTML form.
 The available `type` values for these are:
   - [TextField](#textfield-component)
+  - [HiddenValue](#hiddenvalue-component)
   - [NumberField](#numberfield-component)
   - [NamesField](#namesfield-component)
   - [TelephoneNumberField](#telephonenumberfield-component)
@@ -667,6 +668,10 @@ Simple text field.
     - `suffix` - optional suffix for the text field.
 
 Some users may miss that the input already has a suffix or prefix, and enter a prefix or suffix into the input. Allow for this in your validation and do not show an error.
+
+## `HiddenValue` component
+Renders an `<input>` with `type="hidden'`
+  - `value` - string - the value given to the <input> element
 
 ## `WarningText` component
 Text using the Warning Text component.

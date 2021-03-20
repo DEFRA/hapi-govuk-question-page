@@ -37,6 +37,10 @@ module.exports = {
       }
     }
   }, {
+    type: 'HiddenValue',
+    name: 'hiddenValue',
+    value: 3050
+  }, {
     type: 'MultilineTextField',
     name: 'multilineTextField',
     title: 'Multiline text field',
