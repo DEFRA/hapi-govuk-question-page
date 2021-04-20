@@ -4,9 +4,9 @@ const toCurrency = require('../lib/tocurrency')
 class CurrencyField extends TextField {
   constructor (definition) {
     super(definition)
-    const options = this.options = this.options || {}
-    if (!options.classes) {
-      options.classes = 'govuk-input--width-10'
+    this.options = this.options || {}
+    if (!this.options.classes) {
+      this.options.classes = 'govuk-input--width-10'
     }
   }
 
