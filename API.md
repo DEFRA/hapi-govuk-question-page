@@ -185,7 +185,7 @@ The good news is that if you don't provide a specific callback function, the han
 `request` object, so you get the best of both worlds.
 
 ### Using data functions
-If you want to use functions to supply data to the handler, you provide these in the[handler options](#handler-options).
+If you want to use functions to supply data to the handler, you provide these in the [handler options](#handler-options).
 The functions you can provide are as follows:
 
   - `getData` - supplies the current data values to be displayed on the page
