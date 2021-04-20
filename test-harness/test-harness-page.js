@@ -37,6 +37,21 @@ module.exports = {
       }
     }
   }, {
+    type: 'CurrencyField',
+    name: 'currencyField',
+    title: 'Currency field',
+    titleForError: 'Your currency field',
+    schema: {
+      trim: false,
+      max: 20
+    },
+    hint: 'return a number with two decimal places',
+    options: {
+      prefix: {
+        text: '£'
+      }
+    }
+  }, {
     type: 'MultilineTextField',
     name: 'multilineTextField',
     title: 'Multiline text field',

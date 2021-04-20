@@ -1,0 +1,5 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% macro CurrencyField(component) %}
+  {{ govukInput(component.model) }}
+{% endmacro %}

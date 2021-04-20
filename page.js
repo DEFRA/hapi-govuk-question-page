@@ -1,6 +1,7 @@
 const joi = require('@hapi/joi')
 const componentTypesList = [
   'TextField',
+  'CurrencyField',
   'MultilineTextField',
   'CharacterCountField',
   'YesNoField',
