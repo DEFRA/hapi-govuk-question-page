@@ -390,6 +390,7 @@ All components are defined as an object with keys:
 Form components capture information from a user and are rendered inside an HTML form.
 The available `type` values for these are:
   - [TextField](#textfield-component)
+  - [CurrencyField](#currencyfield-component)
   - [NumberField](#numberfield-component)
   - [NamesField](#namesfield-component)
   - [TelephoneNumberField](#telephonenumberfield-component)
@@ -648,15 +649,6 @@ Note that if this results in a list of less than two items, the component will j
 
 See the [CheckboxesField component](#checkboxesfield-component) for an example of using the filter.
 
-## `TelephoneNumberField` component
-Text field that follows the Telephone number pattern.
-Has the same properties as a [TextField](#textfield-component), with additional:
-  - `options`:
-    - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
-      own telephone number.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
-
 ## `TextField` component
 Simple text field.
   - `schema`:
@@ -667,6 +659,23 @@ Simple text field.
     - `suffix` - optional suffix for the text field.
 
 Some users may miss that the input already has a suffix or prefix, and enter a prefix or suffix into the input. Allow for this in your validation and do not show an error.
+
+## `CurrencyField` component
+Text field that follows the guidelines onf the [HMRC Currency](https://design.tax.service.gov.uk/hmrc-design-patterns/currency-input/) input pattern. 
+
+The component allows the input of non-numerical characters such as `'£'` and `','`, but strips them out prior to validation.
+
+Input will be returned as a number with at most 2 decimal places.
+
+Has the same properties as a [TextField](#textfield-component).
+
+## `TelephoneNumberField` component
+Text field that follows the Telephone number pattern.
+Has the same properties as a [TextField](#textfield-component), with additional:
+  - `options`:
+    - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
+      own telephone number.
+
 
 ## `WarningText` component
 Text using the Warning Text component.
