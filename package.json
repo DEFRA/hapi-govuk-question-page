@@ -1,6 +1,6 @@
 {
   "name": "@envage/hapi-govuk-question-page",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A hapi plugin for simple GOV.UK question pages",
   "main": "index.js",
   "scripts": {
@@ -36,13 +36,14 @@
     "standard": "^16.0.3"
   },
   "peerDependencies": {
-    "@hapi/hapi": "19.x",
+    "@hapi/hapi": "20.x",
     "@hapi/vision": "6.x",
     "govuk-frontend": "3.x",
     "nunjucks": "3.x"
   },
   "files": [
     "/components/",
+    "/lib/",
     "/hapi-govuk-question-page/",
     "/page.js",
     "/API.md"
