@@ -25,6 +25,14 @@ lab.experiment('CurrencyField', () => {
       const currencyField = new CurrencyField({ name, options: { classes: suppliedClasses } })
       expect(currencyField.options.classes).to.equal(suppliedClasses)
     })
+    lab.test('sets default "£" prefix when not supplied', () => {
+      const currencyField = new CurrencyField({ name })
+      expect(currencyField.options.prefix.text).to.equal('£')
+    })
+    lab.test('sets classes when supplied', () => {
+      const currencyField = new CurrencyField({ name, options: { classes: suppliedClasses, prefix: { text: '$' } } })
+      expect(currencyField.options.prefix.text).to.equal('$')
+    })
   })
   lab.experiment('getStateFromValidForm', () => {
     lab.test('empty returns null', () => {

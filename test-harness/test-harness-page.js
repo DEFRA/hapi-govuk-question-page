@@ -29,9 +29,6 @@ module.exports = {
     },
     hint: 'Help text',
     options: {
-      prefix: {
-        text: '£'
-      },
       suffix: {
         text: 'per item'
       }

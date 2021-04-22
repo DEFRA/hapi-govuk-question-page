@@ -508,7 +508,7 @@ The component allows the input of non-numerical characters such as `'£'` and `'
 
 Input will be returned as a number with at most 2 decimal places.
 
-Has the same properties as a [TextField](#textfield-component).
+Has the same properties as a [TextField](#textfield-component). Defaults to a `£` text field prefix if no options supplied.
 
 ## `DatePartsField` component
 Date field using the Date Input component following the Dates pattern, with separate inputs for day, month and year.
@@ -592,8 +592,8 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own email address.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
+    - `prefix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field prefix.
+    - `suffix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field suffix.
 
 ## `Html` component
 Raw HTML markup to include in the page.
@@ -615,8 +615,8 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own name.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
+    - `prefix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field prefix.
+    - `suffix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field suffix.
 
 ## `NumberField` component
 Text field that has a number input and checks that the text is a valid number.
@@ -626,8 +626,8 @@ Text field that has a number input and checks that the text is a valid number.
     - `max` - number - the maximum value to allow.
     - `greater` - number - values must be greater than this.
     - `less` - number - values must be less than this.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
+    - `prefix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field prefix.
+    - `suffix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field suffix.
 
 ## `Para` component
 A simple paragraph of text.
@@ -693,6 +693,9 @@ Side by side radio using the Radios component, with just Yes and No as options.
     - `text` - required string to display on the page for the item.
     - `description` - optional additional tet to display as a hint for the item.
     - `conditionalHtml` - optional conditional HTML to display when the list item is selected.
+
+## `prefix/suffix` object
+  - `text` - required string to use as a prefix or suffix.
 
 For radio button components, dividers can be added between groups of radio buttons by adding a list item containing only a `'divider'` property: 
     - `divider` - string used to specify dividing text between groups of radios 

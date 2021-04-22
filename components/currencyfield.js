@@ -8,6 +8,9 @@ class CurrencyField extends TextField {
     if (!this.options.classes) {
       this.options.classes = 'govuk-input--width-10'
     }
+    if (!this.options.prefix) {
+      this.options.prefix = { text: '£' }
+    }
   }
 
   getStateFromValidForm (validatedFormData) {
