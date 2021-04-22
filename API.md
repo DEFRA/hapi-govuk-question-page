@@ -501,6 +501,15 @@ but instead of the list items having a `conditionalHtml` property,
 they have a `conditionalTextField` property that is the same as a [TextField component](#textfield-component),
 with the exception of `options.required` and `options.classes`.
 
+## `CurrencyField` component
+Text field that follows the guidelines onf the [HMRC Currency](https://design.tax.service.gov.uk/hmrc-design-patterns/currency-input/) input pattern. 
+
+The component allows the input of non-numerical characters such as `'£'` and `','`, but strips them out prior to validation.
+
+Input will be returned as a number with at most 2 decimal places.
+
+Has the same properties as a [TextField](#textfield-component).
+
 ## `DatePartsField` component
 Date field using the Date Input component following the Dates pattern, with separate inputs for day, month and year.
 
@@ -649,6 +658,13 @@ Note that if this results in a list of less than two items, the component will j
 
 See the [CheckboxesField component](#checkboxesfield-component) for an example of using the filter.
 
+## `TelephoneNumberField` component
+Text field that follows the Telephone number pattern.
+Has the same properties as a [TextField](#textfield-component), with additional:
+  - `options`:
+    - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
+      own telephone number.
+
 ## `TextField` component
 Simple text field.
   - `schema`:
@@ -659,23 +675,6 @@ Simple text field.
     - `suffix` - optional suffix for the text field.
 
 Some users may miss that the input already has a suffix or prefix, and enter a prefix or suffix into the input. Allow for this in your validation and do not show an error.
-
-## `CurrencyField` component
-Text field that follows the guidelines onf the [HMRC Currency](https://design.tax.service.gov.uk/hmrc-design-patterns/currency-input/) input pattern. 
-
-The component allows the input of non-numerical characters such as `'£'` and `','`, but strips them out prior to validation.
-
-Input will be returned as a number with at most 2 decimal places.
-
-Has the same properties as a [TextField](#textfield-component).
-
-## `TelephoneNumberField` component
-Text field that follows the Telephone number pattern.
-Has the same properties as a [TextField](#textfield-component), with additional:
-  - `options`:
-    - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
-      own telephone number.
-
 
 ## `WarningText` component
 Text using the Warning Text component.
