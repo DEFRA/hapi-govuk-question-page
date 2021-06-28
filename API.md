@@ -185,7 +185,7 @@ The good news is that if you don't provide a specific callback function, the han
 `request` object, so you get the best of both worlds.
 
 ### Using data functions
-If you want to use functions to supply data to the handler, you provide these in the[handler options](#handler-options).
+If you want to use functions to supply data to the handler, you provide these in the [handler options](#handler-options).
 The functions you can provide are as follows:
 
   - `getData` - supplies the current data values to be displayed on the page
@@ -390,6 +390,7 @@ All components are defined as an object with keys:
 Form components capture information from a user and are rendered inside an HTML form.
 The available `type` values for these are:
   - [TextField](#textfield-component)
+  - [CurrencyField](#currencyfield-component)
   - [NumberField](#numberfield-component)
   - [NamesField](#namesfield-component)
   - [TelephoneNumberField](#telephonenumberfield-component)
@@ -500,6 +501,15 @@ but instead of the list items having a `conditionalHtml` property,
 they have a `conditionalTextField` property that is the same as a [TextField component](#textfield-component),
 with the exception of `options.required` and `options.classes`.
 
+## `CurrencyField` component
+Text field that follows the guidelines onf the [HMRC Currency](https://design.tax.service.gov.uk/hmrc-design-patterns/currency-input/) input pattern. 
+
+The component allows the input of non-numerical characters such as `'£'` and `','`, but strips them out prior to validation.
+
+Input will be returned as a number with at most 2 decimal places.
+
+Has the same properties as a [TextField](#textfield-component). Defaults to a `£` text field prefix if no options supplied.
+
 ## `DatePartsField` component
 Date field using the Date Input component following the Dates pattern, with separate inputs for day, month and year.
 
@@ -582,8 +592,8 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own email address.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
+    - `prefix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field prefix.
+    - `suffix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field suffix.
 
 ## `Html` component
 Raw HTML markup to include in the page.
@@ -605,8 +615,8 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own name.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
+    - `prefix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field prefix.
+    - `suffix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field suffix.
 
 ## `NumberField` component
 Text field that has a number input and checks that the text is a valid number.
@@ -616,8 +626,8 @@ Text field that has a number input and checks that the text is a valid number.
     - `max` - number - the maximum value to allow.
     - `greater` - number - values must be greater than this.
     - `less` - number - values must be less than this.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
+    - `prefix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field prefix.
+    - `suffix` - optional [prefix/suffix object](#prefixsuffix-object) for the text field suffix.
 
 ## `Para` component
 A simple paragraph of text.
@@ -654,8 +664,6 @@ Has the same properties as a [TextField](#textfield-component), with additional:
   - `options`:
     - `autocomplete` - boolean, when `true` will set the autocomplete attribute on so that users can easily add their
       own telephone number.
-    - `prefix` - optional prefix for the text field.
-    - `suffix` - optional suffix for the text field.
 
 ## `TextField` component
 Simple text field.
@@ -685,6 +693,9 @@ Side by side radio using the Radios component, with just Yes and No as options.
     - `text` - required string to display on the page for the item.
     - `description` - optional additional tet to display as a hint for the item.
     - `conditionalHtml` - optional conditional HTML to display when the list item is selected.
+
+## `prefix/suffix` object
+  - `text` - required string to use as a prefix or suffix.
 
 For radio button components, dividers can be added between groups of radio buttons by adding a list item containing only a `'divider'` property: 
     - `divider` - string used to specify dividing text between groups of radios 

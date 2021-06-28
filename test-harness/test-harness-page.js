@@ -29,11 +29,23 @@ module.exports = {
     },
     hint: 'Help text',
     options: {
-      prefix: {
-        text: '£'
-      },
       suffix: {
         text: 'per item'
+      }
+    }
+  }, {
+    type: 'CurrencyField',
+    name: 'currencyField',
+    title: 'Currency field',
+    titleForError: 'Your currency field',
+    schema: {
+      trim: false,
+      max: 20
+    },
+    hint: 'return a number with two decimal places',
+    options: {
+      prefix: {
+        text: '£'
       }
     }
   }, {
