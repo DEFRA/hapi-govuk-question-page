@@ -29,8 +29,12 @@ lab.experiment('CurrencyField', () => {
       const currencyField = new CurrencyField({ name })
       expect(currencyField.options.prefix.text).to.equal('£')
     })
-    lab.test('sets classes when supplied', () => {
-      const currencyField = new CurrencyField({ name, options: { classes: suppliedClasses, prefix: { text: '$' } } })
+    lab.test('supports empty prefix', () => {
+      const currencyField = new CurrencyField({ name, options: { prefix: { text: '' } } })
+      expect(currencyField.options.prefix.text).to.equal('')
+    })
+    lab.test('sets prefix when supplied', () => {
+      const currencyField = new CurrencyField({ name, options: { prefix: { text: '$' } } })
       expect(currencyField.options.prefix.text).to.equal('$')
     })
   })
@@ -44,6 +48,27 @@ lab.experiment('CurrencyField', () => {
       const currencyField = new CurrencyField({ name })
       const stateFromValidForm = currencyField.getStateFromValidForm({ [name]: '123.45' })
       expect(stateFromValidForm[name]).to.equal(123.45)
+    })
+    lab.test('error returns original text unchanged', () => {
+      const currencyField = new CurrencyField({ name })
+      const stateFromValidForm = currencyField.getStateFromValidForm({ [name]: 'three hundred pounds' })
+      expect(stateFromValidForm[name]).to.equal(null)
+    })
+  })
+  lab.experiment('getFormSchemaKeys', () => {
+    lab.test('no error for a valid number', () => {
+      const currencyField = new CurrencyField({ name })
+      const formSchemaKeys = currencyField.getFormSchemaKeys()
+      const schema = formSchemaKeys[name]
+      const result = schema.validate('123')
+      expect(result.error).to.not.exist()
+    })
+    lab.test('error for invalid number', () => {
+      const currencyField = new CurrencyField({ name })
+      const formSchemaKeys = currencyField.getFormSchemaKeys()
+      const schema = formSchemaKeys[name]
+      const result = schema.validate('onetwothree')
+      expect(result.error).to.exist()
     })
   })
 })
