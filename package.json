@@ -1,6 +1,6 @@
 {
   "name": "@envage/hapi-govuk-question-page",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A hapi plugin for simple GOV.UK question pages",
   "main": "index.js",
   "scripts": {
@@ -17,26 +17,26 @@
   "author": "Department for Environment, Food and Rural Affairs <https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs>.",
   "license": "SEE LICENSE IN LICENSE",
   "engines": {
-    "node": "^12.0.0"
+    "node": ">=14"
   },
   "dependencies": {
-    "@hapi/hoek": "^9.0.3",
-    "@hapi/joi": "^17.1.0",
-    "moment": "^2.24.0"
+    "@hapi/hoek": "^9.2.1",
+    "@hapi/joi": "^17.1.1",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
-    "@hapi/code": "^8.0.1",
-    "@hapi/hapi": "^20.1.0",
+    "@hapi/code": "^8.0.7",
+    "@hapi/hapi": "^20.2.1",
     "@hapi/inert": "^6.0.1",
-    "@hapi/lab": "^24.1.1",
-    "@hapi/vision": "^6.0.0",
-    "govuk-frontend": "^3.11.0",
+    "@hapi/lab": "^24.5.1",
+    "@hapi/vision": "^6.1.0",
+    "govuk-frontend": "^3.14.0",
     "nodemon": "^2.0.7",
-    "nunjucks": "^3.2.0",
+    "nunjucks": "^3.2.3",
     "standard": "^16.0.3"
   },
   "peerDependencies": {
-    "@hapi/hapi": "19.x",
+    "@hapi/hapi": "20.x",
     "@hapi/vision": "6.x",
     "govuk-frontend": "3.x",
     "nunjucks": "3.x"
